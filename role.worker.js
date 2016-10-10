@@ -22,13 +22,28 @@ var roleWorker = {
         // Working, has energy
 	    if(creep.memory.working) {
 	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
+	        var priorityTargets = [STRUCTURE_CONTAINER];
+	        var priorityFound = false;
+	        for (var t in targets) {
+	        	if (!found && priorityTargets.indexOf(t.structure_type)) {
+	        		priorityFound = true;
+	        		if (creep.transfer(t) == ERR_NOT_IN_RANGE) {
+                    	creep.moveTo(t);
+                	}
+	        	} 
+	        }
+
+	        if (found) {
+	        	// we found a priority target, no need to do anything else.
+	        }
 	        // Refil Spawn
-	        if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
+	        else if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
 	            if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                      creep.moveTo(Game.spawns['Spawn1']);
                 } 
 	        }
-	        // Build Stuff
+	        // Build Random Stuff
             else if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
