@@ -26,7 +26,7 @@ var roleWorker = {
 	        var priorityTargets = [STRUCTURE_CONTAINER];
 	        var priorityFound = false;
 	        for (var t in targets) {
-	        	if (!found && priorityTargets.indexOf(t.structure_type)) {
+	        	if (!priorityFound && priorityTargets.indexOf(t.structure_type)) {
 	        		priorityFound = true;
 	        		if (creep.transfer(t) == ERR_NOT_IN_RANGE) {
                     	creep.moveTo(t);
