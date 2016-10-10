@@ -11,7 +11,7 @@ var roleWorker = {
         // Not working but full of energy
         if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
-            if (creep.memory.location === 3) {
+            if (creep.memory.location >= 2) {
                 creep.memory.location = 0;
             } else {
                 creep.memory.location++;
