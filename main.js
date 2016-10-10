@@ -1,5 +1,5 @@
 var roleWorker = require('role.worker');
-var maxCreeps = 15;
+var maxCreeps = 13;
 var currentCreeps = 0;
 
 module.exports.loop = function () {
