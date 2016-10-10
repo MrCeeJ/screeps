@@ -34,7 +34,7 @@ var roleWorker = {
 	        	} 
 	        }
 
-	        if (found) {
+	        if (priorityFound) {
 	        	// we found a priority target, no need to do anything else.
 	        }
 	        // Refil Spawn
