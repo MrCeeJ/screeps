@@ -23,24 +23,15 @@ var roleWorker = {
         if (creep.memory.working) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
+            var extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
+            	filter: (i) => i.structureType == STRUCTURE_EXTENSION && 
+                   		i.energy < i.energyCapacity
+            });
+
             var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
     				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
                    		i.store[RESOURCE_ENERGY] < i.storeCapacity
 			});
-            // var priorityTargets = [STRUCTURE_CONTAINER];
-            // var priorityFound = false;
-            // for (var t in targets) {
-            // 	if (!priorityFound && priorityTargets.indexOf(t.structureType)) {
-            // 		priorityFound = true;
-            // 		if (creep.transfer(t) == ERR_NOT_IN_RANGE) {
-            //            	creep.moveTo(t);
-            //                creep.say('On a priority mission!');
-            //        	}
-            // 	}
-            // }
-            // if (priorityFound) {
-            // 	// we found a priority target, no need to do anything else.
-            // }
 
             // Refil Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
@@ -54,9 +45,17 @@ var roleWorker = {
                     creep.moveTo(targets[0]);
                 }
             }
+
+            // Refil any engery extensions
+            else if (extensionsNeedingEnergy.length) {
+				if (creep.transferEnergy(extensionsNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extensionsNeedingEnergy[0]);
+                }
+            }
+
             // Refil any engery containers
             else if (containersNeedingEnergy.length) {
-				if (creep.transferEnergy(containersNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+				if (creep.transfer(containersNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(containersNeedingEnergy[0]);
                 }
             }
