@@ -28,12 +28,16 @@ var roleWorker = {
                    		i.energy < i.energyCapacity
             });
 
+            var towersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
+                filter: (i) => (structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity
+            });
+
             var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
     				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
                    		i.store[RESOURCE_ENERGY] < i.storeCapacity
 			});
 
-            // Refil Spawn
+            // Refill Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
                 if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(Game.spawns['Spawn1']);
@@ -46,14 +50,21 @@ var roleWorker = {
                 }
             }
 
-            // Refil any engery extensions
+            // Refill any engery extensions
             else if (extensionsNeedingEnergy.length) {
 				if (creep.transferEnergy(extensionsNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
                 }
             }
 
-            // Refil any engery containers
+            // Refill any towers
+            else if (towersNeedingEnergy.length) {
+                if (creep.transferEnergy(towersNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(towersNeedingEnergy[0]);
+                }
+            }
+
+            // Refill any engery containers
             else if (containersNeedingEnergy.length) {
 				if (creep.transfer(containersNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(containersNeedingEnergy[0]);
