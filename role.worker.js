@@ -24,7 +24,7 @@ var roleWorker = {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
             var extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-            	filter: (i) => i.structureType == STRUCTURE_EXTENSION && 
+            	filter: (i) => (i.structureType == STRUCTURE_EXTENSION || i.structureType == STRUCTURE_SPAWN) &&
                    		i.energy < i.energyCapacity
             });
 

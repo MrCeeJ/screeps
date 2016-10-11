@@ -1,8 +1,16 @@
+var _ = require("../ScreepsAutocomplete-master/lodash.js");
+var towerStructure = require('structure.tower');
+var creepExtensions = require('creep.extensions');
+var towerExtensions = require('tower.extensions');
+
 var roleWorker = require('role.worker');
 var maxCreeps = 13;
 var currentCreeps = 0;
 
 module.exports.loop = function () {
+
+    creepExtensions.register();
+    towerExtensions.register();
 
     currentCreeps = _(Game.creeps).size();
     //Spawning
@@ -14,4 +22,9 @@ module.exports.loop = function () {
         var creep = Game.creeps[name];
         roleWorker.run(creep);
     }
-}
+    var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+
+    _.forEach(towers, function(tower) {
+        towerStructure.run(tower);
+    })
+};
