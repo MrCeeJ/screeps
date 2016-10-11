@@ -6,17 +6,10 @@ var roleWorker = {
         // Working but ran out of energy
         if (creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
-            creep.say('empty :(');
         }
         // Not working but full of energy
         if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
-            if (creep.memory.location >= 2) {
-                creep.memory.location = 0;
-            } else {
-                creep.memory.location++;
-            }
-            creep.say('full :)');
         }
 
         // Working, has energy
@@ -24,14 +17,9 @@ var roleWorker = {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
             var extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-            	filter: (i) => i.structureType == STRUCTURE_EXTENSION && 
+            	filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
                    		i.energy < i.energyCapacity
             });
-
-            var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-    				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
-                   		i.store[RESOURCE_ENERGY] < i.storeCapacity
-			});
 
             // Build Random Stuff
             if (targets.length) {
