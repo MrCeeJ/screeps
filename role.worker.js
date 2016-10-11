@@ -59,7 +59,7 @@ var roleWorker = {
 
             // Refill any towers
             else if (towersNeedingEnergy.length) {
-                if (creep.transferEnergy(towersNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+                if (creep.transfer(towersNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(towersNeedingEnergy[0]);
                 }
             }
