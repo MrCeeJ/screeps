@@ -33,14 +33,8 @@ var roleWorker = {
                    		i.store[RESOURCE_ENERGY] < i.storeCapacity
 			});
 
-            // Refil Spawn
-            if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
-                if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.spawns['Spawn1']);
-                }
-            }
             // Build Random Stuff
-            else if (targets.length) {
+            if (targets.length) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
@@ -48,7 +42,7 @@ var roleWorker = {
 
             // Refil any engery extensions
             else if (extensionsNeedingEnergy.length) {
-				if (creep.transferEnergy(extensionsNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+				if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
                 }
             }
