@@ -23,7 +23,7 @@ var roleWorker = {
         if (creep.memory.working) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
-            var containersNeedingEnergy = room.find(FIND_STRUCTURES, {
+            var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
     				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
                    		i.store[RESOURCE_ENERGY] < i.storeCapacity
 			});
