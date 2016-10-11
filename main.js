@@ -1,4 +1,3 @@
-var _ = require("../ScreepsAutocomplete-master/lodash.js");
 var towerStructure = require('structure.tower');
 var creepExtensions = require('creep.extensions');
 var towerExtensions = require('tower.extensions');
