@@ -22,14 +22,11 @@ var roleWorker = {
         // Working, has energy
         if (creep.memory.working) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-<<<<<<< Updated upstream
-=======
+
             var containersNeedingEnergy = room.find(FIND_STRUCTURES, {
     				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
                    		i.store[RESOURCE_ENERGY] < i.storeCapacity
 			});
->>>>>>> Stashed changes
-
             // var priorityTargets = [STRUCTURE_CONTAINER];
             // var priorityFound = false;
             // for (var t in targets) {
