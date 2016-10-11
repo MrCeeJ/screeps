@@ -22,6 +22,13 @@ var roleWorker = {
         // Working, has energy
         if (creep.memory.working) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+<<<<<<< Updated upstream
+=======
+            var containersNeedingEnergy = room.find(FIND_STRUCTURES, {
+    				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
+                   		i.store[RESOURCE_ENERGY] < i.storeCapacity
+			});
+>>>>>>> Stashed changes
 
             // var priorityTargets = [STRUCTURE_CONTAINER];
             // var priorityFound = false;
@@ -50,6 +57,13 @@ var roleWorker = {
                     creep.moveTo(targets[0]);
                 }
             }
+            // Refil any engery containers
+            else if (containersNeedingEnergy.length) {
+				if (creep.transferEnergy(containersNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containersNeedingEnergy[0]);
+                }
+            }
+
             // Upgrade Controller
             else {
                 if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
