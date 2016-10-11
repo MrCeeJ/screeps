@@ -29,7 +29,7 @@ var roleWorker = {
             });
 
             var towersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-                filter: (i) => (structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity
+                filter: (i) => (i.structureType == STRUCTURE_TOWER) && i.energy < i.energyCapacity
             });
 
             var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
