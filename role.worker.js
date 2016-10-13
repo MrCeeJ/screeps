@@ -52,7 +52,7 @@ var roleWorker = {
 
             // Refill any engery extensions
             else if (extensionsNeedingEnergy.length) {
-				if (creep.transferEnergy(extensionsNeedingEnergy[0]) == ERR_NOT_IN_RANGE) {
+				if (creep.transfer(extensionsNeedingEnergy[0],RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
                 }
             }
