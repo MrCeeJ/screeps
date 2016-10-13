@@ -1,4 +1,4 @@
-var singleMiner = {
+var leftMiner = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -24,4 +24,4 @@ var singleMiner = {
     }
 };
 
-module.exports = singleMiner;
+module.exports = leftMiner;

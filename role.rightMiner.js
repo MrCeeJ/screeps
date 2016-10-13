@@ -1,4 +1,4 @@
-var trippleMiner = {
+var rightMiner = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -24,4 +24,4 @@ var trippleMiner = {
     }
 };
 
-module.exports = trippleMiner;
+module.exports = rightMiner;

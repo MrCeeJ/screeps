@@ -1,50 +1,51 @@
-var roleSingleMiner = require('role.singleMiner');
-var roleTrippleMiner = require('role.trippleMiner');
-var roleUpgrader = require('role.upgrader');
+var roleLeftMiner = require('role.leftMiner');
+var roleRightMiner = require('role.rightMiner');
 var roleWorker = require('role.worker');
+var roleUpgrader = require('role.upgrader');
+
 var maxCreeps = 15;
-var maxSingleMiners = 1;
-var maxTrippleMiners = 3;
 var maxUpgraders = 2;
+var maxLeftMiners = 1;
+var maxRightMiners = 1;
 var currentCreeps = 0;
 
 module.exports.loop = function () {
 
     currentCreeps = _(Game.creeps).size();
     //Spawning
-    var singleMiners = [];
-    var trippleMiners = [];
-    var upgraders = [];
+    var leftMiner = [];
+    var rightMiner = [];
     var workers = [];
+    var upgraders = [];
 
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
-        if (creep.memory.role = 'singleMiner') {
-            singleMiners.push(creep);
-            roleSingleMiner.run(creep);
+        if (creep.memory.role = 'leftMiner') {
+            leftMiner.push(creep);
+            roleLeftMiner.run(creep);
         }
-        else if (creep.memory.role = 'trippleMiner') {
-            trippleMiners.push(creep);
-            roleTrippleMiner.run(creep);
-        }
-        else if (creep.memory.role = 'upgrader') {
-            upgraders.push(creep);
-            roleUpgrader.run(creep);
+        else if (creep.memory.role = 'rightMiner') {
+            rightMiner.push(creep);
+            roleRightMiner.run(creep);
         }
         else if (creep.memory.role = 'worker') {
             workers.push(creep);
             roleWorker.run(creep);
         }
+        else if (creep.memory.role = 'upgrader') {
+            upgraders.push(creep);
+            roleUpgrader.run(creep);
+        }
     }
 
     if (currentCreeps < maxCreeps) {
 
-        if (_(singleMiners).size() < maxSingleMiners) {
-            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'singleMiner', foundEnergy:false});
+        if (_(leftMiner).size() < maxLeftMiners) {
+            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'leftMiner', foundEnergy:false});
         }
 
-        else if (_(trippleMiners).size() < maxTrippleMiners) {
-            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'trippleMiner'});
+        else if (_(rightMiner).size() < maxRightMiners) {
+            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'rightMiner', foundEnergy:false});
         }
         else if (_(upgraders).size() < maxUpgraders) {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
