@@ -3,6 +3,7 @@ var creepExtensions = require('creep.extensions');
 var towerExtensions = require('tower.extensions');
 
 var roleWorker = require('role.worker');
+var roleUpgrader = require('role.upgrader');
 var maxCreeps = 13;
 var currentCreeps = 0;
 
@@ -19,7 +20,13 @@ module.exports.loop = function () {
     
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
-        roleWorker.run(creep);
+        if (creep.memory.role === 'upgrader') {
+            roleUpgrader.run(creep);
+        }
+        else {
+            roleWorker.run(creep);    
+        }
+        
     }
     var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
 
