@@ -6,17 +6,10 @@ var roleUpgrader = {
         // Working but ran out of energy
         if (creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
-            creep.say('empty :(');
         }
         // Not working but full of energy
         if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
             creep.memory.working = true;
-            if (creep.memory.location >= 2) {
-                creep.memory.location = 0;
-            } else {
-                creep.memory.location++;
-            }
-            creep.say('upgrading!');
         }
 
         // Working, has energy
@@ -28,12 +21,14 @@ var roleUpgrader = {
         }
         // Gathering energy
         else {
-            var energy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
-            if (energy.length>0) {
-                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos);
-                if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(14,25);
+            var source = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
+                                i.energy > i.energyCapacity*.25 &&
+                                i.energy > creep.carryCapacity
                 }
+            );
+            if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
             }
         }
     }
