@@ -47,6 +47,12 @@ module.exports.loop = function () {
         }
     }
 
+    var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+
+    _.forEach(towers, function(tower) {
+        towerStructure.run(tower);
+    });
+
     if (currentCreeps < maxCreeps) {
 
         if (leftMiner == undefined) {
