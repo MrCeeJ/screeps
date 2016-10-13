@@ -1,4 +1,4 @@
-var gatherer = {
+var transporter = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
@@ -11,21 +11,24 @@ var gatherer = {
         else if (creep.carry.energy == 0) {
             creep.memory.gathering = true;
         }
-        // Pick up
+        // Pick up from designated source
         if (creep.memory.gathering) {
-            var sources = creep.room.find(FIND_DROPPED_ENERGY);
-            creep.pickup(sources[0]);
+            var source = Game.getObjectById(creep.memory.sourceId);
+            if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
+            }
         }
         // Drop off
         else {
-            var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
+            var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                i.store[RESOURCE_ENERGY] < i.storeCapacity
+                i.energy < (i.storeCapacity-creep.carryCapacity) &&
+                i.id != creep.memory.sourceId
             });
 
-            if (containersNeedingEnergy.length) {
-                if (creep.transfer(containersNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(containersNeedingEnergy[0]);
+            if (target) {
+                if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
                 }
             }
             // Upgrade Controller
@@ -38,4 +41,4 @@ var gatherer = {
     }
 };
 
-module.exports = gatherer;
+module.exports = transporter;
