@@ -3,9 +3,9 @@ var roleTransporter = require('role.transporter')
 var roleWorker = require('role.worker');
 var roleUpgrader = require('role.upgrader');
 
-var maxCreeps = 8;
+var maxCreeps = 6;
 var maxTransporters = 1;
-var maxUpgraders = 2;
+var maxUpgraders = 1;
 var currentCreeps = 0;
 
 module.exports.loop = function () {

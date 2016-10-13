@@ -21,11 +21,6 @@ var roleWorker = {
                    		i.energy < i.energyCapacity
                 });
 
-            var containersNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-    				filter: (i) => i.structureType == STRUCTURE_CONTAINER && 
-                   		i.store[RESOURCE_ENERGY] < i.storeCapacity
-			});
-
             // Refil Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
                 if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -43,6 +38,12 @@ var roleWorker = {
             else if (extensionsNeedingEnergy.length) {
 				if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
+                }
+            }
+            // Upgrade Controller
+            else {
+                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller);
                 }
             }
 
