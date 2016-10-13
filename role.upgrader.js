@@ -28,10 +28,12 @@ var roleUpgrader = {
         }
         // Gathering energy
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            var location = creep.memory.location == 0 ? 0 : 1;
-            if (creep.harvest(sources[location]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[location]);
+            var energy = creep.pos.findInRange(FIND_DROPPED_ENERGY,1);
+            if (energy.length) {
+                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos);
+                if (creep.pickup(energy[0])) == ERR_NOT_IN_RANGE {
+                    creep.moveTo(energy[0]);       
+                }
             }
         }
     }
