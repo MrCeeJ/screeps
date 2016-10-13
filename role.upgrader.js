@@ -29,10 +29,10 @@ var roleUpgrader = {
         // Gathering energy
         else {
             var energy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY,1);
-            if (energy.length) {
+            if (energy.length>0) {
                 console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos);
                 if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(energy[0]);       
+                    creep.moveTo(14,25);
                 }
             }
         }
