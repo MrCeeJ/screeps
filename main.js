@@ -16,7 +16,7 @@ module.exports.loop = function () {
     if (currentCreeps < maxCreeps) {
         Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {location: 1, working: false});
     }
-
+    
     for (var name in Game.creeps) {
         var creep = Game.creeps[name];
         roleWorker.run(creep);
