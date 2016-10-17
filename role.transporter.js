@@ -21,9 +21,9 @@ var transporter = {
         // Drop off
         else {
             var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                i.energy < (i.storeCapacity-creep.carryCapacity) &&
-                i.id != creep.memory.sourceId
+                filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
+                                i.energy < (i.storeCapacity-creep.carryCapacity) &&
+                                i.id != creep.memory.sourceId
             });
 
             if (target) {
