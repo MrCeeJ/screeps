@@ -12,8 +12,15 @@ var maxCreeps = 12;
 var maxTransporters = 0;
 var maxUpgraders = 0;
 var currentCreeps = 0;
+var spawnMaxEnergy = 300;
 
 module.exports.loop = function () {
+    var enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
+    if (enemies.length > 0) {
+        var username = enemies[0].owner.username;
+        Game.notify(`User ${username} spotted in room ${W9S51}`);
+        Game.rooms.W9S51.controller.activateSafeMode()
+    }
 
     currentCreeps = _(Game.creeps).size();
     //Spawning
@@ -85,7 +92,9 @@ module.exports.loop = function () {
                 filter: {structureType: STRUCTURE_CONTAINER}
                 });
             var containerId = container[0] ? container[0].id : undefined;
-            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
+            if (spawnMaxEnergy >= 550) {
+                Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
+            }
         }
 
         else if (rightMiner = undefined) {
@@ -114,7 +123,6 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'rightTransporter', sourceId:containerId });
         }
         else if (_(upgraders).size() < maxUpgraders) {
-
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
         }
         else {
