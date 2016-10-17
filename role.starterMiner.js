@@ -9,7 +9,7 @@ var  starterMiner = {
         }
         // Not working but full of energy
         if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            if (creep.memory.location > 2) {
+            if (creep.memory.location > 3) {
                 creep.memory.location = 0;
             }
             else {

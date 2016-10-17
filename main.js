@@ -19,7 +19,6 @@ module.exports.loop = function () {
     //Spawning
     var leftMiner = undefined;
     var rightMiner = undefined;
-    var miners = [];
     var leftTransporters = [];
     var rightTransporters = [];
     var starterMiners = [];
