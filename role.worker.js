@@ -15,7 +15,7 @@ var roleWorker = {
         // Working, has energy
         if (creep.memory.working) {
             let buildings = _(creep.room.find(FIND_CONSTRUCTION_SITES))
-                .sortBy(s => s.pos.getRangeTo(creep.pos));
+                .sortBy(s => s.pos.getRangeTo(creep.pos)).value();
 
             // Refil Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
