@@ -13,11 +13,11 @@ const maxTransporters = settings.maxTransporters;
 const maxUpgraders = settings.maxUpgraders;
 
 module.exports.loop = function () {
-    const enemies = Game.rooms.W9S51.constructor.find(FIND_HOSTILE_CREEPS);
+    const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
         var username = enemies[0].owner.username;
         Game.notify(`User ${username} spotted in room W9S51`);
-        Game.rooms.W9S51.controller.activateSafeMode()
+        Game.rooms['W9S51'].controller.activateSafeMode()
     }
 
     const currentCreeps = _(Game.creeps).size();
