@@ -43,6 +43,7 @@ module.exports.loop = function () {
             roleStarterUpgrader.run(creep);
         }
         else if (creep.memory.role == 'leftMiner') {
+            Game.notify('Running left miner code');
             leftMiner = creep;
             roleMiner.run(creep);
         }
