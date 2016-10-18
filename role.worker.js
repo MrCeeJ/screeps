@@ -14,9 +14,9 @@ var roleWorker = {
 
         // Working, has energy
         if (creep.memory.working) {
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
-            var extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
+            const extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
             	filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
                    		i.energy < i.energyCapacity
                 });
@@ -50,7 +50,7 @@ var roleWorker = {
         // Gathering energy
         else {
 
-            let containers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
+            const containers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
                 filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
                                 i.energy > creep.carryCapacity)
             });
