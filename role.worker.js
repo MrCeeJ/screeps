@@ -50,14 +50,14 @@ var roleWorker = {
         }
         // Gathering energy
         else {
-            var source = creep.room.find(FIND_STRUCTURES, {
+            const sources = creep.room.find(FIND_STRUCTURES, {
                     filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
-                    i.energy > i.energyCapacity*.25 &&
-                    i.energy > creep.carryCapacity
+                                    i.energy > i.energyCapacity*.25 &&
+                                    i.energy > creep.carryCapacity
                 }
             );
-            if (creep.withdraw(source[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source[0]);
+            if (creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0]);
             }
         }
     }
