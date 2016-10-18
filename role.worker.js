@@ -52,7 +52,6 @@ var roleWorker = {
         else {
             const sources = creep.room.find(FIND_STRUCTURES, {
                     filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
-                                    i.energy > i.energyCapacity*.25 &&
                                     i.energy > creep.carryCapacity
                 }
             );
