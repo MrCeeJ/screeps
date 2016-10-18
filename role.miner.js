@@ -13,7 +13,7 @@ var miner = {
             if (creep.carry.energy == creep.carryCapacity) {
                 creep.drop(RESOURCE_ENERGY);
             }
-            creep.harvest(creep.room.getObjectById(creep.memory.target));
+            creep.harvest(Game.getObjectById(creep.memory.target));
         }
 
         // Go to your spot.
