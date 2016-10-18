@@ -46,11 +46,10 @@ var roleWorker = {
                     creep.moveTo(creep.room.controller);
                 }
             }
-
         }
         // Gathering energy
         else {
-            const sources = creep.room.find(FIND_STRUCTURES, {
+            const sources = creep.room.find(FIND_MY_STRUCTURES, {
                     filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
                                     i.energy > creep.carryCapacity
                 }
