@@ -26,7 +26,7 @@ var  starterUpgrader = {
         }
         // Gathering energy
         else {
-            var location = creep.memory.location == 0 ? 0 : 1;
+            var location = creep.memory.location == 0 ? 1 : 1;
             var sources = creep.room.find(FIND_SOURCES);
             if (creep.harvest(sources[location]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[location]);
