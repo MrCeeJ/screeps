@@ -24,7 +24,7 @@ var roleWorker = {
                 }
             }
             // Build Random Stuff
-            if (buildings.length) {
+            else if (buildings.length) {
                 if (creep.build(buildings[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(buildings[0]);
                 }
