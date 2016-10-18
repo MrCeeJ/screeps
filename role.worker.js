@@ -51,15 +51,15 @@ var roleWorker = {
         else {
 
            // Game.rooms['W9S51'].find(FIND_STRUCTURES, {filter: (i) => (i.structureType == STRUCTURE_CONTAINER && i.store[RESOURCE_ENERGY] > 150) });
-           //  const containers = creep.room.find(FIND_STRUCTURES, {
-           //      filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
-           //                      i.store[RESOURCE_ENERGY] > creep.carryCapacity)
-           //  });
-            //
-            const containers = _(creep.room.find(FIND_STRUCTURES))
-                .filter(c => c.structureType == STRUCTURE_CONTAINER)
-                //.filter(c => c.store[RESOURCE_ENERGY] > creep.carryCapacity)
-                .sortBy(c => c.pos.getRangeTo(creep));
+            const containers = creep.room.find(FIND_STRUCTURES, {
+                filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
+                                i.store[RESOURCE_ENERGY] > creep.carryCapacity)
+            });
+
+            // const containers = _(creep.room.find(FIND_STRUCTURES))
+            //     .filter(c => c.structureType == STRUCTURE_CONTAINER)
+            //     .filter(c => c.store[RESOURCE_ENERGY] > creep.carryCapacity)
+            //     .sortBy(c => c.pos.getRangeTo(creep));
 
             if (!containers.length) {
                 creep.say("No valid containers");
