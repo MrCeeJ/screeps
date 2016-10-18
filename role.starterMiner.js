@@ -1,7 +1,13 @@
 var  starterMiner = {
 
+
+
     /** @param {Creep} creep **/
     run: function (creep) {
+
+        const refillSpawn = true;
+        const refillExtensions = true;
+        const buildStuff = true;
 
         // Working but ran out of energy
         if (creep.memory.working && creep.carry.energy == 0) {
@@ -26,30 +32,21 @@ var  starterMiner = {
             	filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
                    		i.energy < i.energyCapacity
             });
-
-            // Refill Spawn
-            // if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
-            //     if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            //         creep.moveTo(Game.spawns['Spawn1']);
-            //     }
-            // }
-
-            // Refill any engery extensions
-            if (extensionsNeedingEnergy.length) {
+            if (refillSpawn && Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
+                if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(Game.spawns['Spawn1']);
+                }
+            }
+            else if (refillExtensions && extensionsNeedingEnergy.length) {
                 if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
                 }
             }
-
-            // Build Random Stuff
-            else if (target) {
+            else if (buildStuff && target) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
             }
-
-
-            // Upgrade Controller
             else {
                 if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller);
