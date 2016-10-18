@@ -4,6 +4,5 @@ var settings = {
     maxCreeps : 7,
     maxTransporters : 1,
     maxUpgraders : 1,
-    currentCreeps : 0,
 };
 module.exports = settings;
