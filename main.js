@@ -106,18 +106,14 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
         }
         else if (_(leftTransporters).size() < maxTransporters) {
-            const flag = Game.flags['Flag1'];
-            const containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: {structureType: STRUCTURE_CONTAINER}
-            })[0].id;
-            Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'leftTransporter', sourceId:containerId});
+            const container = _(Game.flags['Flag1'].pos.findInRange(FIND_STRUCTURES, 1))
+                                .filter(s => s.structureType == STRUCTURE_CONTAINER);
+            Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'leftTransporter', sourceId:container.id});
         }
         else if (_(rightTransporters).size() < maxTransporters) {
-            const flag = Game.flags['Flag2'];
-            const containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: {structureType: STRUCTURE_CONTAINER}
-            })[0].id;
-            Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'rightTransporter', sourceId:containerId });
+            const container = _(Game.flags['Flag2'].pos.findInRange(FIND_STRUCTURES, 1))
+                .filter(s => s.structureType == STRUCTURE_CONTAINER);
+            Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'rightTransporter', sourceId:container.id });
         }
         else {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'worker'});
