@@ -1,5 +1,14 @@
 var transporter = {
-
+    /**
+     * Carry Energy to:
+     *  Extensions
+     *  Spawns
+     *  Towers
+     *  Containers
+     *
+     * @param maxEnergy
+     * @returns {*[]}
+     */
     getBody: function (maxEnergy) {
 
         if (maxEnergy >= 550) {

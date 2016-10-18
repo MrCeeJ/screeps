@@ -1,6 +1,10 @@
 var roleWorker = {
 
-    /** @param {Creep} creep **/
+    /**
+     * Build missing buildings
+     * Repair stuff
+     *
+     * @param {Creep} creep **/
     run: function (creep) {
 
         // Working but ran out of energy

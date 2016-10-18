@@ -1,6 +1,9 @@
 var miner = {
 
     /** @param {Creep} creep
+     *
+     * Mine and drop energy on the ground. A container will automatically collect it.
+     *
      * memory.home Set to false to move to
      * memory.locationX The target x coordinate for this miner
      * memory.locationY The target y coordinate for this miner

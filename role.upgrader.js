@@ -1,5 +1,12 @@
 var roleUpgrader = {
 
+    /**
+     * Take Energy from nearest Container and upgrade the room
+     *
+     * @param maxEnergy
+     * @returns {*[]}
+     */
+
     getBody: function (maxEnergy) {
 
         if (maxEnergy >= 550) {
