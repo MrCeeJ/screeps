@@ -43,7 +43,7 @@ var transporter = {
         else {
             let extensions = _(creep.room.find(FIND_STRUCTURES))
                 .filter(s => s.structureType == STRUCTURE_EXTENSION)
-                .filter(s => s.store[RESOURCE_ENERGY] <= s.energyCapacity)
+                .filter(s => s.energy <= s.energyCapacity)
                 .sortBy(s => s.pos.getRangeTo(creep.pos))
                 .value();
 
@@ -54,12 +54,12 @@ var transporter = {
             } else {
 
                 let spawns = _(creep.room.find(FIND_MY_SPAWNS))
-                    .filter(s => s.store[RESOURCE_ENERGY] <= s.energyCapacity)
+                    .filter(s => s.energy <= s.energyCapacity)
                     .sortBy(s => s.pos.getRangeTo(creep.pos))
                     .value();
-                if (spawms.length) {
-                    if (creep.transfer(spawms[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(spawms[0]);
+                if (spawns.length) {
+                    if (creep.transfer(spawns[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(spawns[0]);
                     }
                 }
                 else {
