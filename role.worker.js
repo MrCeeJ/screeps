@@ -17,9 +17,9 @@ var roleWorker = {
             const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
             const extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
-                i.energy < i.energyCapacity
-            });
+            	filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
+                   		i.energy < i.energyCapacity
+                });
 
             // Refil Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
@@ -36,7 +36,7 @@ var roleWorker = {
 
             // Refil any engery extensions
             else if (extensionsNeedingEnergy.length) {
-                if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+				if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensionsNeedingEnergy[0]);
                 }
             }
@@ -50,14 +50,15 @@ var roleWorker = {
         // Gathering energy
         else {
 
-            // Game.rooms['W9S51'].find(FIND_STRUCTURES, {filter: (i) => (i.structureType == STRUCTURE_CONTAINER && i.store[RESOURCE_ENERGY] > 150) });
-            //  const containers = creep.room.find(FIND_STRUCTURES, {
-            //      filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
-            //                      i.store[RESOURCE_ENERGY] > creep.carryCapacity)
-            //  });
+           // Game.rooms['W9S51'].find(FIND_STRUCTURES, {filter: (i) => (i.structureType == STRUCTURE_CONTAINER && i.store[RESOURCE_ENERGY] > 150) });
+           //  const containers = creep.room.find(FIND_STRUCTURES, {
+           //      filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
+           //                      i.store[RESOURCE_ENERGY] > creep.carryCapacity)
+           //  });
 
             let containers = _(creep.room.find(FIND_STRUCTURES))
-                .filter(c => c.structureType == STRUCTURE_CONTAINER && (c.store[RESOURCE_ENERGY] > creep.carryCapacity))
+                .filter(c => c.structureType == STRUCTURE_CONTAINER)
+                .filter(c => c.store[RESOURCE_ENERGY] > creep.carryCapacity)
                 .sortBy(c => c.pos.getRangeTo(creep));
 
             if (!containers.length) {
