@@ -20,21 +20,52 @@ var transporter = {
         }
         // Drop off
         else {
-            var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
-                                i.energy < (i.storeCapacity-creep.carryCapacity) &&
-                                i.id != creep.memory.sourceId
+            const nearestExtension = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
+                i.energy < (i.storeCapacity - creep.carryCapacity)
             });
-
-            if (target) {
-                if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target);
+            if (nearestExtension) {
+                if (creep.transfer(nearestExtension, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(nearestExtension);
                 }
             }
-            // Upgrade Controller
             else {
-                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller);
+                const nearestContainer = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
+                    i.energy < (i.storeCapacity - creep.carryCapacity) &&
+                    i.id != creep.memory.sourceId
+                });
+                if (nearestContainer) {
+                    if (creep.transfer(nearestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(nearestContainer);
+                    }
+                }
+                else {
+                    const allExtensions = creep.room.find(FIND_STRUCTURES, {
+                        filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
+                        i.energy < (i.storeCapacity - creep.carryCapacity)
+                    });
+                    if (allExtensions.length) {
+                        if (creep.transfer(allExtensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(allExtensions[0]);
+                        }
+                    }
+                    else {
+                        const allContainers = creep.room.find(FIND_STRUCTURES, {
+                            filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
+                            i.energy < (i.storeCapacity - creep.carryCapacity)
+                        });
+                        if (allContainers.length) {
+                            if (creep.transfer(allContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                                creep.moveTo(allContainers[0]);
+                            }
+                        }
+                        else {
+                            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                                creep.moveTo(creep.room.controller);
+                            }
+                        }
+                    }
                 }
             }
         }

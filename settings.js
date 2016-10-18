@@ -1,7 +1,7 @@
 var settings = {
     maxStarterUpgraders : 1,
-    maxStarterMiners : 7,
-    maxCreeps : 8,
+    maxStarterMiners : 6,
+    maxCreeps : 7,
     maxTransporters : 0,
     maxUpgraders : 0,
     currentCreeps : 0,
