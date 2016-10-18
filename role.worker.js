@@ -56,6 +56,9 @@ var roleWorker = {
                                     i.energy > creep.carryCapacity
                 }
             );
+            if (!sources.length) {
+                creep.say("No Sources!");
+            }
             if (creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0]);
             }
