@@ -56,7 +56,7 @@ var roleWorker = {
             });
 
             if (!containers.length) {
-                creep.say("No Sources!");
+                creep.say("No containers");
             }
             else if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
