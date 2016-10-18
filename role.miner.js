@@ -22,6 +22,26 @@ var miner = {
                 creep.memory.home = true;
             }
         }
+    },
+    getBody: function (maxEnergy) {
+
+        if (maxEnergy >= 550) {
+            return [WORK, WORK, WORK, WORK, WORK, MOVE];
+        }
+        else if (maxEnergy >= 450) {
+            return [WORK, WORK, WORK, WORK, MOVE];
+        }
+        else if (maxEnergy >= 350) {
+            return [WORK, WORK, WORK, MOVE];
+        }
+        else if (maxEnergy >= 250) {
+            return [WORK, WORK, MOVE];
+        }
+        else {
+            Game.notify(`Unable to spawn miner using ${maxEnergy} energy! Spawning worker instead`);
+            return [WORK, CARRY, MOVE];
+        }
+
     }
 };
 

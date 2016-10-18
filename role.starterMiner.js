@@ -27,25 +27,28 @@ var  starterMiner = {
                    		i.energy < i.energyCapacity
             });
 
-            // Refil Spawn
+            // Refill Spawn
             // if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
             //     if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             //         creep.moveTo(Game.spawns['Spawn1']);
             //     }
             // }
+
+            // Refill any engery extensions
+            if (extensionsNeedingEnergy.length) {
+                if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extensionsNeedingEnergy[0]);
+                }
+            }
+
             // Build Random Stuff
-            if (target) {
+            else if (target) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
             }
 
-            // Refil any engery extensions
-            else if (extensionsNeedingEnergy.length) {
-				if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(extensionsNeedingEnergy[0]);
-                }
-            }
+
             // Upgrade Controller
             else {
                 if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {

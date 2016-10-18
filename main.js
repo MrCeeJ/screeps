@@ -1,41 +1,39 @@
-var settings = require('settings');
-var roleMiner = require('role.miner');
-var roleTransporter = require('role.transporter')
-var roleWorker = require('role.worker');
-var roleUpgrader = require('role.upgrader');
-var roleStarterMiner = require('role.starterMiner');
-var roleStarterUpgrader = require('role.starterUpgrader');
+const settings = require('settings');
+const roleMiner = require('role.miner');
+const roleTransporter = require('role.transporter');
+const roleWorker = require('role.worker');
+const roleUpgrader = require('role.upgrader');
+const roleStarterMiner = require('role.starterMiner');
+const roleStarterUpgrader = require('role.starterUpgrader');
 
-var maxStarterUpgraders = settings.maxStarterUpgraders;
-var maxStarterMiners = settings.maxStarterMiners;
+const maxStarterUpgraders = settings.maxStarterUpgraders;
+const maxStarterMiners = settings.maxStarterMiners;
 
-var maxCreeps = settings.maxCreeps;
-var maxTransporters = settings.maxTransporters;
-var maxUpgraders = settings.maxUpgraders;
-var currentCreeps = settings.currentCreeps;
-var spawnMaxEnergy = settings.spawnMaxEnergy;
+const maxCreeps = settings.maxCreeps;
+const maxTransporters = settings.maxTransporters;
+const maxUpgraders = settings.maxUpgraders;
 
 module.exports.loop = function () {
-    var enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
+    const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
         var username = enemies[0].owner.username;
         Game.notify(`User ${username} spotted in room W9S51`);
         Game.rooms.W9S51.controller.activateSafeMode()
     }
 
-    currentCreeps = _(Game.creeps).size();
+    const currentCreeps = _(Game.creeps).size();
     //Spawning
-    var leftMiner = undefined;
-    var rightMiner = undefined;
-    var leftTransporters = [];
-    var rightTransporters = [];
-    var starterMiners = [];
-    var starterUpgraders = [];
-    var workers = [];
-    var upgraders = [];
+    let leftMiner = undefined;
+    let rightMiner = undefined;
+    let leftTransporters = [];
+    let rightTransporters = [];
+    let starterMiners = [];
+    let starterUpgraders = [];
+    let workers = [];
+    let upgraders = [];
 
-    for (var name in Game.creeps) {
-        var creep = Game.creeps[name];
+    for (const name in Game.creeps) {
+        const creep = Game.creeps[name];
         
         if (creep.memory.role == 'starterMiner') {
             starterMiners.push(creep);
@@ -71,13 +69,14 @@ module.exports.loop = function () {
         }
     }
 
-    var towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+    const towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
 
     _.forEach(towers, function(tower) {
         towerStructure.run(tower);
     });
 
     if (currentCreeps < maxCreeps) {
+        const maxSpawnEnergy = Game.spawns['Spawn1'].energyCapacity;
 
         if (_(starterUpgraders).size() < maxStarterUpgraders) {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterUpgrader'});
@@ -86,39 +85,38 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterMiner'});
         }
         else if (leftMiner == undefined) {
-            var flag = Game.flags['Flag1'];
-            var locationX = flag.pos.x;
-            var locationY = flag.pos.y;
-            var container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
+            const flag = Game.flags['Flag1'];
+            const locationX = flag.pos.x;
+            const locationY = flag.pos.y;
+            const container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
                 filter: {structureType: STRUCTURE_CONTAINER}
                 });
-            var containerId = container[0] ? container[0].id : undefined;
-            if (spawnMaxEnergy >= 550) {
-                Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
-            }
+            const containerId = container[0] ? container[0].id : undefined;
+            const body = roleMiner.getBody(maxSpawnEnergy);
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
         }
 
         else if (rightMiner = undefined) {
-            flag = Game.flags['Flag2'];
-            locationX = flag.pos.x;
-            locationY = flag.pos.y;
-            container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
+            const flag = Game.flags['Flag2'];
+            const locationX = flag.pos.x;
+            const locationY = flag.pos.y;
+            const container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
                 filter: {structureType: STRUCTURE_CONTAINER}
             });
-            containerId = container[0] ? container[0].id : undefined ;
-
-            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE], null, {role: 'rightMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
+            const containerId = container[0] ? container[0].id : undefined ;
+            const body = roleMiner.getBody(maxSpawnEnergy);
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
         }
         else if (_(leftTransporters).size() < maxTransporters) {
-            flag = Game.flags['Flag1'];
-            containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
+            const flag = Game.flags['Flag1'];
+            const containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
                 filter: {structureType: STRUCTURE_CONTAINER}
             })[0].id;
             Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'leftTransporter', sourceId:containerId});
         }
         else if (_(rightTransporters).size() < maxTransporters) {
-            flag = Game.flags['Flag2'];
-            containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
+            const flag = Game.flags['Flag2'];
+            const containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
                 filter: {structureType: STRUCTURE_CONTAINER}
             })[0].id;
             Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'rightTransporter', sourceId:containerId });
@@ -130,4 +128,4 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'worker'});
         }
     }
-}
+};
