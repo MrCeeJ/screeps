@@ -14,7 +14,8 @@ var roleWorker = {
 
         // Working, has energy
         if (creep.memory.working) {
-            const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const targets = _(creep.room.find(FIND_CONSTRUCTION_SITES))
+                .sortBy(s => s.pos.getRangeTo(creep.pos));
 
             const extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
                 filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
