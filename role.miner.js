@@ -21,10 +21,10 @@ var miner = {
             creep.moveTo(creep.memory.locationX, creep.memory.locationY);
             if (creep.pos.x == creep.memory.locationX && creep.pos.y == creep.memory.locationY) {
                 creep.memory.target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-                const res = creep.harvest(target);
+                const res = creep.harvest(creep.memory.target);
                 if (res != ERR_NOT_IN_RANGE) {
                     creep.memory.home = true;
-                    creep.say('Arrived, mining from :'+target);
+                    creep.say('Arrived, mining from :'+creep.memory.target);
                 } else {
                     creep.say('Problem :'+res);
                 }
