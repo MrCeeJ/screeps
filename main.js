@@ -8,13 +8,12 @@ const roleStarterUpgrader = require('role.starterUpgrader');
 
 const maxStarterUpgraders = settings.maxStarterUpgraders;
 const maxStarterMiners = settings.maxStarterMiners;
-
 const maxCreeps = settings.maxCreeps;
 const maxTransporters = settings.maxTransporters;
 const maxUpgraders = settings.maxUpgraders;
 
 module.exports.loop = function () {
-    const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
+    const enemies = Game.rooms.W9S51.constructor.find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
         var username = enemies[0].owner.username;
         Game.notify(`User ${username} spotted in room W9S51`);
@@ -76,7 +75,8 @@ module.exports.loop = function () {
     });
 
     if (currentCreeps < maxCreeps) {
-        const maxSpawnEnergy = Game.spawns['Spawn1'].energyCapacity;
+        // Note we might not have this much energy, in which case we will simply wait
+        const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
 
         if (_(starterUpgraders).size() < maxStarterUpgraders) {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterUpgrader'});
@@ -88,24 +88,16 @@ module.exports.loop = function () {
             const flag = Game.flags['Flag1'];
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;
-            const container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: {structureType: STRUCTURE_CONTAINER}
-                });
-            const containerId = container[0] ? container[0].id : undefined;
             const body = roleMiner.getBody(maxSpawnEnergy);
-            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY});
         }
 
         else if (rightMiner = undefined) {
             const flag = Game.flags['Flag2'];
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;
-            const container = flag.pos.findInRange(FIND_STRUCTURES, 1, {
-                filter: {structureType: STRUCTURE_CONTAINER}
-            });
-            const containerId = container[0] ? container[0].id : undefined ;
             const body = roleMiner.getBody(maxSpawnEnergy);
-            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY, containerId:containerId});
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY});
         }
         else if (_(leftTransporters).size() < maxTransporters) {
             const flag = Game.flags['Flag1'];

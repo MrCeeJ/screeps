@@ -11,15 +11,23 @@ var miner = {
         // Gathering energy
         if (creep.memory.home) {
             if (creep.carry.energy == creep.carryCapacity) {
-                creep.transfer(Game.getObjectById(creep.memory.containerId), RESOURCE_ENERGY);
+                creep.drop(RESOURCE_ENERGY);
             }
-            creep.harvest(creep.memory.location);
+            creep.harvest(creep.memory.target);
         }
+
         // Go to your spot.
         else {
             creep.moveTo(creep.memory.locationX, creep.memory.locationY);
             if (creep.pos.x == creep.memory.locationX && creep.pos.y == creep.memory.locationY) {
-                creep.memory.home = true;
+                creep.memory.target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+                const res = creep.harvest(target);
+                if (res != ERR_NOT_IN_RANGE) {
+                    creep.memory.home = true;
+                    creep.say('Arrived, mining from :'+target);
+                } else {
+                    creep.say('Problem :'+res);
+                }
             }
         }
     },
