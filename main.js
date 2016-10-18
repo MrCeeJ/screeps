@@ -1,3 +1,4 @@
+var settings = require('settings');
 var roleMiner = require('role.miner');
 var roleTransporter = require('role.transporter')
 var roleWorker = require('role.worker');
@@ -5,20 +6,20 @@ var roleUpgrader = require('role.upgrader');
 var roleStarterMiner = require('role.starterMiner');
 var roleStarterUpgrader = require('role.starterUpgrader');
 
-var maxStarterUpgraders = 2;
-var maxStarterMiners = 10;
+var maxStarterUpgraders = settings.maxStarterUpgraders;
+var maxStarterMiners = settings.maxStarterMiners;
 
-var maxCreeps = 12;
-var maxTransporters = 0;
-var maxUpgraders = 0;
-var currentCreeps = 0;
-var spawnMaxEnergy = 300;
+var maxCreeps = settings.maxCreeps;
+var maxTransporters = settings.maxTransporters;
+var maxUpgraders = settings.maxUpgraders;
+var currentCreeps = settings.currentCreeps;
+var spawnMaxEnergy = settings.spawnMaxEnergy;
 
 module.exports.loop = function () {
     var enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
         var username = enemies[0].owner.username;
-        Game.notify(`User ${username} spotted in room ${W9S51}`);
+        Game.notify(`User ${username} spotted in room W9S51`);
         Game.rooms.W9S51.controller.activateSafeMode()
     }
 
