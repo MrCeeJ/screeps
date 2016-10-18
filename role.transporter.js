@@ -49,6 +49,7 @@ var transporter = {
 
             if (extensions.length) {
                 if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.say("MT:"+extensions[0].id);
                     creep.moveTo(extensions[0]);
                 }
             } else {
