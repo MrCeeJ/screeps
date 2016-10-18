@@ -97,7 +97,7 @@ module.exports.loop = function () {
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;
             const body = roleMiner.getBody(maxSpawnEnergy);
-            Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY});
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'rightMiner', home:false, locationX:locationX, locationY:locationY});
         }
         else if (_(leftTransporters).size() < maxTransporters) {
             const flag = Game.flags['Flag1'];

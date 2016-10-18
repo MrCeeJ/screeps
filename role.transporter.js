@@ -1,5 +1,26 @@
 var transporter = {
 
+    getBody: function (maxEnergy) {
+
+        if (maxEnergy >= 550) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+        }
+        else if (maxEnergy >= 450) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+        }
+        else if (maxEnergy >= 350) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+        }
+        else if (maxEnergy >= 250) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+        }
+        else {
+            Game.notify(`Unable to spawn miner using ${maxEnergy} energy! Spawning worker instead`);
+            return [CARRY, CARRY, MOVE];
+        }
+
+    },
+
     /** @param {Creep} creep **/
     run: function (creep) {
 
