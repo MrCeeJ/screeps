@@ -33,6 +33,10 @@ var transporter = {
     /** @param {Creep} creep **/
     run: function (creep) {
 
+        if (!creep.memory.sourceId) {
+            creep.say("No Source!");
+        }
+
         // Carrying energy
         if (creep.carry.energy == creep.carryCapacity) {
             creep.memory.gathering = false;
