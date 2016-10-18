@@ -7,10 +7,9 @@ var miner = {
      * memory.containerId The container to use
      * **/
     run: function (creep) {
-
         // Gathering energy
         if (creep.memory.home) {
-            creep.say("harvesting :"+target.pos);
+            creep.say("harvesting :"+creep.memory.target.pos);
             creep.harvest(Game.getObjectById(creep.memory.target));
             creep.drop(RESOURCE_ENERGY);
         }
