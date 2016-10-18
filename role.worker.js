@@ -57,8 +57,7 @@ var roleWorker = {
            //  });
 
             let containers = _(creep.room.find(FIND_STRUCTURES))
-                .filter(c => c.structureType == STRUCTURE_CONTAINER)
-                .filter(c => c.store[RESOURCE_ENERGY] > creep.carryCapacity)
+                .filter(c => c.structureType == STRUCTURE_CONTAINER && c.store[RESOURCE_ENERGY] > creep.carryCapacity)
                 .sortBy(c => c.pos.getRangeTo(creep));
 
             if (!containers.length) {
