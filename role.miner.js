@@ -13,18 +13,19 @@ var miner = {
             if (creep.carry.energy == creep.carryCapacity) {
                 creep.drop(RESOURCE_ENERGY);
             }
-            creep.harvest(creep.memory.target);
+            creep.harvest(creep.room.getObjectById(creep.memory.target));
         }
 
         // Go to your spot.
         else {
             creep.moveTo(creep.memory.locationX, creep.memory.locationY);
             if (creep.pos.x == creep.memory.locationX && creep.pos.y == creep.memory.locationY) {
-                creep.memory.target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-                const res = creep.harvest(creep.memory.target);
+                let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+                const res = creep.harvest(target);
                 if (res != ERR_NOT_IN_RANGE) {
                     creep.memory.home = true;
-                    creep.say('Arrived, mining from :'+creep.memory.target);
+                    creep.say('Arrived, mining from :'+target);
+                    creep.memory.targetId = target.id;
                 } else {
                     creep.say('Problem :'+res);
                 }
