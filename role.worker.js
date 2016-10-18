@@ -50,7 +50,7 @@ var roleWorker = {
         // Gathering energy
         else {
 
-            const containers = Game.spawns.Spawn1.find(FIND_MY_STRUCTURES, {
+            const containers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
                 filter: (i) => (i.structureType == STRUCTURE_CONTAINER &&
                                 i.energy > creep.carryCapacity)
             });
