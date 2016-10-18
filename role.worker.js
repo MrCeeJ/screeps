@@ -14,13 +14,8 @@ var roleWorker = {
 
         // Working, has energy
         if (creep.memory.working) {
-            const targets = _(creep.room.find(FIND_CONSTRUCTION_SITES))
+            let buildings = _(creep.room.find(FIND_CONSTRUCTION_SITES))
                 .sortBy(s => s.pos.getRangeTo(creep.pos));
-
-            const extensionsNeedingEnergy = creep.room.find(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
-                i.energy < i.energyCapacity
-            });
 
             // Refil Spawn
             if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
@@ -29,22 +24,29 @@ var roleWorker = {
                 }
             }
             // Build Random Stuff
-            if (targets.length) {
-                if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            if (buildings.length) {
+                if (creep.build(buildings[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(buildings[0]);
                 }
             }
-
             // Refil any engery extensions
-            else if (extensionsNeedingEnergy.length) {
-                if (creep.transfer(extensionsNeedingEnergy[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(extensionsNeedingEnergy[0]);
-                }
-            }
-            // Upgrade Controller
             else {
-                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller);
+                let extensions = _(creep.room.find(FIND_STRUCTURES))
+                    .filter(s => s.structureType == STRUCTURE_EXTENSION)
+                    .filter(s => s.energy <= s.energyCapacity)
+                    .sortBy(s => s.pos.getRangeTo(creep.pos))
+                    .value();
+
+                if (extensions.length) {
+                    if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(extensions[0]);
+                    }
+                }
+                // Upgrade Controller
+                else {
+                    if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(creep.room.controller);
+                    }
                 }
             }
         }
