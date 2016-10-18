@@ -12,7 +12,7 @@ const maxCreeps = settings.maxCreeps;
 const maxTransporters = settings.maxTransporters;
 const maxUpgraders = settings.maxUpgraders;
 
-const allowStarters = true;
+const allowStarters = false;
 
 
 module.exports.loop = function () {
