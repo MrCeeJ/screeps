@@ -41,15 +41,19 @@ var roleUpgrader = {
         }
         // Gathering energy
         else {
-            var source = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (i) =>  i.structureType == STRUCTURE_CONTAINER &&
-                                i.energy > i.energyCapacity*.25 &&
-                                i.energy > creep.carryCapacity
+            let containers = _(creep.room.find(FIND_STRUCTURES))
+                .filter(s => s.structureType == STRUCTURE_CONTAINER)
+                .filter(s => s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
+                .sortBy(s => s.pos.getRangeTo(creep.pos))
+                .value();
+            if (containers.length) {
+                if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containers[0]);
                 }
-            );
-            if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+            } else {
+                creep.say("El Problemo");
             }
+
         }
     }
 };
