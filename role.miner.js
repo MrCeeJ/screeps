@@ -10,6 +10,7 @@ var miner = {
 
         // Gathering energy
         if (creep.memory.home) {
+            creep.say("harvesting :"+target.pos);
             creep.harvest(Game.getObjectById(creep.memory.target));
             creep.drop(RESOURCE_ENERGY);
         }
