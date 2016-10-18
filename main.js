@@ -12,6 +12,9 @@ const maxCreeps = settings.maxCreeps;
 const maxTransporters = settings.maxTransporters;
 const maxUpgraders = settings.maxUpgraders;
 
+const allowStarters = false;
+
+
 module.exports.loop = function () {
     const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
@@ -78,10 +81,10 @@ module.exports.loop = function () {
         // Note we might not have this much energy, in which case we will simply wait
         const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
 
-        if (_(starterUpgraders).size() < maxStarterUpgraders) {
+        if (allowStarters && _(starterUpgraders).size() < maxStarterUpgraders) {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterUpgrader'});
         }
-        else if (_(starterMiners).size() < maxStarterMiners) {
+        else if (allowStarters && _(starterMiners).size() < maxStarterMiners) {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterMiner'});
         }
         else if (leftMiner == undefined) {
@@ -99,6 +102,9 @@ module.exports.loop = function () {
             const body = roleMiner.getBody(maxSpawnEnergy);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'rightMiner', home:false, locationX:locationX, locationY:locationY});
         }
+        else if (_(upgraders).size() < maxUpgraders) {
+            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
+        }
         else if (_(leftTransporters).size() < maxTransporters) {
             const flag = Game.flags['Flag1'];
             const containerId = flag.pos.findInRange(FIND_STRUCTURES, 1, {
@@ -112,9 +118,6 @@ module.exports.loop = function () {
                 filter: {structureType: STRUCTURE_CONTAINER}
             })[0].id;
             Game.spawns['Spawn1'].createCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], null, {role: 'rightTransporter', sourceId:containerId });
-        }
-        else if (_(upgraders).size() < maxUpgraders) {
-            Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
         }
         else {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'worker'});

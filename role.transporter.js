@@ -3,16 +3,16 @@ var transporter = {
     getBody: function (maxEnergy) {
 
         if (maxEnergy >= 550) {
-            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
         }
         else if (maxEnergy >= 450) {
-            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else if (maxEnergy >= 350) {
-            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+            return [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else if (maxEnergy >= 250) {
-            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE];
+            return [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else {
             Game.notify(`Unable to spawn miner using ${maxEnergy} energy! Spawning worker instead`);
@@ -41,50 +41,37 @@ var transporter = {
         }
         // Drop off
         else {
-            const nearestExtension = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
-                i.energy < (i.storeCapacity - creep.carryCapacity)
-            });
-            if (nearestExtension) {
-                if (creep.transfer(nearestExtension, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(nearestExtension);
+            let extensions = _(creep.room.find(FIND_STRUCTURES))
+                .filter(s => s.structureType == STRUCTURE_EXTENSION)
+                .filter(s => s.store[RESOURCE_ENERGY] <= s.energyCapacity)
+                .sortBy(s => s.pos.getRangeTo(creep.pos))
+                .value();
+
+            if (extensions.length) {
+                if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extensions[0]);
                 }
-            }
-            else {
-                const nearestContainer = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                    i.energy < (i.storeCapacity - creep.carryCapacity) &&
-                    i.id != creep.memory.sourceId
-                });
-                if (nearestContainer) {
-                    if (creep.transfer(nearestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(nearestContainer);
+            } else {
+
+                let spawns = _(creep.room.find(FIND_MY_SPAWNS))
+                    .filter(s => s.store[RESOURCE_ENERGY] <= s.energyCapacity)
+                    .sortBy(s => s.pos.getRangeTo(creep.pos))
+                    .value();
+                if (spawms.length) {
+                    if (creep.transfer(spawms[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(spawms[0]);
                     }
                 }
                 else {
-                    const allExtensions = creep.room.find(FIND_STRUCTURES, {
-                        filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
-                        i.energy < (i.storeCapacity - creep.carryCapacity)
-                    });
-                    if (allExtensions.length) {
-                        if (creep.transfer(allExtensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(allExtensions[0]);
-                        }
-                    }
-                    else {
-                        const allContainers = creep.room.find(FIND_STRUCTURES, {
-                            filter: (i) => i.structureType == STRUCTURE_EXTENSION &&
-                            i.energy < (i.storeCapacity - creep.carryCapacity)
-                        });
-                        if (allContainers.length) {
-                            if (creep.transfer(allContainers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(allContainers[0]);
-                            }
-                        }
-                        else {
-                            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(creep.room.controller);
-                            }
+                    let containers = _(creep.room.find(FIND_STRUCTURES))
+                        .filter(s => s.structureType == STRUCTURE_CONTAINER)
+                        .filter(s => s.store[RESOURCE_ENERGY] <= s.storeCapacity)
+                        .sortBy(s => s.pos.getRangeTo(creep.pos))
+                        .value();
+
+                    if (containers.length) {
+                        if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(containers[0]);
                         }
                     }
                 }
