@@ -81,11 +81,11 @@ var roleBootstrapper = {
             if (energy.length) {
                 if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0]);
-                    utils.logMessage("Moving to source");
-                   // utils.logCreep(creep, "Moving to source ${energy}");
+                    //utils.logMessage("Moving to source");
+                    utils.logCreep(creep, "Moving to source ${energy}");
                 } else {
-                    utils.logMessage("Picking up energy");
-                 //  utils.logCreep(creep, "Picking up energy from ${energy}");
+                   // utils.logMessage("Picking up energy");
+                    utils.logCreep(creep, "Picking up energy from ${energy}");
                 }
             }
         }

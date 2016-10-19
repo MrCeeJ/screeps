@@ -4,7 +4,7 @@ var utils = {
     },
 
     logCreep : function (creep, message) {
-        console.log('[${creep.memory.role}:{$creep.name}:${message}' );
+        console.log('[${creep.memory.role}:${creep.name}:${message}' );
     }
 
 };
