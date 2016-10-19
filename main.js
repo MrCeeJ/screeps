@@ -12,6 +12,7 @@ const maxStarterMiners = settings.maxStarterMiners;
 const maxCreeps = settings.maxCreeps;
 const maxTransporters = settings.maxTransporters;
 const maxUpgraders = settings.maxUpgraders;
+const maxBootstrappers = settings.maxBootstrappers;
 
 const allowStarters = false;
 
@@ -34,6 +35,7 @@ module.exports.loop = function () {
     let starterUpgraders = [];
     let workers = [];
     let upgraders = [];
+    let bootstrappers = [];
 
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
@@ -71,6 +73,7 @@ module.exports.loop = function () {
             roleUpgrader.run(creep);
         }
         else if (creep.memory.role == 'bootstrapper') {
+            bootstrappers.push(creep);
             roleBootstrapper.run(creep);
         }
     }
@@ -98,13 +101,15 @@ module.exports.loop = function () {
             const body = roleMiner.getBody(maxSpawnEnergy);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY});
         }
-
         else if (rightMiner == undefined) {
             const flag = Game.flags['Flag2'];
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;
             const body = roleMiner.getBody(maxSpawnEnergy);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'rightMiner', home:false, locationX:locationX, locationY:locationY});
+        }
+        else if (_(bootstrappers).size() < maxBootstrappers) {
+            Game.spawns['Spawn1'].createCreep([WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE], null, {role: 'bootstrapper'});
         }
         else if (_(upgraders).size() < maxUpgraders) {
             Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], null, {role: 'upgrader'});
