@@ -4,7 +4,9 @@ var utils = {
     },
 
     logCreep: function (creep, message) {
-        console.log(creep.memory.role + ':' + creep.name + ': ' + message);
+        if (creep.memory.log){
+            console.log(creep.memory.role + ':' + creep.name + ': ' + message);
+        }
     }
 };
 
