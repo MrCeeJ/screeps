@@ -46,6 +46,7 @@ var roleBootstrapper = {
             if (buildings.length) {
                 if (creep.build(buildings[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(buildings[0]);
+                    utils.logCreep(creep, 'Moving to build ' +buildings[0].structureType +' at '+ buildings[0].pos);
                 }
             }
             // Refil any engery extensions
