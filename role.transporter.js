@@ -53,9 +53,9 @@ var transporter = {
             var source = Game.getObjectById(creep.memory.sourceId);
             if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source);
-             //   utils.logCreep(creep, "Moving to source ${source}");
+                //   utils.logCreep(creep, "Moving to source ${source}");
             } else {
-            //    utils.logCreep(creep, "Collecting energy from ${source}");
+                //    utils.logCreep(creep, "Collecting energy from ${source}");
             }
         }
         // Drop off
@@ -70,8 +70,8 @@ var transporter = {
                 if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(extensions[0]);
                 }
-            } else {
-
+            }
+            else {
                 let spawns = _(creep.room.find(FIND_MY_SPAWNS))
                     .filter(s => s.energy <= s.energyCapacity)
                     .sortBy(s => s.pos.getRangeTo(creep.pos))
@@ -82,15 +82,28 @@ var transporter = {
                     }
                 }
                 else {
-                    let containers = _(creep.room.find(FIND_STRUCTURES))
-                        .filter(s => s.structureType == STRUCTURE_CONTAINER)
-                        .filter(s => s.store[RESOURCE_ENERGY] <= s.storeCapacity)
+                    let towers = _(creep.room.find(FIND_STRUCTURES))
+                        .filter(s => s.structureType == STRUCTURE_TOWER)
+                        .filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity*0.8)
                         .sortBy(s => s.pos.getRangeTo(creep.pos))
                         .value();
 
-                    if (containers.length) {
-                        if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(containers[0]);
+                    if (towers.length) {
+                        if (creep.transfer(towers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(towers[0]);
+                        }
+                    }
+                    else {
+                        let containers = _(creep.room.find(FIND_STRUCTURES))
+                            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+                            .filter(s => s.store[RESOURCE_ENERGY] <= s.storeCapacity)
+                            .sortBy(s => s.pos.getRangeTo(creep.pos))
+                            .value();
+
+                        if (containers.length) {
+                            if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                                creep.moveTo(containers[0]);
+                            }
                         }
                     }
                 }
