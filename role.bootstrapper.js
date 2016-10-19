@@ -39,34 +39,47 @@ var roleBootstrapper = {
 
         // Working, has energy
         if (creep.memory.working) {
-            let buildings = _(creep.room.find(FIND_CONSTRUCTION_SITES))
-                .sortBy(s => s.pos.getRangeTo(creep.pos)).value();
 
-            // Build Random Stuff
-            if (buildings.length) {
-                if (creep.build(buildings[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(buildings[0]);
-                    utils.logCreep(creep, 'Moving to build ' +buildings[0].structureType +' at '+ buildings[0].pos);
+            let spawns = _(creep.room.find(FIND_MY_SPAWNS))
+                .filter(s => s.energy <= s.energyCapacity)
+                .sortBy(s => s.pos.getRangeTo(creep.pos))
+                .value();
+            if (spawns.length) {
+                if (creep.transfer(spawns[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(spawns[0]);
                 }
-                utils.logCreep(creep, 'Building ' +buildings[0].structureType +' at '+ buildings[0].pos);
             }
-            // Refil any engery extensions
             else {
-                let extensions = _(creep.room.find(FIND_STRUCTURES))
-                    .filter(s => s.structureType == STRUCTURE_EXTENSION)
-                    .filter(s => s.energy < s.energyCapacity)
-                    .sortBy(s => s.pos.getRangeTo(creep.pos))
-                    .value();
 
-                if (extensions.length) {
-                    if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(extensions[0]);
+                let buildings = _(creep.room.find(FIND_CONSTRUCTION_SITES))
+                    .sortBy(s => s.pos.getRangeTo(creep.pos)).value();
+
+                // Build Random Stuff
+                if (buildings.length) {
+                    if (creep.build(buildings[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(buildings[0]);
+                        utils.logCreep(creep, 'Moving to build ' + buildings[0].structureType + ' at ' + buildings[0].pos);
                     }
+                    utils.logCreep(creep, 'Building ' + buildings[0].structureType + ' at ' + buildings[0].pos);
                 }
-                // Upgrade Controller
+                // Refil any engery extensions
                 else {
-                    if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(creep.room.controller);
+                    let extensions = _(creep.room.find(FIND_STRUCTURES))
+                        .filter(s => s.structureType == STRUCTURE_EXTENSION)
+                        .filter(s => s.energy < s.energyCapacity)
+                        .sortBy(s => s.pos.getRangeTo(creep.pos))
+                        .value();
+
+                    if (extensions.length) {
+                        if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(extensions[0]);
+                        }
+                    }
+                    // Upgrade Controller
+                    else {
+                        if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(creep.room.controller);
+                        }
                     }
                 }
             }
