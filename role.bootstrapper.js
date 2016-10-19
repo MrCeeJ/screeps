@@ -48,6 +48,7 @@ var roleBootstrapper = {
                     creep.moveTo(buildings[0]);
                     utils.logCreep(creep, 'Moving to build ' +buildings[0].structureType +' at '+ buildings[0].pos);
                 }
+                utils.logCreep(creep, 'Building ' +buildings[0].structureType +' at '+ buildings[0].pos);
             }
             // Refil any engery extensions
             else {
