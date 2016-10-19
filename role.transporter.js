@@ -53,9 +53,9 @@ var transporter = {
             var source = Game.getObjectById(creep.memory.sourceId);
             if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source);
-                utils.logCreep(creep, "Moving to source ${source}");
+             //   utils.logCreep(creep, "Moving to source ${source}");
             } else {
-                utils.logCreep(creep, "Collecting energy from ${source}");
+            //    utils.logCreep(creep, "Collecting energy from ${source}");
             }
         }
         // Drop off
