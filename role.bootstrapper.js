@@ -41,7 +41,7 @@ var roleBootstrapper = {
         if (creep.memory.working) {
 
             let spawns = _(creep.room.find(FIND_MY_SPAWNS))
-                .filter(s => s.energy <= s.energyCapacity)
+                .filter(s => s.energy < s.energyCapacity)
                 .sortBy(s => s.pos.getRangeTo(creep.pos))
                 .value();
             if (spawns.length) {
