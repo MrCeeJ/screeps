@@ -69,7 +69,18 @@ var roleWorker = {
                 }
                 // Upgrade Controller
                 else {
-                    if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    let towers = _(creep.room.find(FIND_STRUCTURES))
+                        .filter(s => s.structureType == STRUCTURE_TOWER)
+                        .filter(s => s.energy <= s.energyCapacity*0.8)
+                        .sortBy(s => s.pos.getRangeTo(creep.pos))
+                        .value();
+                    if (towers.length) {
+                        if (creep.transfer(towers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(towers[0]);
+                        }
+                    }
+
+                    else if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(creep.room.controller);
                     }
                 }
