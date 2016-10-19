@@ -1,3 +1,5 @@
+const utils = require('utils.js');
+
 var transporter = {
     /**
      * Carry Energy to:
@@ -35,6 +37,7 @@ var transporter = {
 
         if (!creep.memory.sourceId) {
             creep.say("No Source!");
+            return ERR_NOT_FOUND;
         }
 
         // Carrying energy
@@ -50,6 +53,9 @@ var transporter = {
             var source = Game.getObjectById(creep.memory.sourceId);
             if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source);
+                utils.logCreep(creep, "Moving to source ${source}");
+            } else {
+                utils.logCreep(creep, "Collecting energy from ${source}");
             }
         }
         // Drop off
@@ -62,7 +68,6 @@ var transporter = {
 
             if (extensions.length) {
                 if (creep.transfer(extensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.say("MT:"+extensions[0].id);
                     creep.moveTo(extensions[0]);
                 }
             } else {
