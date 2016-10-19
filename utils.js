@@ -1,6 +1,6 @@
 var utils = {
     logMessage : function(message) {
-
+        console.log(message);
     },
 
     logCreep : function (creep, message) {
