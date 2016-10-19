@@ -5,6 +5,7 @@ const roleWorker = require('role.worker');
 const roleUpgrader = require('role.upgrader');
 const roleStarterMiner = require('role.starterMiner');
 const roleStarterUpgrader = require('role.starterUpgrader');
+const roleBootstrapper = require('role.bootstrapper');
 
 const maxStarterUpgraders = settings.maxStarterUpgraders;
 const maxStarterMiners = settings.maxStarterMiners;
@@ -69,6 +70,9 @@ module.exports.loop = function () {
             upgraders.push(creep);
             roleUpgrader.run(creep);
         }
+        else if (creep.memory.role == 'bootstrapper') {
+            roleBootstrapper.run(creep);
+        }
     }
 
     const towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
@@ -87,7 +91,7 @@ module.exports.loop = function () {
         else if (allowStarters && _(starterMiners).size() < maxStarterMiners) {
             Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'starterMiner'});
         }
-        else if (leftMiner == undefined) {
+        else if (false && leftMiner == undefined) {
             const flag = Game.flags['Flag1'];
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;
@@ -95,7 +99,7 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'leftMiner', home:false, locationX:locationX, locationY:locationY});
         }
 
-        else if (false && rightMiner == undefined) {
+        else if (rightMiner == undefined) {
             const flag = Game.flags['Flag2'];
             const locationX = flag.pos.x;
             const locationY = flag.pos.y;

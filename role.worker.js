@@ -5,6 +5,27 @@ var roleWorker = {
      * Repair stuff
      *
      * @param {Creep} creep **/
+
+    getBody: function (maxEnergy) {
+
+        if (maxEnergy >= 550) {
+            return [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+        }
+        else if (maxEnergy >= 450) {
+            return [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE];
+        }
+        else if (maxEnergy >= 350) {
+            return [WORK, WORK, CARRY, CARRY, MOVE];
+        }
+        else if (maxEnergy >= 250) {
+            return [WORK, CARRY, CARRY, MOVE];
+        }
+        else {
+            return [WORK, CARRY, MOVE];
+        }
+
+    },
+
     run: function (creep) {
 
         // Working but ran out of energy
