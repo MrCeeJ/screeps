@@ -16,7 +16,7 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_MOVING = function (creep) {
     creep.moveTo(creep.memory.flagId);
-    const flag = Game.flags[creep.memory.flagId];
+    const flag = Game.getObjectById(creep.memory.flagId);
     if (creep.pos == flag.pos) {
         let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         const result = creep.harvest(target);
