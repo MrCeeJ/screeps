@@ -3,7 +3,7 @@ const roleDrone = require('ai.drone');
 const roleUpgrader = require('ai.upgrader');
 const roleMiner = require('ai.miner');
 const roleTower = require('ai.tower');
-
+const utils = require('utils');
 const maxCreeps = settings.maxCreeps;
 
 module.exports.loop = function () {
