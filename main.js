@@ -27,16 +27,16 @@ module.exports.loop = function () {
 
     const towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
 
-    _.forEach(towers, function(tower) {
-    //   roleTower.run(tower);
+    _.forEach(towers, function (tower) {
+        roleTower.run(tower);
     });
 
     if (currentCreeps < maxCreeps) {
         // Note we might not have this much energy, in which case we will simply wait
         // const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
-        if (drones.length < settings.maxDrones){
-        const body = roleDrone.getBody(150);
-        Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
+        if (drones.length < settings.maxDrones) {
+            const body = roleDrone.getBody(150);
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
         }
     }
 };
