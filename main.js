@@ -25,8 +25,7 @@ module.exports.loop = function () {
         }
     }
 
-    const towers =  _.(Game.structures)
-        .filter(s => s.structureType == STRUCTURE_TOWER);
+    const towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
 
     _.forEach(towers, function(tower) {
        roleTower.run(tower);
