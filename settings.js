@@ -1,5 +1,6 @@
 var settings = {
-    maxCreeps : 7,
-    maxDrones : 6
+    maxCreeps : 8,
+    maxDrones : 6,
+    maxMiners : 2
 };
 module.exports = settings;

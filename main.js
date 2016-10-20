@@ -1,5 +1,6 @@
 const settings = require('settings');
 const roleDrone = require('ai.drone');
+const roleMiner = require('ai.miner');
 const roleTower = require('ai.tower');
 
 const maxCreeps = settings.maxCreeps;
@@ -13,15 +14,18 @@ module.exports.loop = function () {
     }
 
     const currentCreeps = _(Game.creeps).size();
-    //Spawning
     let drones = [];
-
+    let miners = [];
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 
         if (creep.memory.role == 'drone') {
             drones.push(creep);
             roleDrone.run(creep);
+        }
+        else if (creep.memory.role == 'miner') {
+            miners.push(creep);
+            roleMiner.run(creep);
         }
     }
 
@@ -33,10 +37,14 @@ module.exports.loop = function () {
 
     if (currentCreeps < maxCreeps) {
         // Note we might not have this much energy, in which case we will simply wait
-        // const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
+        const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
         if (drones.length < settings.maxDrones) {
             const body = roleDrone.getBody(150);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
+        }
+        else if (miners.length < settings.maxMiners) {
+            const flags = _.filter(Game.flags, (flag) => flag.color == COLOR_GREEN && flag.secondaryColor == COLOR_GREEN);
+            const minedFlags = _.filter(Game.creeps, (creep) => creep.memory.role =='miner');
         }
     }
 };
