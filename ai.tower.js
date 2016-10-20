@@ -25,7 +25,7 @@ const tower = {
         if(tower.energy > 500) {
             const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
 
-            var structures = this.room.find(FIND_STRUCTURES, {
+            var structures = tower.room.find(FIND_STRUCTURES, {
                 filter: function(s) {
                     return s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType);
                 }
