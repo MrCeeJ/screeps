@@ -49,7 +49,7 @@ module.exports.loop = function () {
             const body = roleDrone.getBody(150);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
         }
-        else if (upgraders.length < upgraders.maxUpgraders) {
+        else if (upgraders.length < settings.maxUpgraders) {
             const body = roleUpgrader.getBody(maxSpawnEnergy);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
         }
@@ -64,4 +64,8 @@ module.exports.loop = function () {
             }
         }
     }
+    utils.logMessage("Tick complete:");
+    utils.logMessage("Miners :"+JSON.stringify(_.map(miners, (c) => c.name)));
+    utils.logMessage("Drones :"+JSON.stringify(_.map(drones, (c) => c.name)));
+    utils.logMessage("Upgraders :"+JSON.stringify(_.map(upgraders, (c) => c.name)));
 };

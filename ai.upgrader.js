@@ -3,7 +3,7 @@ const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
-    utils.logCreep(creep, " starting up!", true);
+    utils.logCreep(creep, "Upgrader starting up!", true);
 
     return states[creep.memory.state](creep);
 };
