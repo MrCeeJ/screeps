@@ -5,7 +5,7 @@ var ai = {
     gatherDroppedEnergy: function (creep) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount > 50)
-            .sortBy(s => s.pos.getRangeTo(creep.pos))
+            .sortBy(e => e.amount)
             .value();
 
         if (energy.length) {
