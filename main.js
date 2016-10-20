@@ -28,7 +28,7 @@ module.exports.loop = function () {
     const towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
 
     _.forEach(towers, function(tower) {
-       roleTower.run(tower);
+    //   roleTower.run(tower);
     });
 
     if (currentCreeps < maxCreeps) {
