@@ -15,7 +15,7 @@ const tower = {
             tower.attack(creep);
             return OK;
         }
-        creep = this.pos.findClosestByRange(FIND_MY_CREEPS, {
+        creep = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
             filter: function(c) { return c.hits < c.hitsMax;}
         });
         if(creep) {
@@ -23,11 +23,16 @@ const tower = {
             return OK;
         }
         if(tower.energy > 500) {
-            var structure = tower.findWeakestStructureOfType([STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART]);
-            if (structure) {
-                tower.repair(structure);
-                return OK;
-            }
+            const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
+
+            var structures = this.room.find(FIND_STRUCTURES, {
+                filter: function(s) {
+                    return s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType);
+                }
+            });
+            var orderedStructures = _.sortByOrder(structures, ['hits']);
+            tower.repair(_.first(orderedStructures));
+            return OK;
         }
     }
 };
