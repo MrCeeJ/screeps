@@ -25,8 +25,11 @@ const STATE_MOVING = function (creep) {
             utils.logCreep(creep,'Problem :'+result);
         }
     } else {
-        utils.logCreep(creep,'Moving to :'+creep.memory.flagId.pos);
-        creep.moveTo(creep.memory.flagId.pos);
+        utils.logCreep(creep,'Moving to :'+JSON.stringify(creep.memory.flagId.pos));
+        if (creep.memory.flagId.pos) {
+            creep.moveTo(creep.memory.flagId.pos.x,creep.memory.flagId.pos.y);
+        }
+
     }
 };
 
