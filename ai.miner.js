@@ -16,7 +16,8 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_MOVING = function (creep) {
     creep.moveTo(creep.memory.flagId);
-    if (creep.pos == Game.flags[creep.memory.flagId].pos) {
+    const flag = Game.flags[creep.memory.flagId];
+    if (creep.pos == flag.pos) {
         let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         const result = creep.harvest(target);
         if (result != ERR_NOT_IN_RANGE) {
@@ -46,7 +47,7 @@ const drone = {
     /**
      * Generic blank AI file.
      *
-     * @param {Creep} creep **/
+     * @param {Energy} energy **/
 
     getBody: function (energy) {
 
