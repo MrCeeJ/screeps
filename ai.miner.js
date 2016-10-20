@@ -19,13 +19,13 @@ const STATE_MOVING = function (creep) {
         let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         const result = creep.harvest(target);
         if (result != ERR_NOT_IN_RANGE) {
-            creep.say('Arrived, mining from :'+target);
+            utils.logCreep(creep,'Arrived, mining from :'+target);
             creep.memory.targetId = target.id;
         } else {
-            creep.say('Problem :'+result);
+            utils.logCreep(creep,'Problem :'+result);
         }
     } else {
-        creep.say('Moving to :'+creep.memory.flagId.pos);
+        utils.logCreep(creep,'Moving to :'+creep.memory.flagId.pos);
         creep.moveTo(creep.memory.flagId.pos);
     }
 };
