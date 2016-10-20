@@ -4,8 +4,8 @@ var ai = {
 
     gatherDroppedEnergy: function (creep) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
-            .filter(e => e.amount > 50)
-            .sortBy(e => e.amount)
+            .filter(e => e.amount > 500)
+            .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
 
         if (energy.length) {
@@ -22,7 +22,6 @@ var ai = {
                     return false;
                 }
             }
-
         }
         utils.logCreep(creep, 'No dropped energy  found');
         return false;
