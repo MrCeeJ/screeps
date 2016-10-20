@@ -9,25 +9,25 @@ const STATE_INITIALISING = function (creep) {
         creep.say('Need Location!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to location ['+creep.memory.locationX+','+creep.memory.locationY+']', true);
+        utils.logCreep(creep, 'Moving to location [' + creep.memory.locationX + ',' + creep.memory.locationY + ']', true);
         return states[creep.memory.state](creep);
     }
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.pos.x == creep.memory.flagId.pos.x && creep.pos.y == creep.memory.flagId.pos.y ) {
-        let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-        const result = creep.harvest(target);
-        if (result != ERR_NOT_IN_RANGE) {
-            utils.logCreep(creep,'Arrived, mining from :'+target);
-            creep.memory.targetId = target.id;
+    if (creep.memory.flagId.pos) {
+        if (creep.pos.x == creep.memory.flagId.pos.x && creep.pos.y == creep.memory.flagId.pos.y) {
+            let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+            const result = creep.harvest(target);
+            if (result != ERR_NOT_IN_RANGE) {
+                utils.logCreep(creep, 'Arrived, mining from :' + target);
+                creep.memory.targetId = target.id;
+            } else {
+                utils.logCreep(creep, 'Problem :' + result);
+            }
         } else {
-            utils.logCreep(creep,'Problem :'+result);
-        }
-    } else {
-        utils.logCreep(creep,'Moving to :'+JSON.stringify(creep.memory.flagId.pos));
-        if (creep.memory.flagId.pos) {
-            creep.moveTo(creep.memory.flagId.pos.x,creep.memory.flagId.pos.y);
+            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.flagId.pos));
+            creep.moveTo(creep.memory.flagId.pos.x, creep.memory.flagId.pos.y);
         }
     }
 };
@@ -41,8 +41,8 @@ const STATE_MINING = function (creep) {
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
-    'MOVING' : STATE_MOVING,
-    'MINING' : STATE_MINING
+    'MOVING': STATE_MOVING,
+    'MINING': STATE_MINING
 };
 
 const drone = {
