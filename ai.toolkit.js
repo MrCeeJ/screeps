@@ -116,13 +116,21 @@ var ai = {
         return false;
     },
     repairBuildings: function (creep) {
+        const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
+        let structures = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s =>  s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType))
+            .sortBy(s => s.hits);
 
-        var structure = tower.findWeakestStructureOfType([STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART]);
-        if (structure /*&& structure.hits <= 125000*/) {
-            tower.repair(structure);
-            return OK;
+        if(structures.length) {
+            if (creep.repair(structures[0] == ERR_NOT_IN_RANGE)) {
+                creep.moveTo(structures[0]);
+                utils.logCreep(creep, 'Moving to repair ' + structures[0].structureType + ' at ' + structures[0].pos);
+            }
+            else {
+                utils.logCreep(creep, 'Repairing ' + structures[0].structureType + ' at ' + structures[0].pos);
+            }
+            return true;
         }
-
         return false;
     },
     upgradeRoom: function (creep) {
