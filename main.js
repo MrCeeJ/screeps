@@ -26,7 +26,7 @@ module.exports.loop = function () {
             drones.push(creep);
             roleDrone.run(creep);
         }
-        else if (creep.memory.role == 'upgrader'){
+        else if (creep.memory.role == 'upgrader') {
             upgraders.push(creep);
             roleUpgrader.run(creep);
         }
@@ -46,7 +46,7 @@ module.exports.loop = function () {
         // Note we might not have this much energy, in which case we will simply wait
         const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
         if (drones.length < settings.maxDrones) {
-            const body = roleDrone.getBody(150);
+            const body = roleDrone.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
         }
         else if (upgraders.length < settings.maxUpgraders) {
@@ -55,20 +55,21 @@ module.exports.loop = function () {
         }
         else if (miners.length < settings.maxMiners) {
             const flags = _.filter(Game.flags, (flag) => flag.color == COLOR_GREEN && flag.secondaryColor == COLOR_GREEN);
-            const miners = _.filter(Game.creeps, (creep) => creep.memory.role =='miner')
+            const miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
             const minedFlags = _.map(miners, (m) => m.memory.flag);
             const destinations = _.without(flags, minedFlags);
             if (destinations.length) {
                 const body = roleMiner.getBody(maxSpawnEnergy);
-                Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flag:destinations[0]});
+                Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flag: destinations[0]});
             }
         }
     }
-    if (Game.time %10 == 0) {
-        utils.logMessage("Time is :"+Game.time);
-        utils.logMessage("Miners :"+JSON.stringify(_.map(miners, (c) => c.name)));
-        utils.logMessage("Drones :"+JSON.stringify(_.map(drones, (c) => c.name)));
-        utils.logMessage("Upgraders :"+JSON.stringify(_.map(upgraders, (c) => c.name)));
+
+    if (Game.time % 10 == 0) {
+        utils.logMessage("Time is :" + Game.time);
+        utils.logMessage("Miners :" + JSON.stringify(_.map(miners, (c) => c.name)));
+        utils.logMessage("Drones :" + JSON.stringify(_.map(drones, (c) => c.name)));
+        utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
     }
 
 };
