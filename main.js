@@ -64,8 +64,11 @@ module.exports.loop = function () {
             }
         }
     }
-    utils.logMessage("Tick complete:");
-    utils.logMessage("Miners :"+JSON.stringify(_.map(miners, (c) => c.name)));
-    utils.logMessage("Drones :"+JSON.stringify(_.map(drones, (c) => c.name)));
-    utils.logMessage("Upgraders :"+JSON.stringify(_.map(upgraders, (c) => c.name)));
+    if (Game.time %10 == 0) {
+        utils.logMessage("Time is :"+Game.time);
+        utils.logMessage("Miners :"+JSON.stringify(_.map(miners, (c) => c.name)));
+        utils.logMessage("Drones :"+JSON.stringify(_.map(drones, (c) => c.name)));
+        utils.logMessage("Upgraders :"+JSON.stringify(_.map(upgraders, (c) => c.name)));
+    }
+
 };
