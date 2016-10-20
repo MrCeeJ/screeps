@@ -3,8 +3,8 @@ var utils = {
         console.log(message);
     },
 
-    logCreep: function (creep, message) {
-        if (creep.memory.log){
+    logCreep: function (creep, message, override) {
+        if (override || creep.memory.log){
             console.log(creep.memory.role + ':' + creep.name + ': ' + message);
         }
     }
