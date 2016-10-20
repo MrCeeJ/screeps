@@ -15,7 +15,7 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.pos == creep.memory.flagId.pos) {
+    if (creep.pos.x == creep.memory.flagId.pos.x && creep.pos.y == creep.memory.flagId.pos.y ) {
         let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         const result = creep.harvest(target);
         if (result != ERR_NOT_IN_RANGE) {
@@ -29,7 +29,6 @@ const STATE_MOVING = function (creep) {
         if (creep.memory.flagId.pos) {
             creep.moveTo(creep.memory.flagId.pos.x,creep.memory.flagId.pos.y);
         }
-
     }
 };
 
