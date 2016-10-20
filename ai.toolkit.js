@@ -12,10 +12,17 @@ var ai = {
             if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(energy[0]);
                 utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos);
+                return true;
             } else {
                 utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
+                if (creep.carry.energy == creep.carryCapacity) {
+                    return true;
+                } else {
+                    utils.logCreep(creep, 'Insufficient dropped energy found');
+                    return false;
+                }
             }
-            return true;
+
         }
         utils.logCreep(creep, 'No dropped energy  found');
         return false;
