@@ -44,13 +44,12 @@ module.exports.loop = function () {
         }
         else if (miners.length < settings.maxMiners) {
             const flags = _.filter(Game.flags, (flag) => flag.color == COLOR_GREEN && flag.secondaryColor == COLOR_GREEN);
-            const minedFlags = _.filter(Game.creeps, (creep) => creep.memory.role =='miner')
-                .map((creep) => creep.memory.flagId);
-
+            const miners = _.filter(Game.creeps, (creep) => creep.memory.role =='miner')
+            const minedFlags = _.map(miners, (m) => m.memory.flag);
             const destinations = _.without(flags, minedFlags);
             if (destinations.length) {
                 const body = roleMiner.getBody(maxSpawnEnergy);
-                Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flagId:destinations[0]});
+                Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flag:destinations[0]});
             }
         }
     }

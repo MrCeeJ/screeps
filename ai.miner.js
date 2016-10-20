@@ -4,7 +4,7 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Miner starting up!', true);
-    if (creep.memory.flagId == undefined) {
+    if (creep.memory.flag == undefined) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
@@ -15,8 +15,8 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.memory.flagId.pos) {
-        if (creep.pos.x == creep.memory.flagId.pos.x && creep.pos.y == creep.memory.flagId.pos.y) {
+    if (creep.memory.flag.pos) {
+        if (creep.pos.x == creep.memory.flag.pos.x && creep.pos.y == creep.memory.flag.pos.y) {
             let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             const result = creep.harvest(target);
             if (result != ERR_NOT_IN_RANGE) {
@@ -26,8 +26,8 @@ const STATE_MOVING = function (creep) {
                 utils.logCreep(creep, 'Problem :' + result);
             }
         } else {
-            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.flagId.pos));
-            creep.moveTo(creep.memory.flagId.pos.x, creep.memory.flagId.pos.y);
+            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.flag.pos));
+            creep.moveTo(creep.memory.flag.pos.x, creep.memory.flag.pos.y);
         }
     }
 };
