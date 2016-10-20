@@ -1,5 +1,6 @@
 const settings = require('settings');
 const roleDrone = require('ai.drone');
+const roleUpgrader = require('ai.upgrader');
 const roleMiner = require('ai.miner');
 const roleTower = require('ai.tower');
 
@@ -15,13 +16,19 @@ module.exports.loop = function () {
 
     const currentCreeps = _(Game.creeps).size();
     let drones = [];
+    let upgraders = [];
     let miners = [];
+
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 
         if (creep.memory.role == 'drone') {
             drones.push(creep);
             roleDrone.run(creep);
+        }
+        else if (creep.memory.role == 'upgrader'){
+            upgraders.push(creep);
+            roleUpgrader.run(creep);
         }
         else if (creep.memory.role == 'miner') {
             miners.push(creep);
@@ -41,6 +48,10 @@ module.exports.loop = function () {
         if (drones.length < settings.maxDrones) {
             const body = roleDrone.getBody(150);
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
+        }
+        else if (upgraders.length < upgraders.maxUpgraders) {
+            const body = roleUpgrader.getBody(maxSpawnEnergy);
+            Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
         }
         else if (miners.length < settings.maxMiners) {
             const flags = _.filter(Game.flags, (flag) => flag.color == COLOR_GREEN && flag.secondaryColor == COLOR_GREEN);
