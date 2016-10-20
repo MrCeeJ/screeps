@@ -34,9 +34,9 @@ module.exports.loop = function () {
     if (currentCreeps < maxCreeps) {
         // Note we might not have this much energy, in which case we will simply wait
         // const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
-        const maxSpawnEnergy = 150;
-        const body = roleDrone.getBody(maxSpawnEnergy);
+        if (drones.length < settings.maxDrones){
+        const body = roleDrone.getBody(150);
         Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
-
+        }
     }
 };
