@@ -54,8 +54,8 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
         }
         else if (miners.length < settings.maxMiners) {
-            const flags = _.filter(Game.flags, (flag) => flag.color == COLOR_GREEN && flag.secondaryColor == COLOR_GREEN);
-            const miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
+            const flags = _.filter(Game.flags, (f) => f.color == COLOR_GREEN && f.secondaryColor == COLOR_GREEN);
+            const miners = _.filter(Game.creeps, (c) => c.memory.role == 'miner');
             const minedFlags = _.map(miners, (m) => m.memory.flag);
             const destinations = _.without(flags, minedFlags);
             if (destinations.length) {
