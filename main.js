@@ -65,16 +65,16 @@ module.exports.loop = function () {
         }
         else if (miners.length < settings.maxMiners) {
             let energySources = settings.rooms[currentRoom].energySources;
-
+            let unusedSources = [];
             if (miners.length < energySources.length) {
                 for (let miner in miners) {
                     if (miner.memory) {
-                        _.pull(energySources, miner.memory.source);
+                        unusedSources = _.remove(energySources, (s) => s == miner.memory.source);
                     }
                 }
-                if (energySources.length) {
+                if (unusedSources.length) {
                     const body = roleMiner.getBody(maxSpawnEnergy);
-                    Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: energySources[0]});
+                    Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: unusedSources[0]});
                 }
             }
         }
