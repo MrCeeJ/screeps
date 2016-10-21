@@ -4,19 +4,19 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Miner starting up!', true);
-    if (creep.memory.flag == undefined) {
+    if (creep.memory.source == undefined) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to location [' + creep.memory.locationX + ',' + creep.memory.locationY + ']', true);
+        utils.logCreep(creep, 'Moving to location [' + creep.memory.source.x + ',' + creep.memory.source.y + ']', true);
         return states[creep.memory.state](creep);
     }
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.memory.flag.pos) {
-        if (creep.pos.x == creep.memory.flag.pos.x && creep.pos.y == creep.memory.flag.pos.y) {
+    if (creep.memory.source) {
+        if (creep.pos.x == creep.memory.source.x && creep.pos.y == creep.memory.source.y) {
             let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             const result = creep.harvest(target);
             if (result != ERR_NOT_IN_RANGE) {
@@ -26,8 +26,8 @@ const STATE_MOVING = function (creep) {
                 utils.logCreep(creep, 'Problem :' + result);
             }
         } else {
-            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.flag.pos));
-            creep.moveTo(creep.memory.flag.pos.x, creep.memory.flag.pos.y);
+            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.source));
+            creep.moveTo(creep.memory.source.x, creep.memory.source.y);
         }
     }
 };

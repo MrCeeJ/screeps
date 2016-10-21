@@ -45,12 +45,31 @@ var ai = {
         utils.logCreep(creep, 'No containers with energy  found');
         return false;
     },
+    gatherEnergyFromContainers: function (creep, sources) {
+        let containers = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+            .filter(s => s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
+            .filter(s => _.includes(sources, s.pos))
+            .value();
+
+        if (containers.length) {
+            if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0]);
+                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos);
+            } else {
+                utils.logCreep(creep, 'Withdrawing energy from container ' + containers[0].pos);
+            }
+            return true;
+        }
+        utils.logCreep(creep, 'No container with energy found at pos ' + pos);
+        return false;
+    },
     harvestEnergy: function (creep) {
         let sources = creep.room.find(FIND_SOURCES);
         if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
             creep.moveTo(sources[1]);
             utils.logCreep(creep, 'Moving to mine from' + sources[1].pos);
-        }else {
+        } else {
             utils.logCreep(creep, 'Mining from' + sources[1].pos);
         }
         return true;
@@ -95,7 +114,7 @@ var ai = {
     refillTowers: function (creep) {
         let towers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_TOWER)
-            .filter(s => s.energy <= s.energyCapacity*0.8)
+            .filter(s => s.energy <= s.energyCapacity * 0.8)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
         if (towers.length) {
@@ -128,10 +147,10 @@ var ai = {
     repairBuildings: function (creep) {
         const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
         let structures = _(creep.room.find(FIND_STRUCTURES))
-            .filter(s =>  s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType))
+            .filter(s => s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType))
             .sortBy(s => s.hits);
 
-        if(structures.length) {
+        if (structures.length) {
             if (creep.repair(structures[0] == ERR_NOT_IN_RANGE)) {
                 creep.moveTo(structures[0]);
                 utils.logCreep(creep, 'Moving to repair ' + structures[0].structureType + ' at ' + structures[0].pos);

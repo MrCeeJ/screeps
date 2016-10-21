@@ -5,7 +5,7 @@ var settings = {
     maxUpgraders : 2,
     rooms : {
         'W9S51': {
-            energySources : [Game.flags['Flag1'], Game.flags['Flag2']],
+            energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
             mineralSources : [Game.flags['Flag3']]
         }
     }
