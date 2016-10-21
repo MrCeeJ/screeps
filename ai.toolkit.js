@@ -64,6 +64,9 @@ var ai = {
         utils.logCreep(creep, 'No container with energy found at pos ' + pos);
         return false;
     },
+    refillContainers : function (creep, sources) {
+        return false;
+    },
     harvestEnergy: function (creep) {
         let sources = creep.room.find(FIND_SOURCES);
         if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {

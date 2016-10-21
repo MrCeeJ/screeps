@@ -67,7 +67,9 @@ module.exports.loop = function () {
             let energySources = settings.rooms[currentRoom].energySources;
             if (miners.length < energySources.length) {
                 for (let miner in miners) {
-                    energySources = _.reject(energySources, (s) => s == miner.memory.source);
+                    if (miner.memory) {
+                        energySources = _.reject(energySources, (s) => s == miner.memory.source);
+                    }
                 }
                 if (energySources.length) {
                     const body = roleMiner.getBody(maxSpawnEnergy);
