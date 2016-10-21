@@ -5,6 +5,7 @@ const roleMiner = require('ai.miner');
 const roleTower = require('ai.tower');
 const utils = require('utils');
 const maxCreeps = settings.maxCreeps;
+let currentRoom = 'W9S51';
 
 module.exports.loop = function () {
     const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
@@ -54,13 +55,15 @@ module.exports.loop = function () {
             Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
         }
         else if (miners.length < settings.maxMiners) {
-            const flags = _.filter(Game.flags, (f) => f.color == COLOR_GREEN && f.secondaryColor == COLOR_GREEN);
-            const miners = _.filter(Game.creeps, (c) => c.memory.role == 'miner');
-            const minedFlags = _.map(miners, (m) => m.memory.flag);
-            const destinations = _.without(flags, minedFlags);
-            if (destinations.length) {
-                const body = roleMiner.getBody(maxSpawnEnergy);
-                Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flag: destinations[0]});
+            let energySources = settings.rooms[currentRoom].energySources;
+            if (miners.length < energySources.length) {
+                for (let miner in miners) {
+                    energySources = _.reject(energySources, miner.memory.flag);
+                }
+                if (energySources.length) {
+                    const body = roleMiner.getBody(maxSpawnEnergy);
+                    Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', flag: energySources[0]});
+                }
             }
         }
     }
