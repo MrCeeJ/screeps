@@ -73,7 +73,7 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
-            let unusedSources = _.pull(energySources, usedSources)
+            let unusedSources = _.pull(energySources, usedSources);
             utils.logMessage("unusedSources :" + unusedSources);
 
             if (miners.length < energySources.length) {
