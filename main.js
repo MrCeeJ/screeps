@@ -118,8 +118,10 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
-            let unusedSources = _.pull(energySources, usedSources);
-            utils.logMessage("unusedSources :" + unusedSources);
+            for (let i in usedSources) {
+                _.pull(energySources, usedSources[i]);
+            }
+            utils.logMessage("unusedSources :" + usedSources);
         }
     }
 
