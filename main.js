@@ -69,7 +69,9 @@ module.exports.loop = function () {
                 let usedSources = [];
                 for (let m in miners) {
                     if (m.memory && m.memory.source) {
-                        usedSources.push(m.memory.source);
+                        const obj = miners[m].memory.source;
+                        const pos = new RoomPosition(obj.x, obj.y, obj.roomName);
+                        usedSources.push(pos);
                     }
                 }
                 utils.logMessage("energySources :" + energySources);
@@ -104,14 +106,18 @@ module.exports.loop = function () {
                 if (miners[m].memory) {
                     utils.logMessage("memory ok");
                     if (miners[m].memory.source) {
-                        utils.logMessage("memory source :"+miners[m].memory.source);
-                        usedSources.push(miners[m].memory.source);
+                        utils.logMessage("memory source :" + miners[m].memory.source);
+                        let obj = miners[m].memory.source;
+                        let pos = new RoomPosition(obj.x, obj.y, obj.roomName);
+                        utils.logMessage("memory source pos:" + pos);
+                        usedSources.push(pos);
+                        usedSources.push();
                     } else
                         utils.logMessage("memory source not found");
                 }
             }
             utils.logMessage("energySources :" + energySources);
-            utils.logMessage("usedSources :" + JSON.stringify(usedSources));
+            utils.logMessage("usedSources :" + usedSources);
             let unusedSources = _.pull(energySources, usedSources);
             utils.logMessage("unusedSources :" + unusedSources);
         }
