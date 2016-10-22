@@ -118,7 +118,7 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
-            let unusedSources = _.pull(energySources, usedSources);
+            let unusedSources = _.pullAll(energySources, usedSources);
             utils.logMessage("unusedSources :" + unusedSources);
         }
     }
