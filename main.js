@@ -88,10 +88,10 @@ module.exports.loop = function () {
             } else if (transporters.length < settings.maxTransporters) {
                 let energySources = settings.rooms[currentRoom].energySources;
                 let containers = _(Game.rooms[currentRoom].find(FIND_STRUCTURES))
-                    .filter(s => _.includes(energySources, s.pos))
+                    .filter(s => _.some(energySources, s.pos))
                     .filter(s => s.structureType == STRUCTURE_CONTAINER);
 
-                utils.logMessage("Containers :" + JSON.stringify(containers));
+                utils.logMessage("Containers :" + JSON.stringify(_.map(containers, (c) => c.id)));
 
             }
         }
