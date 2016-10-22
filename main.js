@@ -76,7 +76,7 @@ module.exports.loop = function () {
                 }
                 let unusedSources;
                 for (let i in usedSources) {
-                    unusedSources =  _.remove(energySources, (s) => _.matches(usedSources[i]));
+                    unusedSources =  _.filter(energySources, (s) => _.matches(usedSources[i]));
                 }
                 if (miners.length < energySources.length) {
                     if (unusedSources.length) {
@@ -115,7 +115,7 @@ module.exports.loop = function () {
             utils.logMessage("usedSources :" + usedSources);
             let unusedSources;
             for (let i in usedSources) {
-                unusedSources =  _.remove(energySources, (s) => _.matches(usedSources[i]));
+                unusedSources =  _.filter(energySources, (s) => _.matches(usedSources[i]));
             }
             utils.logMessage("unusedSources :" + unusedSources);
         }
