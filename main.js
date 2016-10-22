@@ -95,6 +95,8 @@ module.exports.loop = function () {
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
         }
         if (Game.time % 5 == 0) {
+            utils.logMessage(" ### Mining debug ###");
+
             let energySources = settings.rooms[currentRoom].energySources;
             let usedSources = [];
             for (let m in miners) {
