@@ -73,14 +73,10 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
+            let unusedSources = _.pull(energySources, usedSources)
+            utils.logMessage("unusedSources :" + unusedSources);
 
-            let unusedSources = [];
             if (miners.length < energySources.length) {
-                for (let miner in miners) {
-                    if (miner.memory) {
-                        unusedSources = _.remove(energySources, (s) => s == miner.memory.source);
-                    }
-                }
                 if (unusedSources.length) {
                     const body = roleMiner.getBody(maxSpawnEnergy);
                     Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: unusedSources[0]});
