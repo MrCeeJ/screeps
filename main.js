@@ -74,7 +74,7 @@ module.exports.loop = function () {
                         usedSources.push(pos);
                     }
                 }
-                let unusedSources = _.reject(energySources, (s) => _.includes(usedSources));
+                let unusedSources = _.reject(energySources, (s) => _.includes(usedSources, s));
                 if (miners.length < energySources.length) {
                     if (unusedSources.length) {
                         const body = roleMiner.getBody(maxSpawnEnergy);
@@ -110,7 +110,7 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
-            let unusedSources = _.reject(energySources, (s) => _.includes(usedSources));
+            let unusedSources = _.reject(energySources, (s) => _.includes(usedSources, s));
             utils.logMessage("unusedSources :" + unusedSources);
         }
     }
