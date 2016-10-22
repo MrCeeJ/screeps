@@ -92,27 +92,6 @@ module.exports.loop = function () {
             utils.logMessage("Drones :" + JSON.stringify(_.map(drones, (c) => c.name)));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
         }
-        if (Game.time % 5 == 0) {
-            utils.logMessage(" ### Mining debug ###");
-
-            let energySources = settings.rooms[currentRoom].energySources;
-            let usedSources = [];
-            for (let m in miners) {
-                utils.logMessage("checking creep:" + miners[m]);
-                if (miners[m].memory) {
-                    if (miners[m].memory.source) {
-                        let obj = miners[m].memory.source;
-                        let pos = new RoomPosition(obj.x, obj.y, obj.roomName);
-                        usedSources.push(pos);
-                        usedSources.push();
-                    }
-                }
-            }
-            utils.logMessage("energySources :" + energySources);
-            utils.logMessage("usedSources :" + usedSources);
-            let unusedSources = _.reject(energySources, (s) => _.some(usedSources, s));
-            utils.logMessage("unusedSources :" + unusedSources);
-        }
     }
 
     const currentRoom = 'W9S51';
