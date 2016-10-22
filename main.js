@@ -98,8 +98,14 @@ module.exports.loop = function () {
             let energySources = settings.rooms[currentRoom].energySources;
             let usedSources = [];
             for (let m in miners) {
-                if (m.memory && m.memory.source) {
-                    usedSources.push(m.memory.source);
+                utils.logMessage("checking creep:" + m.name);
+                if (m.memory) {
+                    utils.logMessage("memory ok");
+                    if (m.memory.source) {
+                        utils.logMessage("memory source :"+m.memory.source);
+                        usedSources.push(m.memory.source);
+                    } else
+                        utils.logMessage("memory source not found");
                 }
             }
             utils.logMessage("energySources :" + energySources);
