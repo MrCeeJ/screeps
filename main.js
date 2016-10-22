@@ -65,6 +65,15 @@ module.exports.loop = function () {
         }
         else if (miners.length < settings.maxMiners) {
             let energySources = settings.rooms[currentRoom].energySources;
+            let usedSources = [];
+            for (let m in miners) {
+                if (m.memory && m.memory.source) {
+                    usedSources.push(m.memory.source);
+                }
+            }
+            utils.logMessage("energySources :" + energySources);
+            utils.logMessage("usedSources :" + usedSources);
+
             let unusedSources = [];
             if (miners.length < energySources.length) {
                 for (let miner in miners) {
