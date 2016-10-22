@@ -109,7 +109,7 @@ module.exports.loop = function () {
                 }
             }
             utils.logMessage("energySources :" + energySources);
-            utils.logMessage("usedSources :" + usedSources);
+            utils.logMessage("usedSources :" + JSON.stringify(usedSources));
             let unusedSources = _.pull(energySources, usedSources);
             utils.logMessage("unusedSources :" + unusedSources);
         }
