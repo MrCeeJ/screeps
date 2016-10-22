@@ -2,6 +2,7 @@ const settings = require('settings');
 const roleDrone = require('ai.drone');
 const roleUpgrader = require('ai.upgrader');
 const roleMiner = require('ai.miner');
+const roleTransporter = require('ai.transporter');
 const roleTower = require('ai.tower');
 const utils = require('utils');
 const maxCreeps = settings.maxCreeps;
@@ -40,6 +41,9 @@ module.exports.loop = function () {
             else if (creep.memory.role == 'miner') {
                 miners.push(creep);
                 roleMiner.run(creep);
+            } else if (creep.memory.role == 'transporter') {
+                transporters.push(creep);
+                roleTransporter.run(creep);
             }
         }
     }
@@ -81,6 +85,14 @@ module.exports.loop = function () {
                         Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: unusedSources[0]});
                     }
                 }
+            } else if (transporters.length < settings.maxTransporters) {
+                let energySources = settings.rooms[currentRoom].energySources;
+                let containers = _(Game.rooms[currentRoom].find(FIND_STRUCTURES))
+                    .filter(s => _.includes(energySources, s.pos))
+                    .filter(s => s.structureType == STRUCTURE_CONTAINER);
+
+                utils.logMessage("Containers :" + JSON.stringify(containers));
+
             }
         }
     }
@@ -91,6 +103,8 @@ module.exports.loop = function () {
             utils.logMessage("Miners :" + JSON.stringify(_.map(miners, (c) => c.name)));
             utils.logMessage("Drones :" + JSON.stringify(_.map(drones, (c) => c.name)));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
+            utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, (c) => c.name)));
+
         }
     }
 
@@ -99,6 +113,7 @@ module.exports.loop = function () {
     let drones = [];
     let upgraders = [];
     let miners = [];
+    let transporters = [];
     let towers;
 
     activateSafeMode();

@@ -4,9 +4,9 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
-    if (creep.memory.sources == undefined) {
-        utils.logCreep(creep, 'ALERT! No location defined', true);
-        creep.say('Need Location!');
+    if (creep.memory.sourceIds == undefined) {
+        utils.logCreep(creep, 'ALERT! No container ids defined', true);
+        creep.say('Need ids!');
     } else {
         creep.memory.state = 'MOVING';
         utils.logCreep(creep, 'Moving to locations [' + JSON.stringify(creep.memory.sources) + ']', true);
@@ -19,7 +19,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'TRANSPORTING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherDroppedEnergy(creep) || ai.gatherEnergyFromContainers(creep, creep.memory.sources) || ai.harvestEnergy(creep);
+    return ai.gatherDroppedEnergy(creep) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds) || ai.harvestEnergy(creep);
 };
 
 const STATE_TRANSPORTING = function (creep) {
@@ -27,7 +27,7 @@ const STATE_TRANSPORTING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep) || ai.refillContainers(creep, creep.memory.sources);
+    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
 };
 
 const states = {
