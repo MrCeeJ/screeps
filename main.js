@@ -74,11 +74,10 @@ module.exports.loop = function () {
                         usedSources.push(pos);
                     }
                 }
-                utils.logMessage("energySources :" + energySources);
-                utils.logMessage("usedSources :" + usedSources);
-                let unusedSources = _.pull(energySources, usedSources);
-                utils.logMessage("unusedSources :" + unusedSources);
-
+                let unusedSources;
+                for (let i in usedSources) {
+                    unusedSources =  _.remove(energySources, (s) => _.matches(usedSources[i]));
+                }
                 if (miners.length < energySources.length) {
                     if (unusedSources.length) {
                         const body = roleMiner.getBody(maxSpawnEnergy);
