@@ -118,10 +118,11 @@ module.exports.loop = function () {
             }
             utils.logMessage("energySources :" + energySources);
             utils.logMessage("usedSources :" + usedSources);
+            let unusedSources;
             for (let i in usedSources) {
-                energySources =  _.remove(energySources, (s) => _.matches(usedSources[i]));
+                unusedSources =  _.remove(energySources, (s) => _.matches(usedSources[i]));
             }
-            utils.logMessage("unusedSources :" + usedSources);
+            utils.logMessage("unusedSources :" + unusedSources);
         }
     }
 
