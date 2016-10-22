@@ -4,12 +4,12 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
-    if (creep.memory.flag == undefined) {
+    if (creep.memory.sources == undefined) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to location [' + creep.memory.flag.pos.x + ',' + creep.memory.flag.pos.y + ']', true);
+        utils.logCreep(creep, 'Moving to locations [' + JSON.stringify(creep.memory.sources) + ']', true);
         return states[creep.memory.state](creep);
     }
 };
@@ -21,7 +21,6 @@ const STATE_GATHERING = function (creep) {
     }
     return ai.gatherDroppedEnergy(creep) || ai.gatherEnergyFromContainers(creep, creep.memory.sources) || ai.harvestEnergy(creep);
 };
-
 
 const STATE_TRANSPORTING = function (creep) {
     if (creep.carry.energy == 0) {

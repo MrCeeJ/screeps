@@ -94,6 +94,19 @@ module.exports.loop = function () {
             utils.logMessage("Drones :" + JSON.stringify(_.map(drones, (c) => c.name)));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
         }
+        if (Game.time % 5 == 0) {
+            let energySources = settings.rooms[currentRoom].energySources;
+            let usedSources = [];
+            for (let m in miners) {
+                if (m.memory && m.memory.source) {
+                    usedSources.push(m.memory.source);
+                }
+            }
+            utils.logMessage("energySources :" + energySources);
+            utils.logMessage("usedSources :" + usedSources);
+            let unusedSources = _.pull(energySources, usedSources);
+            utils.logMessage("unusedSources :" + unusedSources);
+        }
     }
 
     const currentRoom = 'W9S51';
