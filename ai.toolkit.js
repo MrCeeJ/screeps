@@ -80,6 +80,7 @@ var ai = {
             }
             return true;
         }
+        utils.logCreep(creep, 'No containers needing energy found.');
         return false;
     },
     harvestEnergy: function (creep) {
@@ -107,7 +108,7 @@ var ai = {
             }
             return true;
         }
-        utils.logCreep(creep, 'No spawns neededing energy found.');
+        utils.logCreep(creep, 'No spawns needing energy found.');
         return false;
     },
     refillExtensions: function (creep) {
@@ -127,6 +128,7 @@ var ai = {
             }
             return true;
         }
+        utils.logCreep(creep, 'No extensions needing energy found.');
         return false;
     },
     refillTowers: function (creep, minCapacity) {
@@ -145,6 +147,7 @@ var ai = {
             }
             return true;
         }
+        utils.logCreep(creep, 'No towers needing energy found.');
         return false;
     },
     buildBuildings: function (creep) {
@@ -178,6 +181,7 @@ var ai = {
             }
             return true;
         }
+        utils.logCreep(creep, 'No buildings to repair.');
         return false;
     },
     upgradeRoom: function (creep) {
