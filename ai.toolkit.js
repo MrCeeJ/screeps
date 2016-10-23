@@ -48,7 +48,7 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds) {
         let containers = _.map(sourceIds, (s) => Game.getObjectById(s));
-        _.sortBy(containers, s => 0 - s.store[RESOURCE_ENERGY])
+        _.sortBy(containers, s => -1 * s.store[RESOURCE_ENERGY]);
 
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -62,7 +62,7 @@ var ai = {
         utils.logCreep(creep, 'No container with energy found at pos ' + pos);
         return false;
     },
-    refillContainersExcept : function (creep, sourceIds) {
+    refillContainersExcept: function (creep, sourceIds) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
             .reject(s => _.some(sourceIds, s.id))
