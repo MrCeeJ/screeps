@@ -47,7 +47,7 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds) {
         let containers = _.map(sourceIds, (s) => Game.getObjectById(s));
-        _.sortBy(containers, s => s.store[RESOURCE_ENERGY]);
+        _.orderBy(containers, s => s.store[RESOURCE_ENERGY], 'desc');
 
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
