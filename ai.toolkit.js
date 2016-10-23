@@ -24,7 +24,7 @@ var ai = {
                 }
             }
         }
-        utils.logCreep(creep, 'No dropped energy  found');
+        utils.logCreep(creep, 'No dropped energy found');
         return false;
     },
     gatherContainerEnergy: function (creep) {
