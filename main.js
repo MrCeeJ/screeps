@@ -90,9 +90,10 @@ module.exports.loop = function () {
                 let containers = _(Game.rooms[currentRoom].find(FIND_STRUCTURES))
                     .filter(s => _.some(energySources, s.pos))
                     .filter(s => s.structureType == STRUCTURE_CONTAINER);
-                let containerIds = _.map(containers, (c) => c["id"]);
+                let containerIds = _.map(containers, (c) => c.id);
+                utils.logMessage("Containers 0:" + JSON.stringify(containers[0].id));
                 utils.logMessage("Containers :" + JSON.stringify(containers));
-                utils.logMessage("Containers :" + JSON.stringify(containerIds));
+                utils.logMessage("Container IDs :" + JSON.stringify(containerIds));
 
             }
         }
