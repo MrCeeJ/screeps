@@ -63,10 +63,13 @@ module.exports.loop = function () {
             if (drones.length < settings.maxDrones) {
                 const body = roleDrone.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
+                utils.logMessage("Spawning drone :"+JSON.stringify(body));
+
             }
             else if (upgraders.length < settings.maxUpgraders) {
                 const body = roleUpgrader.getBody(maxSpawnEnergy);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
+                utils.logMessage("Spawning upgrader :"+JSON.stringify(body));
             }
             else if (miners.length < settings.maxMiners) {
                 let energySources = settings.rooms[currentRoom].energySources;
@@ -78,16 +81,19 @@ module.exports.loop = function () {
                         usedSources.push(pos);
                     }
                 }
-                let unusedSources = _.reject(energySources, (s) => _.some(usedSources, s));
+                let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
                 if (miners.length < energySources.length) {
                     if (unusedSources.length) {
                         const body = roleMiner.getBody(maxSpawnEnergy);
                         Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: unusedSources[0]});
+                        utils.logMessage("Spawning miner :"+JSON.stringify(body));
                     }
                 }
             } else if (transporters.length < settings.maxTransporters) {
                 const body = roleTransporter.getBody(maxSpawnEnergy);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'transporter', sourceIds:settings.rooms[currentRoom].sourceContainerIDs});
+                utils.logMessage("Spawning transporter :"+JSON.stringify(body));
+
             }
         }
     }
@@ -95,11 +101,10 @@ module.exports.loop = function () {
     function logGameState() {
         if (Game.time % 10 == 0) {
             utils.logMessage("Time is :" + Game.time);
-            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, (c) => c.name)));
-            utils.logMessage("Drones :" + JSON.stringify(_.map(drones, (c) => c.name)));
-            utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, (c) => c.name)));
-            utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, (c) => c.name)));
-
+            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name)));
+            utils.logMessage("Drones :" + JSON.stringify(_.map(drones, c => c.name)));
+            utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
+            utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
         }
     }
 
