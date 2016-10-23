@@ -93,7 +93,7 @@ module.exports.loop = function () {
                 let containerIds = _.map(containers, (c) => c.id);
                 //utils.logMessage("Containers 0:" + JSON.stringify(containers[0].id));
                 utils.logMessage("Containers :" + JSON.stringify(containers));
-                utils.logMessage("Container IDs :" + JSON.stringify(settings.sourceContainerIDs));
+                utils.logMessage("Source Container IDs :" + JSON.stringify(settings.rooms[currentRoom].sourceContainerIDs));
 
             }
         }
