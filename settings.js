@@ -1,9 +1,9 @@
 var settings = {
-    maxCreeps : 7,
+    maxCreeps : 8,
     maxDrones : 4,
     maxMiners : 2,
     maxUpgraders : 1,
-    maxTransporters : 0,
+    maxTransporters : 1,
     rooms : {
         'W9S51': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],

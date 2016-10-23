@@ -91,7 +91,7 @@ module.exports.loop = function () {
                     .filter(s => _.some(energySources, s.pos))
                     .filter(s => s.structureType == STRUCTURE_CONTAINER);
 
-                utils.logMessage("Containers :" + JSON.stringify(_.map(containers, (c) => c.id)));
+                utils.logMessage("Containers :" + JSON.stringify(containers));
 
             }
         }
