@@ -2,9 +2,9 @@ const utils = require('utils');
 
 var ai = {
 
-    gatherDroppedEnergy: function (creep) {
+    gatherDroppedEnergy: function (creep, minEnergy) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
-            .filter(e => e.amount > 500)
+            .filter(e => e.amount > minEnergy ? minEnergy : 0)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
 
@@ -47,16 +47,8 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds) {
         let containers = _.map(sourceIds, (s) => Game.getObjectById(s))
-            .filter(s => s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
             .sortBy(s => s.store[RESOURCE_ENERGY])
             .value();
-        
-        // let containers = _(creep.room.find(FIND_STRUCTURES))
-        //     .filter(s => _.includes(sourceIds, s.pos))
-        //     .filter(s => s.structureType == STRUCTURE_CONTAINER)
-        //     .filter(s => s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
-        //     .sortBy(s => s.store[RESOURCE_ENERGY])
-        //     .value();
 
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -70,7 +62,24 @@ var ai = {
         utils.logCreep(creep, 'No container with energy found at pos ' + pos);
         return false;
     },
-    refillContainersExcept : function (creep, sources) {
+    refillContainersExcept : function (creep, sourceIds) {
+        let containers = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+            .reject(s => _.some(sourceIds, s.id))
+            .filter(s => s.energy < s.energyCapacity)
+            .sortBy(s => s.pos.getRangeTo(creep.pos))
+            .value();
+
+        if (containers.length) {
+            if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0]);
+                utils.logCreep(creep, 'Moving to refill container ' + containers[0].pos);
+            }
+            else {
+                utils.logCreep(creep, 'Refilling container ' + containers[0].pos);
+            }
+            return true;
+        }
         return false;
     },
     harvestEnergy: function (creep) {
@@ -120,10 +129,10 @@ var ai = {
         }
         return false;
     },
-    refillTowers: function (creep) {
+    refillTowers: function (creep, minCapacity) {
         let towers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_TOWER)
-            .filter(s => s.energy <= s.energyCapacity * 0.8)
+            .filter(s => s.energy <= s.energyCapacity * minCapacity)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
         if (towers.length) {

@@ -2,6 +2,9 @@ const utils = require('utils');
 const settings = require('settings');
 const ai = require('ai.toolkit');
 
+const REFILL_TOWER_CAPACITY = 0.75;
+const MINIMUM_ENERGY_TO_PICKUP = 500;
+
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, "Drone starting up!", true);
     creep.memory.state = 'GATHERING';
@@ -13,7 +16,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherDroppedEnergy(creep) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
+    return ai.gatherDroppedEnergy(creep, MINIMUM_ENERGY_TO_PICKUP) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
 };
 
 const STATE_WORKING = function (creep) {
@@ -21,7 +24,7 @@ const STATE_WORKING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep) || ai.buildBuildings(creep) || ai.repairBuildings(creep) || ai.upgradeRoom(creep);
+    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.buildBuildings(creep) || ai.repairBuildings(creep) || ai.upgradeRoom(creep);
 };
 
 const states = {

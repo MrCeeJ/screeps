@@ -2,6 +2,9 @@ const utils = require('utils');
 const settings = require('settings');
 const ai = require('ai.toolkit');
 
+const REFILL_TOWER_CAPACITY = 0.9;
+const MINIMUM_ENERGY_TO_PICKUP = 0;
+
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
     if (creep.memory.sourceIds == undefined) {
@@ -9,7 +12,7 @@ const STATE_INITIALISING = function (creep) {
         creep.say('Need ids!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to locations [' + JSON.stringify(creep.memory.sources) + ']', true);
+        utils.logCreep(creep, 'Gathering from locations [' + JSON.stringify(creep.memory.sourceIds) + ']', true);
         return states[creep.memory.state](creep);
     }
 };
@@ -19,7 +22,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'TRANSPORTING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherDroppedEnergy(creep) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds) || ai.harvestEnergy(creep);
+    return ai.gatherDroppedEnergy(creep, MINIMUM_ENERGY_TO_PICKUP) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds) || ai.harvestEnergy(creep);
 };
 
 const STATE_TRANSPORTING = function (creep) {
@@ -27,13 +30,13 @@ const STATE_TRANSPORTING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
+    return ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
 };
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
     'GATHERING' : STATE_GATHERING,
-    TRANSPORTING : STATE_TRANSPORTING
+    'TRANSPORTING' : STATE_TRANSPORTING
 };
 
 const drone = {
@@ -41,24 +44,24 @@ const drone = {
     /**
      * Generic blank AI file.
      *
-     * @param {Creep} creep **/
+     * @param {Energy} energy **/
 
     getBody: function (energy) {
 
-        if (energy >= 550) {
-            return [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+        if (energy >= 600) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
         }
         else if (energy >= 450) {
-            return [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE];
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else if (energy >= 350) {
-            return [WORK, WORK, CARRY, CARRY, MOVE];
+            return [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else if (energy >= 250) {
-            return [WORK, CARRY, CARRY, MOVE];
+            return [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else {
-            return [WORK, CARRY, MOVE];
+            return [CARRY, CARRY, MOVE];
         }
 
     },

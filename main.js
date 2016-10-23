@@ -86,15 +86,8 @@ module.exports.loop = function () {
                     }
                 }
             } else if (transporters.length < settings.maxTransporters) {
-                let energySources = settings.rooms[currentRoom].energySources;
-                let containers = _(Game.rooms[currentRoom].find(FIND_STRUCTURES))
-                    .filter(s => _.some(energySources, s.pos))
-                    .filter(s => s.structureType == STRUCTURE_CONTAINER);
-                let containerIds = _.map(containers, (c) => c.id);
-                //utils.logMessage("Containers 0:" + JSON.stringify(containers[0].id));
-                utils.logMessage("Containers :" + JSON.stringify(containers));
-                utils.logMessage("Source Container IDs :" + JSON.stringify(settings.rooms[currentRoom].sourceContainerIDs));
-
+                const body = roleTransporter.getBody(maxSpawnEnergy);
+                Game.spawns['Spawn1'].createCreep(body, null, {role: 'transporter', sourceIds:settings.rooms[currentRoom].sourceContainerIDs});
             }
         }
     }
