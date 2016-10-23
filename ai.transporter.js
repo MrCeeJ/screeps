@@ -11,7 +11,7 @@ const STATE_INITIALISING = function (creep) {
         utils.logCreep(creep, 'ALERT! No container ids defined', true);
         creep.say('Need ids!');
     } else {
-        creep.memory.state = 'MOVING';
+        creep.memory.state = 'GATHERING';
         utils.logCreep(creep, 'Gathering from locations [' + JSON.stringify(creep.memory.sourceIds) + ']', true);
         return states[creep.memory.state](creep);
     }
