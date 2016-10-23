@@ -7,7 +7,8 @@ var settings = {
     rooms : {
         'W9S51': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
-            mineralSources : [Game.flags['Flag3']]
+            mineralSources : [Game.flags['Flag3']],
+            sourceContainerIDs : ['5809fd94e691a1b041d962b5', '5808e172c85d9b0937e9d690']
         }
     }
 
