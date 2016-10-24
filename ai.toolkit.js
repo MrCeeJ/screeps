@@ -66,14 +66,10 @@ var ai = {
     refillContainersExcept: function (creep, sourceIds) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER);
-        utils.logCreep(creep, "c1 "+containers);
             containers  = containers.reject(s => _.some(sourceIds, s.id));
-        utils.logCreep(creep, "c2 "+containers);
         containers  = containers.filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity);
-        utils.logCreep(creep, "c3 "+containers);
         containers  = containers.sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
-        utils.logCreep(creep, "c4 "+containers);
 
         if (containers.length) {
             if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
