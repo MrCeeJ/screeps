@@ -47,10 +47,11 @@ var ai = {
         return false;
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {
-        let containers = _.map(sourceIds, (s) => Game.getObjectById(s))
-                        .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy);
-        _.sortBy(containers, s => -1 * s.store[RESOURCE_ENERGY]);
-
+        let containers = _.map(sourceIds, s => Game.getObjectById(s))
+                        .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
+                        .sortBy(s => -1 * s.store[RESOURCE_ENERGY])
+                        .value()
+        utils.logCreep(creep, "Checking for energy in containers :"+containers);
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
