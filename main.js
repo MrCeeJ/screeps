@@ -9,6 +9,21 @@ const maxCreeps = settings.maxCreeps;
 
 module.exports.loop = function () {
 
+    const currentRoom = settings.startingRoom;
+    const currentCreeps = _(Game.creeps).size();
+    let drones = [];
+    let upgraders = [];
+    let miners = [];
+    let transporters = [];
+    let towers;
+
+    activateSafeMode();
+    cleanupMemory();
+    runCreeps();
+    runTowers();
+    spawnCreeps();
+    logGameState();
+
     function activateSafeMode() {
         const enemies = Game.rooms[currentRoom].find(FIND_HOSTILE_CREEPS);
         if (enemies.length > 0) {
@@ -107,20 +122,5 @@ module.exports.loop = function () {
             utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
         }
     }
-
-    const currentRoom = 'W9S51';
-    const currentCreeps = _(Game.creeps).size();
-    let drones = [];
-    let upgraders = [];
-    let miners = [];
-    let transporters = [];
-    let towers;
-
-    activateSafeMode();
-    cleanupMemory();
-    runCreeps();
-    runTowers();
-    spawnCreeps();
-    logGameState();
 
 };

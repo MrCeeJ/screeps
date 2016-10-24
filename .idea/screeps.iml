@@ -9,5 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lodash" level="project" />
+    <orderEntry type="library" name="require" level="project" />
+    <orderEntry type="library" name="screeps" level="project" />
   </component>
 </module>

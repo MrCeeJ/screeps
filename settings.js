@@ -4,6 +4,7 @@ var settings = {
     maxMiners : 2,
     maxUpgraders : 1,
     maxTransporters : 2,
+    startingRoom : 'W9S51',
     rooms : {
         'W9S51': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
