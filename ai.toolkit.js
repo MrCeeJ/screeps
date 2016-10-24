@@ -48,10 +48,10 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {
         let containers = _.map(sourceIds, s => Game.getObjectById(s))
-                        .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
-                        .sortBy(s => -1 * s.store[RESOURCE_ENERGY])
-                        .value()
-        utils.logCreep(creep, "Checking for energy in containers :"+containers);
+            .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
+            .sortBy(s => -1 * s.store[RESOURCE_ENERGY])
+            .value();
+        utils.logCreep(creep, "Checking for energy in containers :" + containers);
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
@@ -66,10 +66,10 @@ var ai = {
     },
     refillContainersExcept: function (creep, sourceIds) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
-            .filter(s => s.structureType == STRUCTURE_CONTAINER);
-            containers  = containers.reject(s => _.some(sourceIds, s.id));
-        containers  = containers.filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity);
-        containers  = containers.sortBy(s => s.pos.getRangeTo(creep.pos))
+            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+            .reject(s => _.some(sourceIds, s.id))
+            .filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity)
+            .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
 
         if (containers.length) {
