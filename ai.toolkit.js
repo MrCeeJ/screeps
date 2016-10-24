@@ -51,6 +51,7 @@ var ai = {
             .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
             .sortBy(s => -1 * s.store[RESOURCE_ENERGY])
             .value();
+
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -196,8 +197,6 @@ var ai = {
         }
         return true;
     },
-
-
 };
 
 module.exports = ai;
