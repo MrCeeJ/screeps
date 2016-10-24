@@ -3,8 +3,8 @@ const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.9;
-const MINIMUM_ENERGY_TO_PICKUP = 0;
-const MINIMUM_CONTAINER_ENERGY = 0;
+const MIN_PICKUP = 0;
+const MIN_CONTAINER = 0;
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
@@ -23,7 +23,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'TRANSPORTING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherDroppedEnergy(creep, MINIMUM_ENERGY_TO_PICKUP) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, MINIMUM_CONTAINER_ENERGY) || ai.harvestEnergy(creep);
+    return ai.gatherDroppedEnergy(creep, MIN_PICKUP) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, MIN_CONTAINER) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, 0);
 };
 
 const STATE_TRANSPORTING = function (creep) {

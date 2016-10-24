@@ -64,7 +64,7 @@ var ai = {
             }
             return true;
         }
-        utils.logCreep(creep, 'No container with energy found at pos ' + pos);
+        utils.logCreep(creep, 'No container with energy found');
         return false;
     },
     refillContainersExcept: function (creep, sourceIds) {
