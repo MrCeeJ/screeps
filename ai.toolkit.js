@@ -47,7 +47,7 @@ var ai = {
         return false;
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {
-        let containers = _.map(sourceIds, s => Game.getObjectById(s))
+        let containers = _.forEach(sourceIds, s => Game.getObjectById(s))
             .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
             .sortBy(s => -1 * s.store[RESOURCE_ENERGY])
             .value();
