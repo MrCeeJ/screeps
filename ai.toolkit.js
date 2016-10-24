@@ -69,7 +69,7 @@ var ai = {
         utils.logCreep(creep, "c1 "+containers);
             containers  = containers.reject(s => _.some(sourceIds, s.id));
         utils.logCreep(creep, "c2 "+containers);
-        containers  = containers.filter(s => s.energy = s.energyCapacity);
+        containers  = containers.filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity);
         utils.logCreep(creep, "c3 "+containers);
         containers  = containers.sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
