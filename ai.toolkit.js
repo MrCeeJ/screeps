@@ -3,7 +3,7 @@ const utils = require('utils');
 var ai = {
 
     gatherNearestDroppedEnergy: function (creep, minEnergy) {
-        utils.logCreep(creep, 'Looking for at least '+minEnergy+' dropped energy.');
+        utils.logCreep(creep, 'Looking for at least ' + minEnergy + ' dropped energy.');
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
@@ -12,7 +12,7 @@ var ai = {
         if (energy.length) {
             if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(energy[0]);
-                utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos +":"+energy[0].amount);
+                utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
                 utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
@@ -30,13 +30,13 @@ var ai = {
     gatherMostDroppedEnergy: function (creep, minEnergy) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
-            .sortBy(e => -1* e.amount)
+            .sortBy(e => -1 * e.amount)
             .value();
 
         if (energy.length) {
             if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(energy[0]);
-                utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos +":"+energy[0].amount);
+                utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
                 utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
@@ -87,18 +87,18 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {
         let containers = _(creep.room.find(FIND_STRUCTURES));
-        utils.logMessage("c1 :"+containers);
+        utils.logMessage("c1 :" + containers);
         containers = containers.filter(s => s.structureType == STRUCTURE_CONTAINER);
-        utils.logMessage("c2 :"+containers);
-        utils.logMessage("sources :"+sourceIds);
-        _.forEach(containers.value(), c =>  utils.logMessage("containers id  :"+c.id));
-        containers = containers.filter(s => _.some(sourceIds, s.id));
-        utils.logMessage("c3 :"+containers);
+        utils.logMessage("c2 :" + containers);
+        utils.logMessage("sources :" + sourceIds);
+        _.forEach(containers.value(), c => utils.logMessage("containers id  :" + c.id));
+        containers = containers.value().filter(s => _.some(sourceIds, s.id));
+        utils.logMessage("c3 :" + containers);
         containers = containers.filter(s => s.store[RESOURCE_ENERGY] >= minEnergy);
-        utils.logMessage("c4 :"+containers);
+        utils.logMessage("c4 :" + containers);
         containers = containers.sortBy(s => s.store[RESOURCE_ENERGY] * -1)
             .value();
-        utils.logMessage("c5 :"+containers)
+        utils.logMessage("c5 :" + containers)
 
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
         if (containers.length) {
@@ -113,7 +113,7 @@ var ai = {
         utils.logCreep(creep, 'No container with energy found');
         return false;
     },
-    dumpMinerals: function(creep, sourceIds) {
+    dumpMinerals: function (creep, sourceIds) {
         return false;
         // does creep have stuff to drop
 
