@@ -9,7 +9,7 @@ var settings = {
         'E63S63': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
             mineralSources : [Game.flags['Flag3']],
-            sourceContainerIDs : []
+            sourceContainerIDs : ['580f6b288c4693a4382fd0c1']
         }
     }
 
