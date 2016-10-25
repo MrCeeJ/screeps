@@ -3,7 +3,7 @@ var settings = {
     maxDrones : 4,
     maxMiners : 2,
     maxUpgraders : 1,
-    maxTransporters : 0,
+    maxTransporters : 1,
     startingRoom : 'E63S63',
     rooms : {
         'E63S63': {
