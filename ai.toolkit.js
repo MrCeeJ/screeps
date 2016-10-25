@@ -121,7 +121,7 @@ var ai = {
     refillContainersExcept: function (creep, sourceIds) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
-            .reject(s => _.some(sourceIds, s.id))
+            .reject(s => _.includes(sourceIds, s.id))
             .filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
