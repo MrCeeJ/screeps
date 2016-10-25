@@ -3,7 +3,6 @@ const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.75;
-const MINIMUM_ENERGY_TO_PICKUP = 50;
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, "Drone starting up!", true);
@@ -16,7 +15,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherDroppedEnergy(creep, MINIMUM_ENERGY_TO_PICKUP) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
+    return ai.gatherDroppedEnergy(creep, creep.energyCapacity) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
 };
 
 const STATE_WORKING = function (creep) {
