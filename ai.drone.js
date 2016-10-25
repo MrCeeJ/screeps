@@ -11,11 +11,12 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_GATHERING = function (creep) {
+    const MIN_ENERGY = creep.energyCapacity;
     if (creep.carry.energy == creep.carryCapacity) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherNearestDroppedEnergy(creep, 50) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
+    return ai.gatherNearestDroppedEnergy(creep, MIN_ENERGY) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
 };
 
 const STATE_WORKING = function (creep) {
