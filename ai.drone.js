@@ -37,7 +37,7 @@ const drone = {
     /**
      * Generic Do everything drone.
      *
-     * @param {Creep} creep **/
+     * @param energy **/
 
     getBody: function (energy) {
 
