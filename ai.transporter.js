@@ -52,6 +52,9 @@ const drone = {
         if (energy >= 600) {
             return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
         }
+        else if (energy >= 550) {
+            return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+        }
         else if (energy >= 450) {
             return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
