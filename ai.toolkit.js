@@ -51,6 +51,21 @@ var ai = {
         utils.logCreep(creep, 'No dropped energy found');
         return false;
     },
+    goToSpawnOrGather: function (creep) {
+        if (creep.carry.energy == creep.carryCapacity) {
+            let spawns = _(creep.room.find(FIND_MY_SPAWNS))
+                .sortBy(s => s.pos.getRangeTo(creep.pos))
+                .value();
+            creep.moveTo(spawns[0]);
+            utils.logCreep(creep, 'No work for transporter, waiting by spawn.');
+            return true;
+        } else {
+            utils.logCreep(creep, 'No work for transporter, topping up energy.');
+            creep.memory.state = 'GATHERING';
+            return true;
+        }
+    },
+
     gatherContainerEnergy: function (creep) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
