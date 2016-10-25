@@ -23,7 +23,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'TRANSPORTING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherMostDroppedEnergy(creep, MIN_PICKUP) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, MIN_CONTAINER) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, 0) || ai.goToSpawnOrGather(creep);
+    return ai.gatherMostDroppedEnergy(creep, MIN_PICKUP) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, MIN_CONTAINER) || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, 0);
 };
 
 const STATE_TRANSPORTING = function (creep) {
@@ -31,13 +31,13 @@ const STATE_TRANSPORTING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return ai.dumpMinerals(creep, creep.memory.sourceIds) || ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
+    return ai.dumpMinerals(creep, creep.memory.sourceIds) || ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.refillContainersExcept(creep, creep.memory.sourceIds) || ai.goToSpawnOrGather(creep);
 };
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
-    'GATHERING' : STATE_GATHERING,
-    'TRANSPORTING' : STATE_TRANSPORTING
+    'GATHERING': STATE_GATHERING,
+    'TRANSPORTING': STATE_TRANSPORTING
 };
 
 const drone = {
