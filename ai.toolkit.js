@@ -2,11 +2,36 @@ const utils = require('utils');
 
 var ai = {
 
-    gatherDroppedEnergy: function (creep, minEnergy) {
+    gatherNearestDroppedEnergy: function (creep, minEnergy) {
         const min = minEnergy ? minEnergy : 0;
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
+            .value();
+
+        if (energy.length) {
+            if (creep.pickup(energy[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(energy[0]);
+                utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos +":"+energy[0].amount);
+                return true;
+            } else {
+                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
+                if (creep.carry.energy == creep.carryCapacity) {
+                    return true;
+                } else {
+                    utils.logCreep(creep, 'Insufficient dropped energy found');
+                    return false;
+                }
+            }
+        }
+        utils.logCreep(creep, 'No dropped energy found');
+        return false;
+    },
+    gatherMostDroppedEnergy: function (creep, minEnergy) {
+        const min = minEnergy ? minEnergy : 0;
+        let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
+            .filter(e => e.amount >= minEnergy)
+            .sortBy(e => e.amount)
             .value();
 
         if (energy.length) {
