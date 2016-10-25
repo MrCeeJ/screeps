@@ -1,8 +1,8 @@
 var settings = {
-    maxCreeps : 9,
+    maxCreeps : 10,
     maxDrones : 4,
     maxMiners : 2,
-    maxUpgraders : 1,
+    maxUpgraders : 2,
     maxTransporters : 2,
     startingRoom : 'E63S63',
     rooms : {
