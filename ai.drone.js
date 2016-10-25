@@ -3,7 +3,7 @@ const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.75;
-const MINIMUM_ENERGY_TO_PICKUP = 500;
+const MINIMUM_ENERGY_TO_PICKUP = 50;
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, "Drone starting up!", true);
