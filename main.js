@@ -1,5 +1,6 @@
 const settings = require('settings');
 const roleDrone = require('ai.drone');
+const roleWorker = require('ai.worker');
 const roleUpgrader = require('ai.upgrader');
 const roleMiner = require('ai.miner');
 const roleTransporter = require('ai.transporter');
@@ -10,8 +11,9 @@ const maxCreeps = settings.maxCreeps;
 module.exports.loop = function () {
 
     const currentRoom = settings.startingRoom;
+    const useDrones = settings.useDrones;
     const currentCreeps = _(Game.creeps).size();
-    let drones = [];
+    let workers = [];
     let upgraders = [];
     let miners = [];
     let transporters = [];
@@ -26,7 +28,7 @@ module.exports.loop = function () {
 
     function activateSafeMode() {
         const enemies = Game.rooms[currentRoom].find(FIND_HOSTILE_CREEPS);
-        if (enemies.length > 0) {
+        if (enemies.length > 1) {
             var username = enemies[0].owner.username;
             Game.notify(`User ${username} spotted in room :` + currentRoom);
             Game.rooms[currentRoom].controller.activateSafeMode()
@@ -46,8 +48,12 @@ module.exports.loop = function () {
             const creep = Game.creeps[name];
 
             if (creep.memory.role == 'drone') {
-                drones.push(creep);
+                workers.push(creep);
                 roleDrone.run(creep);
+            }
+            else if (creep.memory.role == 'worker') {
+                workers.push(creep);
+                roleWorker.run(creep);
             }
             else if (creep.memory.role == 'upgrader') {
                 upgraders.push(creep);
@@ -75,16 +81,19 @@ module.exports.loop = function () {
         if (currentCreeps < maxCreeps) {
             // Note we might not have this much energy, in which case we will simply wait
             const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
-            if (drones.length < settings.maxDrones) {
+            if (useDrones && workers.length < settings.maxWorkers) {
                 const body = roleDrone.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
-                utils.logMessage("Spawning drone :"+JSON.stringify(body));
-
+                utils.logMessage("Spawning drone :" + JSON.stringify(body));
+            } else if (workers.length < settings.maxWorkers) {
+                const body = roleWorker.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
+                Game.spawns['Spawn1'].createCreep(body, null, {role: 'worker'});
+                utils.logMessage("Spawning worker :" + JSON.stringify(body));
             }
             else if (upgraders.length < settings.maxUpgraders) {
                 const body = roleUpgrader.getBody(maxSpawnEnergy);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'upgrader'});
-                utils.logMessage("Spawning upgrader :"+JSON.stringify(body));
+                utils.logMessage("Spawning upgrader :" + JSON.stringify(body));
             }
             else if (miners.length < settings.maxMiners) {
                 let energySources = settings.rooms[currentRoom].energySources;
@@ -101,13 +110,16 @@ module.exports.loop = function () {
                     if (unusedSources.length) {
                         const body = roleMiner.getBody(maxSpawnEnergy);
                         Game.spawns['Spawn1'].createCreep(body, null, {role: 'miner', source: unusedSources[0]});
-                        utils.logMessage("Spawning miner :"+JSON.stringify(body));
+                        utils.logMessage("Spawning miner :" + JSON.stringify(body));
                     }
                 }
             } else if (transporters.length < settings.maxTransporters) {
                 const body = roleTransporter.getBody(maxSpawnEnergy);
-                Game.spawns['Spawn1'].createCreep(body, null, {role: 'transporter', sourceIds:settings.rooms[currentRoom].sourceContainerIDs});
-                utils.logMessage("Spawning transporter :"+JSON.stringify(body));
+                Game.spawns['Spawn1'].createCreep(body, null, {
+                    role: 'transporter',
+                    sourceIds: settings.rooms[currentRoom].sourceContainerIDs
+                });
+                utils.logMessage("Spawning transporter :" + JSON.stringify(body));
 
             }
         }
@@ -117,7 +129,7 @@ module.exports.loop = function () {
         if (Game.time % 10 == 0) {
             utils.logMessage("Time is :" + Game.time);
             utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name)));
-            utils.logMessage("Drones :" + JSON.stringify(_.map(drones, c => c.name)));
+            utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":[" + c.memory.role[0]+"]")));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
             utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
         }
