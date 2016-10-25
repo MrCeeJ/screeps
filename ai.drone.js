@@ -15,7 +15,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
-    return ai.gatherNearestDroppedEnergy(creep, creep.energyCapacity) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
+    return ai.gatherNearestDroppedEnergy(creep, 50) || ai.gatherContainerEnergy(creep) || ai.harvestEnergy(creep);
 };
 
 const STATE_WORKING = function (creep) {
