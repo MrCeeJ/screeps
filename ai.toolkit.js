@@ -91,6 +91,9 @@ var ai = {
         containers = containers.filter(s => s.structureType == STRUCTURE_CONTAINER);
         utils.logMessage("c2 :"+containers);
         utils.logMessage("sources :"+sourceIds);
+        for (var i in containers) {
+            utils.logMessage("containers id  :"+containers[i].id);
+        }
         containers = containers.filter(s => _.some(sourceIds, s.id));
         utils.logMessage("c3 :"+containers);
         containers = containers.filter(s => s.store[RESOURCE_ENERGY] >= minEnergy);
