@@ -94,7 +94,7 @@ var ai = {
         _.forEach(containers.value(), c => utils.logMessage("containers id  :" + c.id));
         containers = containers.value().filter(s => _.some(sourceIds, s.id));
         utils.logMessage("c3 :" + containers);
-        containers = containers.filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
+        containers = _.filter(containers, s => s.store[RESOURCE_ENERGY] >= minEnergy)
             .sortBy(s => s.store[RESOURCE_ENERGY] * -1).value();
         utils.logMessage("c4 :" + containers);
 
