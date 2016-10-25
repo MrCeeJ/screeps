@@ -89,7 +89,7 @@ var ai = {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
             .filter(s => _.includes(sourceIds, s.id))
-            .filter(containers, s => s.store[RESOURCE_ENERGY] >= minEnergy)
+            .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
             .sortBy(s => s.store[RESOURCE_ENERGY] * -1).value();
 
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
