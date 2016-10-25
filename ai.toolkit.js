@@ -15,7 +15,7 @@ var ai = {
                 utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
-                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
+                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos+":"+energy[0].amount);
                 if (creep.carry.energy == creep.carryCapacity) {
                     return true;
                 } else {
@@ -39,7 +39,7 @@ var ai = {
                 utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
-                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos);
+                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos+":"+energy[0].amount);
                 if (creep.carry.energy == creep.carryCapacity) {
                     return true;
                 } else {
@@ -76,7 +76,7 @@ var ai = {
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
-                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos);
+                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos+":"+containers[0].store[RESOURCE_ENERGY]);
             } else {
                 utils.logCreep(creep, 'Withdrawing energy from container ' + containers[0].pos);
             }
@@ -96,7 +96,7 @@ var ai = {
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
-                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos);
+                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos+":"+containers[0].store[RESOURCE_ENERGY]);
             } else {
                 utils.logCreep(creep, 'Withdrawing energy from container ' + containers[0].pos);
             }

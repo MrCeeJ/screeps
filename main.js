@@ -129,7 +129,7 @@ module.exports.loop = function () {
         if (Game.time % 10 == 0) {
             utils.logMessage("Time is :" + Game.time);
             utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name)));
-            utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":[" + c.memory.role[0]+"]")));
+            utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0])));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
             utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
         }
