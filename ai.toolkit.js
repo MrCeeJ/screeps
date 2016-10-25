@@ -87,11 +87,16 @@ var ai = {
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
-            .filter(s => s.structureType == STRUCTURE_CONTAINER)
-            .filter(s => _.some(sourceIds, s.id))
-            .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
-            .sortBy(s => s.store[RESOURCE_ENERGY] * -1)
+        utils.logMessage("c1 :"+containers)
+        containers = containers.filter(s => s.structureType == STRUCTURE_CONTAINER)
+        utils.logMessage("c2 :"+containers)
+        containers = containers.filter(s => _.some(sourceIds, s.id))
+        utils.logMessage("c3 :"+containers)
+        containers = containers.filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
+        utils.logMessage("c4 :"+containers)
+        containers = containers.sortBy(s => s.store[RESOURCE_ENERGY] * -1)
             .value();
+        utils.logMessage("c5 :"+containers)
 
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
         if (containers.length) {
