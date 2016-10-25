@@ -3,7 +3,6 @@ const utils = require('utils');
 var ai = {
 
     gatherNearestDroppedEnergy: function (creep, minEnergy) {
-        const min = minEnergy ? minEnergy : 0;
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
@@ -28,10 +27,9 @@ var ai = {
         return false;
     },
     gatherMostDroppedEnergy: function (creep, minEnergy) {
-        const min = minEnergy ? minEnergy : 0;
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
-            .sortBy(e => e.amount)
+            .sortBy(e => -1* e.amount)
             .value();
 
         if (energy.length) {
