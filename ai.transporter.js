@@ -31,7 +31,7 @@ const STATE_TRANSPORTING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return dumpMinerals(creep, sourceIds) || ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
+    return ai.dumpMinerals(creep, sourceIds) || ai.refillExtensions(creep) || ai.refillSpawns(creep) || ai.refillTowers(creep, REFILL_TOWER_CAPACITY) || ai.refillContainersExcept(creep, creep.memory.sourceIds);
 };
 
 const states = {
@@ -55,16 +55,9 @@ const drone = {
         else if (energy >= 450) {
             return [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
-        else if (energy >= 350) {
-            return [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
+        else if (energy >= 300) {
+            return [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE];
         }
-        else if (energy >= 250) {
-            return [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
-        }
-        else {
-            return [CARRY, CARRY, MOVE];
-        }
-
     },
 
     run: function (creep) {
