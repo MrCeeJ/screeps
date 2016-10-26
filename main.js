@@ -11,7 +11,6 @@ const maxCreeps = settings.maxCreeps;
 module.exports.loop = function () {
 
     const currentRoom = settings.startingRoom;
-    const useDrones = settings.useDrones;
     const currentCreeps = _(Game.creeps).size();
     let workers = [];
     let upgraders = [];
@@ -81,14 +80,10 @@ module.exports.loop = function () {
         if (currentCreeps < maxCreeps) {
             // Note we might not have this much energy, in which case we will simply wait
             const maxSpawnEnergy = Game.spawns.Spawn1.room.energyCapacityAvailable;
-            if (useDrones && workers.length < settings.maxWorkers) {
-                const body = roleDrone.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
+            if (workers.length < 2) {
+                const body = roleDrone.getBody(150);
                 Game.spawns['Spawn1'].createCreep(body, null, {role: 'drone'});
                 utils.logMessage("Spawning drone :" + JSON.stringify(body));
-            } else if (workers.length < settings.maxWorkers) {
-                const body = roleWorker.getBody((currentCreeps < 2) ? 150 : maxSpawnEnergy);
-                Game.spawns['Spawn1'].createCreep(body, null, {role: 'worker'});
-                utils.logMessage("Spawning worker :" + JSON.stringify(body));
             }
             else if (upgraders.length < settings.maxUpgraders) {
                 const body = roleUpgrader.getBody(maxSpawnEnergy);
@@ -121,6 +116,10 @@ module.exports.loop = function () {
                 });
                 utils.logMessage("Spawning transporter :" + JSON.stringify(body));
 
+            } else if (workers.length < settings.maxWorkers) {
+                const body = roleWorker.getBody(maxSpawnEnergy);
+                Game.spawns['Spawn1'].createCreep(body, null, {role: 'worker'});
+                utils.logMessage("Spawning worker :" + JSON.stringify(body));
             }
         }
     }

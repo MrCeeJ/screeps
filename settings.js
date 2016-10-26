@@ -1,7 +1,6 @@
 var settings = {
     maxCreeps : 12,
     maxWorkers : 6,
-    useDrones : false,
     maxMiners : 2,
     maxUpgraders : 2,
     maxTransporters : 2,
