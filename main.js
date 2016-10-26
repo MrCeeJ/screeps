@@ -71,10 +71,7 @@ module.exports.loop = function () {
 
     function runTowers() {
         towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
-
-        _.forEach(towers, function (tower) {
-            roleTower.run(tower);
-        });
+        _.forEach(towers, t => roleTower.run(t));
     }
 
     function spawnCreeps() {
@@ -101,6 +98,8 @@ module.exports.loop = function () {
             else if (workers.length < settings.maxWorkers) {
                 spawnWorker(maxSpawnEnergy);
             }
+        } else {
+            _.forEach(miners, m => utils.logCreep(m, "miner time left :"+m.ticksToLive));
         }
 
         function spawnDrone() {
