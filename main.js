@@ -138,7 +138,7 @@ module.exports.loop = function () {
             const body = roleTransporter.getBody(maxSpawnEnergy);
             currentSpawn.createCreep(body, null, {
                 role: 'transporter',
-                sourceIds: currentRoom.sourceContainerIDs
+                sourceIds: settings.rooms[currentRoom].sourceContainerIDs
             });
             utils.logMessage("Spawning transporter :" + JSON.stringify(body));
         }
