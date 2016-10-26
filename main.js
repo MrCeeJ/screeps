@@ -115,7 +115,7 @@ module.exports.loop = function () {
         }
 
         function spawnMiner(maxSpawnEnergy) {
-            let energySources = currentRoom.energySources;
+            let energySources = settings.rooms[currentRoom.name].energySources;
             let usedSources = [];
             for (let m in miners) {
                 if (miners[m].memory && miners[m].memory.source) {
