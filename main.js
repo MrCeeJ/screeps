@@ -87,15 +87,17 @@ module.exports.loop = function () {
             else if (miners.length < 1) {
                 spawnMiner(maxSpawnEnergy);
             }
-            else if (upgraders.length < settings.maxUpgraders) {
+            else if (upgraders.length < 1) {
                 spawnUpgrader(maxSpawnEnergy);
             }
             else if (miners.length < settings.maxMiners) {
                 spawnMiner(maxSpawnEnergy);
             }
+            else if (upgraders.length < settings.maxUpgraders) {
+                spawnUpgrader(maxSpawnEnergy);
+            }
             else if (transporters.length < settings.maxTransporters) {
                 spawnTransporter(maxSpawnEnergy);
-
             }
             else if (workers.length < settings.maxWorkers) {
                 spawnWorker(maxSpawnEnergy);
