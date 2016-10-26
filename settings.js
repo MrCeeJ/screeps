@@ -5,6 +5,7 @@ var settings = {
     maxUpgraders : 2,
     maxTransporters : 2,
     startingRoom : 'E63S63',
+    startingSpawn : 'Spawn1',
     rooms : {
         'E63S63': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
