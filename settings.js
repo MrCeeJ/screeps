@@ -1,8 +1,8 @@
 var settings = {
-    maxCreeps : 12,
-    maxWorkers : 6,
+    maxCreeps : 10,
+    maxWorkers : 5,
     maxMiners : 2,
-    maxUpgraders : 2,
+    maxUpgraders : 1,
     maxTransporters : 2,
     startingRoom : 'E63S63',
     startingSpawn : 'Spawn1',
@@ -13,7 +13,6 @@ var settings = {
             sourceContainerIDs : ['580f6b288c4693a4382fd0c1', '580f7870ff27e79264b0c4f2']
         }
     }
-
 };
 module.exports = settings;
 
