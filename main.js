@@ -105,6 +105,8 @@ module.exports.loop = function () {
             _.forEach(miners, m => {
                 utils.logMessage("miner time left :" + m.ticksToLive);
                 utils.logMessage("miner body cost:" + m.body.length * 3);
+                utils.logMessage("miner time:" + m.memory.ticksToArrive);
+
                 if (m.ticksToLive < m.memory.ticksToArrive + (m.body.length * 3)) {
                     dyingMiners.push(m);
                 }
