@@ -122,18 +122,27 @@ var ai = {
         utils.logCreep(creep, 'No container with energy found');
         return false;
     },
-    dumpMinerals: function (creep, sourceIds) {
+    dumpMinerals: function (creep) {
+        let store = creep.room.storage;
+        if (store) {
+            var total = _.sum(creep.room.storage.store);
+            let contents = creep.carry;
+            if (store.storeCapacity > total) {
+                if (creep.transfer(store, contents[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(store);
+                    utils.logCreep(creep, 'Moving to dump ' + contents[0] + ' in store at' + store.pos + "(" + total + ")");
+                }
+                else {
+                    utils.logCreep(creep, 'Dumping ' + contents[0] + ' in store at' + store.pos + "(" + total + ")");
+                }
+                return true;
+            } else {
+                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / " + store.storeCapacity + ")");
+                return false;
+            }
+        }
+        utils.logCreep(creep, 'No stores found.');
         return false;
-        // does creep have stuff to drop
-
-        let containers = _(creep.room.find(FIND_STRUCTURES))
-            .filter(s => s.structureType == STRUCTURE_CONTAINER)
-            .reject(s => _.includes(sourceIds, s.id))
-            .filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity) // does container have space for junk
-            .sortBy(s => s.pos.getRangeTo(creep.pos))
-            .value();
-
-        // transfer junk
     },
     refillContainersExcept: function (creep, sourceIds, fullness) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
@@ -181,7 +190,7 @@ var ai = {
                 }
                 return true;
             } else {
-                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / "+store.storeCapacity+")");
+                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / " + store.storeCapacity + ")");
                 return false;
             }
         }

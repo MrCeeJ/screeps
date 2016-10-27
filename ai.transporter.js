@@ -33,11 +33,15 @@ const STATE_GATHERING = function (creep) {
 
 const STATE_TRANSPORTING = function (creep) {
     if (creep.carry.energy == 0) {
-        creep.memory.state = 'GATHERING';
-        return states[creep.memory.state](creep);
-    }
-    return ai.dumpMinerals(creep, creep.memory.sourceIds)
-        || ai.refillExtensions(creep)
+        let total = _.sum(creep.carry);
+        if (total) {
+            ai.dumpMinerals(creep)
+        }
+        else {
+            creep.memory.state = 'GATHERING';
+            return states[creep.memory.state](creep);
+        }
+    } else return ai.refillExtensions(creep)
         || ai.refillSpawns(creep)
         || ai.refillTowers(creep, REFILL_TOWER_CAPACITY)
         || ai.refillContainersExcept(creep, creep.memory.sourceIds, MIN_FULLNESS)
