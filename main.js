@@ -99,6 +99,7 @@ module.exports.loop = function () {
                 spawnWorker(maxSpawnEnergy);
             }
         } else {
+            utils.logMessage("Checking for dying miners..");
             _.forEach(miners, m => utils.logCreep(m, "miner time left :"+m.ticksToLive));
         }
 
