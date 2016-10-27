@@ -101,18 +101,22 @@ module.exports.loop = function () {
         }
         else if (miners.length == settings.maxMiners) {
             let dyingMiners = [];
+            if (Game.time % 10 == 0) {
+                    utils.logMessage("Checking for dying miners..");
+            }
             utils.logMessage("Checking for dying miners..");
             _.forEach(miners, m => {
-                utils.logMessage(m.name +" time left :" + m.ticksToLive);
-                utils.logMessage("body cost:" + m.body.length * 3);
-                utils.logMessage("time:" + m.memory.ticksToArrive);
-
+                if (Game.time % 10 == 0) {
+                    utils.logMessage(m.name + " time left :" + m.ticksToLive);
+                    utils.logMessage("body cost:" + m.body.length * 3);
+                    utils.logMessage("time:" + m.memory.ticksToArrive);
+                }
                 if (m.ticksToLive < m.memory.ticksToArrive + (m.body.length * 3)) {
                     dyingMiners.push(m);
                 }
             });
             if (dyingMiners.length) {
-                utils.logMessage("Spawning replacement for :"+dyingMiners[0]);
+                utils.logMessage("Spawning replacement for :" + dyingMiners[0]);
                 spawnReplacementMiner(dyingMiners[0]);
             }
         }
