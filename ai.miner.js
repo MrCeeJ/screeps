@@ -21,6 +21,7 @@ const STATE_MOVING = function (creep) {
             const result = creep.harvest(target);
             if (result != ERR_NOT_IN_RANGE) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target);
+                creep.memory.state = 'MINING';
                 creep.memory.targetId = target.id;
                 creep.memory.ticksToArrive = 1500 - creep.ticksToLive;
             } else {
@@ -35,7 +36,6 @@ const STATE_MOVING = function (creep) {
 
 const STATE_MINING = function (creep) {
     creep.harvest(Game.getObjectById(creep.memory.targetId));
-    creep.drop(RESOURCE_ENERGY);
     utils.logCreep(creep, "Just mining. zzz");
 };
 
