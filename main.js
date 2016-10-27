@@ -103,8 +103,8 @@ module.exports.loop = function () {
             let dyingMiners = [];
             utils.logMessage("Checking for dying miners..");
             _.forEach(miners, m => {
-                utils.logMessage(m, "miner time left :" + m.ticksToLive);
-                utils.logMessage(m, "miner body cost:" + m.body.length * 3);
+                utils.logMessage("miner time left :" + m.ticksToLive);
+                utils.logMessage("miner body cost:" + m.body.length * 3);
                 if (m.ticksToLive < m.memory.ticksToArrive + (m.body.length * 3)) {
                     dyingMiners.push(m);
                 }
