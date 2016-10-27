@@ -33,7 +33,7 @@ var ai = {
     gatherMostDroppedEnergy: function (creep, minEnergy) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
-            .sortBy(e => (e.amount + (RANGE_FACTOR * e.pos.getRangeTo(creep.pos))) * -1)
+            .sortBy(e => (e.amount - (RANGE_FACTOR * e.pos.getRangeTo(creep.pos))) * -1)
             .value();
 
         if (energy.length) {
@@ -93,7 +93,7 @@ var ai = {
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
             .filter(s => _.includes(sourceIds, s.id))
             .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
-            .sortBy(s => (s.store[RESOURCE_ENERGY] + (RANGE_FACTOR * s.pos.getRangeTo(creep.pos))) * -1)
+            .sortBy(s => (s.store[RESOURCE_ENERGY] - (RANGE_FACTOR * s.pos.getRangeTo(creep.pos))) * -1)
             .value();
 
         // Check for multiple containers > 50%, sort by distance.
