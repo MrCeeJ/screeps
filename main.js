@@ -100,7 +100,7 @@ module.exports.loop = function () {
             }
         } else {
             utils.logMessage("Checking for dying miners..");
-            _.forEach(miners, m => utils.logCreep(m, "miner time left :"+m.ticksToLive));
+            _.forEach(miners, m => utils.logCreep(m, "miner time left :"+m.ticksToLive, true));
         }
 
         function spawnDrone() {
