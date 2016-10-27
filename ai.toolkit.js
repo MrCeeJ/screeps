@@ -119,11 +119,12 @@ var ai = {
 
         // transfer junk
     },
-    refillContainersExcept: function (creep, sourceIds) {
+    refillContainersExcept: function (creep, sourceIds, fullness) {
         let containers = _(creep.room.find(FIND_STRUCTURES))
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
             .reject(s => _.includes(sourceIds, s.id))
             .filter(s => s.store[RESOURCE_ENERGY] < s.storeCapacity)
+            .filter(s => s.store[RESOURCE_ENERGY] / s.storeCapacity < fullness)
             .sortBy(s => s.pos.getRangeTo(creep.pos))
             .value();
 

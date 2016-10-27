@@ -5,6 +5,7 @@ const ai = require('ai.toolkit');
 const REFILL_TOWER_CAPACITY = 0.9;
 const MIN_PICKUP = 0;
 const MIN_CONTAINER = 0;
+const MIN_FULLNESS = 0.8;
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
@@ -37,7 +38,7 @@ const STATE_TRANSPORTING = function (creep) {
         || ai.refillExtensions(creep)
         || ai.refillSpawns(creep)
         || ai.refillTowers(creep, REFILL_TOWER_CAPACITY)
-        || ai.refillContainersExcept(creep, creep.memory.sourceIds)
+        || ai.refillContainersExcept(creep, creep.memory.sourceIds, MIN_FULLNESS)
         || ai.refillStorage(creep)
         || ai.goToSpawnOrGather(creep);
 };
