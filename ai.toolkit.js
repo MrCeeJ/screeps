@@ -92,6 +92,7 @@ var ai = {
             .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
             .sortBy(s => s.store[RESOURCE_ENERGY] * -1).value();
 
+        // Check for multiple containers > 50%, sort by distance.
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -167,6 +168,7 @@ var ai = {
                 return false;
             }
         }
+        utils.logCreep(creep, 'No stores found.');
         return false;
     },
     refillSpawns: function (creep) {
