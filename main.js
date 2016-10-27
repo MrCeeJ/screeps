@@ -107,7 +107,6 @@ module.exports.loop = function () {
             if (Game.time % 10 == 0) {
                     utils.logMessage("Checking for dying miners..");
             }
-            utils.logMessage("Checking for dying miners..");
             _.forEach(miners, m => {
                 if (Game.time % 10 == 0) {
                     utils.logMessage(m.name + " time left :" + m.ticksToLive);
