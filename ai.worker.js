@@ -64,7 +64,6 @@ const drone = {
         else {
             return [WORK, CARRY, MOVE];
         }
-
     },
 
     run: function (creep) {

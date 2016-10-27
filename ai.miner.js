@@ -22,6 +22,7 @@ const STATE_MOVING = function (creep) {
             if (result != ERR_NOT_IN_RANGE) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target);
                 creep.memory.targetId = target.id;
+                creep.memory.ticksToArrive = 1500 - creep.ticksToLive;
             } else {
                 utils.logCreep(creep, 'Problem :' + result);
             }

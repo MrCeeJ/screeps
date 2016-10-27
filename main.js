@@ -77,7 +77,7 @@ module.exports.loop = function () {
     function spawnCreeps() {
         if (!currentSpawn.spawning && currentCreeps < maxCreeps) {
             const maxSpawnEnergy = currentRoom.energyCapacityAvailable;
-            if (workers.length < 2) {
+            if (currentCreeps < 2) {
                 spawnDrone();
             }
             else if (miners.length < 1) {
