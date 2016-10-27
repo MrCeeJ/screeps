@@ -21,7 +21,8 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_GATHERING = function (creep) {
-    if (creep.carry.energy == creep.carryCapacity) {
+    let total = _.sum(creep.carry);
+    if (total == creep.carryCapacity) {
         creep.memory.state = 'TRANSPORTING';
         return states[creep.memory.state](creep);
     }
