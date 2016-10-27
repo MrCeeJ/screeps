@@ -126,9 +126,16 @@ var ai = {
         let store = creep.room.storage;
         if (store) {
             var total = _.sum(creep.room.storage.store);
-            let contents = creep.carry;
+            let contents = [];
+            for (let item in creep.carry) {
+                //noinspection JSUnfilteredForInLoop
+                if (creep.carry[item] > 0 ) {
+                    //noinspection JSUnfilteredForInLoop
+                    contents.push(item);
+                }
+            }
             if (store.storeCapacity > total) {
-                if (creep.transfer(store, contents[1]) == ERR_NOT_IN_RANGE) {
+                if (creep.transfer(store, contents[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(store);
                     utils.logCreep(creep, 'Moving to dump ' + contents[0] + ' in store at' + store.pos + "(" + total + ")");
                 }
