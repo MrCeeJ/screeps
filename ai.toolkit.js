@@ -3,8 +3,6 @@ const utils = require('utils');
 const RANGE_FACTOR = 10;
 
 var ai = {
-
-
     gatherNearestDroppedEnergy: function (creep, minEnergy) {
         utils.logCreep(creep, 'Looking for at least ' + minEnergy + ' dropped energy.');
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
@@ -86,6 +84,20 @@ var ai = {
             return true;
         }
         utils.logCreep(creep, 'No containers with energy  found');
+        return false;
+    },
+    gatherStoredEnergy: function (creep, MIN_ENERGY) {
+        let store = creep.room.storage;
+        if (store && store.store[RESOURCE_ENERGY] > MIN_ENERGY) {
+            if (creep.withdraw(store, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(store);
+                utils.logCreep(creep, 'Moving to store with energy ' + store.pos + ":" + store.store[RESOURCE_ENERGY]);
+            } else {
+                utils.logCreep(creep, 'Withdrawing energy from store ' + store.pos);
+            }
+            return true;
+        }
+        utils.logCreep(creep, 'No stores with energy  found');
         return false;
     },
     gatherEnergyFromContainers: function (creep, sourceIds, minEnergy) {

@@ -5,6 +5,7 @@ const ai = require('ai.toolkit');
 const REFILL_TOWER_CAPACITY = 0.9;
 const MIN_PICKUP = 0;
 const MIN_CONTAINER = 0;
+const MIN_STORE = 0;
 const MIN_FULLNESS = 0.8;
 
 const STATE_INITIALISING = function (creep) {
@@ -26,7 +27,7 @@ const STATE_GATHERING = function (creep) {
     }
     return ai.gatherMostDroppedEnergy(creep, MIN_PICKUP)
         || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, MIN_CONTAINER)
-        || ai.gatherEnergyFromContainers(creep, creep.memory.sourceIds, 0);
+        || ai.gatherStoredEnergy(creep, MIN_STORE);
 };
 
 const STATE_TRANSPORTING = function (creep) {

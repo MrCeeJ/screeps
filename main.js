@@ -133,6 +133,13 @@ module.exports.loop = function () {
             }
         }
 
+        function spawnReplacementMiner(oldMiner) {
+            const energySource =oldMiner.memory.source;
+            const body = oldMiner.body;
+            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource});
+            utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
+        }
+
         function spawnTransporter(maxSpawnEnergy) {
             const body = roleTransporter.getBody(maxSpawnEnergy);
             currentSpawn.createCreep(body, null, {
