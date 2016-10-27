@@ -1,6 +1,6 @@
 const utils = require('utils');
 
-const RANGE_FACTOR = 15;
+const RANGE_FACTOR = 10;
 
 var ai = {
 
