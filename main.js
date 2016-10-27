@@ -100,11 +100,19 @@ module.exports.loop = function () {
             }
         }
         else if (miners.length == settings.maxMiners) {
-                utils.logMessage("Checking for dying miners..");
-                _.forEach(miners, m => {
-                    utils.logCreep(m, "miner time left :" + m.ticksToLive, true);
-                    utils.logCreep(m, "miner body cost:" + m.body.length * 3, true);
-                });
+            let dyingMiners = [];
+            utils.logMessage("Checking for dying miners..");
+            _.forEach(miners, m => {
+                utils.logMessage(m, "miner time left :" + m.ticksToLive);
+                utils.logMessage(m, "miner body cost:" + m.body.length * 3);
+                if (m.ticksToLive < m.memory.ticksToArrive + (m.body.length * 3)) {
+                    dyingMiners.push(m);
+                }
+            });
+            if (dyingMiners.length) {
+                utils.logMessage("Spawning replacement for :"+dyingMiners[0]);
+                spawnReplacementMiner(dyingMiners[0]);
+            }
         }
 
         function spawnDrone() {
@@ -139,7 +147,7 @@ module.exports.loop = function () {
         }
 
         function spawnReplacementMiner(oldMiner) {
-            const energySource =oldMiner.memory.source;
+            const energySource = oldMiner.memory.source;
             const body = oldMiner.body;
             currentSpawn.createCreep(body, null, {role: 'miner', source: energySource});
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
