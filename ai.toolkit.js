@@ -9,7 +9,7 @@ var ai = {
         utils.logCreep(creep, 'Looking for at least ' + minEnergy + ' dropped energy.');
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
-            .sortBy(s => s.pos.getRangeTo(creep.pos))
+            .sortBy(e => e.pos.getRangeTo(creep.pos))
             .value();
 
         if (energy.length) {
@@ -33,7 +33,7 @@ var ai = {
     gatherMostDroppedEnergy: function (creep, minEnergy) {
         let energy = _(creep.room.find(FIND_DROPPED_ENERGY))
             .filter(e => e.amount >= minEnergy)
-            .sortBy((s.amount + (RANGE_FACTOR * s.pos.getRangeTo(creep.pos))) * -1)
+            .sortBy(e => (e.amount + (RANGE_FACTOR * e.pos.getRangeTo(creep.pos))) * -1)
             .value();
 
         if (energy.length) {
