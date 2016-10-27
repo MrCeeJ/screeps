@@ -37,7 +37,9 @@ module.exports.loop = function () {
 
     function cleanupMemory() {
         for (var i in Memory.creeps) {
+            //noinspection JSUnfilteredForInLoop
             if (!Game.creeps[i]) {
+                //noinspection JSUnfilteredForInLoop
                 delete Memory.creeps[i];
             }
         }
@@ -45,6 +47,7 @@ module.exports.loop = function () {
 
     function runCreeps() {
         for (const name in Game.creeps) {
+            //noinspection JSUnfilteredForInLoop
             const creep = Game.creeps[name];
 
             if (creep.memory.role == 'drone') {
