@@ -98,9 +98,13 @@ module.exports.loop = function () {
             else if (workers.length < settings.maxWorkers) {
                 spawnWorker(maxSpawnEnergy);
             }
-        } else {
-            utils.logMessage("Checking for dying miners..");
-            _.forEach(miners, m => utils.logCreep(m, "miner time left :"+m.ticksToLive, true));
+        }
+        else if (miners.length == settings.maxMiners) {
+                utils.logMessage("Checking for dying miners..");
+                _.forEach(miners, m => {
+                    utils.logCreep(m, "miner time left :" + m.ticksToLive, true);
+                    utils.logCreep(m, "miner body cost:" + m.body.length * 3, true);
+                });
         }
 
         function spawnDrone() {
