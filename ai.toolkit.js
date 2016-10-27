@@ -1,6 +1,9 @@
 const utils = require('utils');
 
+const RANGE_FACTOR = 15;
+
 var ai = {
+
 
     gatherNearestDroppedEnergy: function (creep, minEnergy) {
         utils.logCreep(creep, 'Looking for at least ' + minEnergy + ' dropped energy.');
@@ -90,7 +93,8 @@ var ai = {
             .filter(s => s.structureType == STRUCTURE_CONTAINER)
             .filter(s => _.includes(sourceIds, s.id))
             .filter(s => s.store[RESOURCE_ENERGY] >= minEnergy)
-            .sortBy(s => s.store[RESOURCE_ENERGY] * -1).value();
+            .sortBy(s => (s.store[RESOURCE_ENERGY] + (RANGE_FACTOR * s.pos.getRangeTo(creep.pos))) * -1)
+            .value();
 
         // Check for multiple containers > 50%, sort by distance.
         utils.logCreep(creep, "Checking for energy in containers :" + containers);
