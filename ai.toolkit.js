@@ -155,7 +155,7 @@ var ai = {
         let store = creep.room.storage;
         if (store) {
             var total = _.sum(creep.room.storage.store);
-            if (store.capacity > total) {
+            if (store.storeCapacity > total) {
                 if (creep.transfer(store, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(store);
                     utils.logCreep(creep, 'Moving to refill store at' + store.pos + "(" + total + ")");
@@ -165,7 +165,7 @@ var ai = {
                 }
                 return true;
             } else {
-                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / "+store.capacity+")");
+                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / "+store.storeCapacity+")");
                 return false;
             }
         }
