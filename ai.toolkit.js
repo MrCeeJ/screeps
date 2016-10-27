@@ -15,7 +15,7 @@ var ai = {
                 utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
-                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos+":"+energy[0].amount);
+                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos + ":" + energy[0].amount);
                 if (creep.carry.energy == creep.carryCapacity) {
                     return true;
                 } else {
@@ -39,7 +39,7 @@ var ai = {
                 utils.logCreep(creep, 'Moving to dropped energy  ' + energy[0].pos + ":" + energy[0].amount);
                 return true;
             } else {
-                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos+":"+energy[0].amount);
+                utils.logCreep(creep, 'Picking up dropped energy from ' + energy[0].pos + ":" + energy[0].amount);
                 if (creep.carry.energy == creep.carryCapacity) {
                     return true;
                 } else {
@@ -76,7 +76,7 @@ var ai = {
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
-                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos+":"+containers[0].store[RESOURCE_ENERGY]);
+                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos + ":" + containers[0].store[RESOURCE_ENERGY]);
             } else {
                 utils.logCreep(creep, 'Withdrawing energy from container ' + containers[0].pos);
             }
@@ -96,7 +96,7 @@ var ai = {
         if (containers.length) {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
-                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos+":"+containers[0].store[RESOURCE_ENERGY]);
+                utils.logCreep(creep, 'Moving to container with energy ' + containers[0].pos + ":" + containers[0].store[RESOURCE_ENERGY]);
             } else {
                 utils.logCreep(creep, 'Withdrawing energy from container ' + containers[0].pos);
             }
@@ -148,6 +148,26 @@ var ai = {
             utils.logCreep(creep, 'Mining from' + sources[1].pos);
         }
         return true;
+    },
+    refillStorage: function (creep) {
+        let store = creep.room.storage;
+        if (store) {
+            var total = _.sum(creep.room.storage.store);
+            if (store.capacity > total) {
+                if (creep.transfer(store, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(store);
+                    utils.logCreep(creep, 'Moving to refill store at' + store.pos + "(" + total + ")");
+                }
+                else {
+                    utils.logCreep(creep, 'Refilling store at' + store.pos + "(" + total + ")");
+                }
+                return true;
+            } else {
+                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + ")");
+                return false;
+            }
+        }
+        return false;
     },
     refillSpawns: function (creep) {
         let spawns = _(creep.room.find(FIND_MY_SPAWNS))
