@@ -165,7 +165,7 @@ var ai = {
                 }
                 return true;
             } else {
-                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + ")");
+                utils.logCreep(creep, 'Store full :' + store.pos + "(" + total + " / "+store.capacity+")");
                 return false;
             }
         }
