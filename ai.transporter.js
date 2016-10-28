@@ -4,7 +4,7 @@ const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.9;
 const MIN_PICKUP = 0;
-const MIN_CONTAINER = 50;
+const MIN_CONTAINER = 400;
 const MIN_STORE = 0;
 const MIN_FULLNESS = 0.8;
 
