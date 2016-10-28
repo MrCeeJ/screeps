@@ -159,7 +159,7 @@ module.exports.loop = function () {
             const body = [];
             for (let part in oldMiner.body) {
                 //noinspection JSUnfilteredForInLoop
-                body.push(part.type);
+                body.push(oldMiner.body[part].type);
             }
             currentSpawn.createCreep(body, null, {role: 'miner', source: energySource});
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
