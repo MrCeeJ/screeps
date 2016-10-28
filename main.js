@@ -113,7 +113,7 @@ module.exports.loop = function () {
                     utils.logMessage("body cost:" + m.body.length * 3);
                     utils.logMessage("time:" + m.memory.ticksToArrive);
                 }
-                if (m.ticksToLive < m.memory.ticksToArrive + (m.body.length * 3)) {
+                if (m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
                     dyingMiners.push(m);
                 }
             });
