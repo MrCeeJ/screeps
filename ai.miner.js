@@ -8,6 +8,19 @@ const STATE_INITIALISING = function (creep) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
+        const pos = new RoomPosition(creep.memory.source.x, creep.memory.source.y, creep.room.name);
+        const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
+        if (link) {
+            if (settings.rooms[creep.room.name].linkSourceId == link.id) {
+                creep.memory.linkPosition = 'SOURCE';
+            }
+            else if (settings.rooms[creep.room.name].linkDestinationId == link.id) {
+                creep.memory.linkPosition = 'DESTINATION';
+            } else {
+                utils.logCreep(creep, 'ALERT! No unable to find link :' + link, true);
+                creep.say('Need Link!');
+            }
+        }
         creep.memory.state = 'MOVING';
         utils.logCreep(creep, 'Moving to location [' + creep.memory.source.x + ',' + creep.memory.source.y + ']', true);
         return states[creep.memory.state](creep);
@@ -21,7 +34,11 @@ const STATE_MOVING = function (creep) {
             const result = creep.harvest(target);
             if (result != ERR_NOT_IN_RANGE) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target);
-                creep.memory.state = 'MINING';
+                if (creep.memory.linkPosition) {
+                    creep.memory.state = creep.memory.linkPosition;
+                } else {
+                    creep.memory.state = 'MINING';
+                }
                 creep.memory.targetId = target.id;
                 creep.memory.ticksToArrive = 1500 - creep.ticksToLive;
             } else {
@@ -39,11 +56,23 @@ const STATE_MINING = function (creep) {
     utils.logCreep(creep, "Just mining. zzz");
 };
 
+const STATE_SOURCE_MINING = function (creep) {
+    creep.harvest(Game.getObjectById(creep.memory.targetId));
+    utils.logCreep(creep, "Just source mining. zzz");
+};
+
+const STATE_DESTINATION_MINING = function (creep) {
+    creep.harvest(Game.getObjectById(creep.memory.targetId));
+    utils.logCreep(creep, "Just destination mining. zzz");
+};
+
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
     'MOVING': STATE_MOVING,
-    'MINING': STATE_MINING
+    'MINING': STATE_MINING,
+    'SOURCE': STATE_SOURCE_MINING,
+    'DESTINATION': STATE_DESTINATION_MINING
 };
 
 const drone = {

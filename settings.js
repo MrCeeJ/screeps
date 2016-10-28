@@ -10,13 +10,15 @@ var settings = {
     rooms : {
         'E63S63': {
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
+            linkSourceId : '581364ef587daed572db91df',
+            linkDestinationId : '58136064cba4c6a855d51b5c',
             mineralSources : [],
-            sourceContainerIDs : ['580f6b288c4693a4382fd0c1', '580f7870ff27e79264b0c4f2']
+            sourceContainerIds : ['580f6b288c4693a4382fd0c1', '580f7870ff27e79264b0c4f2']
         },
         'E62S63' : {
             energySources : [Game.flags['Flag3'].pos],
             mineralSources : [],
-            sourceContainerIDs : []
+            sourceContainerIds : []
         }
     }
 };
