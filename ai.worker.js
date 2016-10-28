@@ -40,7 +40,10 @@ const drone = {
 
     getBody: function (energy) {
 
-        if (energy >= 800) {
+        if (energy >= 1000) {
+            return [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
+        }
+        else if (energy >= 800) {
             return [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
         }
         else if (energy >= 700) {
