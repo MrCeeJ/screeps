@@ -38,8 +38,10 @@ const drone = {
      * @param {Energy} energy **/
 
     getBody: function (energy) {
-
-        if (energy >= 650) {
+        if (energy >= 800) {
+            return [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+        }
+        else if (energy >= 650) {
             return [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
         }
         else if (energy >= 550) {
@@ -57,7 +59,6 @@ const drone = {
         else {
             return [WORK, CARRY, MOVE];
         }
-
     },
 
     run: function (creep) {
