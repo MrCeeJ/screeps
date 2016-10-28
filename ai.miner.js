@@ -78,9 +78,9 @@ const states = {
 const drone = {
 
     /**
-     * Generic blank AI file.
+     * Advanced miner AI file.
      *
-     * @param {Energy} energy **/
+     * @param energy **/
 
     getBody: function (energy) {
 
@@ -98,6 +98,16 @@ const drone = {
         }
         else {
             return [WORK, MOVE];
+        }
+    },
+
+    getLinkBody: function (energy) {
+
+        if (energy >= 550) {
+            return [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE];
+        }
+        else {
+            return [WORK, CARRY, MOVE];
         }
     },
 

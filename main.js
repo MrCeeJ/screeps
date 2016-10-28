@@ -5,6 +5,7 @@ const roleUpgrader = require('ai.upgrader');
 const roleMiner = require('ai.miner');
 const roleTransporter = require('ai.transporter');
 const roleTower = require('ai.tower');
+const roleLink = require('ai.link');
 const utils = require('utils');
 const maxCreeps = settings.maxCreeps;
 
@@ -18,11 +19,13 @@ module.exports.loop = function () {
     let miners = [];
     let transporters = [];
     let towers;
+    let links;
 
     activateSafeMode();
     cleanupMemory();
     runCreeps();
     runTowers();
+    runLinks();
     spawnCreeps();
     logGameState();
 
@@ -75,6 +78,11 @@ module.exports.loop = function () {
     function runTowers() {
         towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
         _.forEach(towers, t => roleTower.run(t));
+    }
+
+    function runLinks() {
+        links = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_LINK);
+        _.forEach(links, l => roleLink.run(l));
     }
 
     function spawnCreeps() {
