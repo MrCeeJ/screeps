@@ -118,8 +118,8 @@ module.exports.loop = function () {
                 }
             });
             if (dyingMiners.length) {
-                utils.logMessage("Spawning replacement for :" + dyingMiners[0]);
-                spawnReplacementMiner(dyingMiners[0]);
+                //utils.logMessage("Spawning replacement for :" + dyingMiners[0]);
+                //spawnReplacementMiner(dyingMiners[0]);
             }
         }
 
