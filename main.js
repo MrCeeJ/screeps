@@ -149,7 +149,6 @@ module.exports.loop = function () {
             }
             let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
             if (miners.length < energySources.length) {
-            } else if (unusedSources.length) {
                 if (unusedSources.length) {
 
                     const pos = unusedSources[0];
