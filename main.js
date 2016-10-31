@@ -104,6 +104,7 @@ module.exports.loop = function () {
                 spawnUpgrader(maxSpawnEnergy);
             }
             else if (transporters.length < settings.maxTransporters) {
+                utils.logMessage("Need more transporters :(" + transporters.length + " / " + settings.maxTransporters + ')');
                 spawnTransporter(maxSpawnEnergy);
             }
             else if (workers.length < settings.maxWorkers) {
@@ -152,15 +153,10 @@ module.exports.loop = function () {
                 if (unusedSources.length) {
 
                     const pos = unusedSources[0];
-                    utils.logMessage("Checking source :" + JSON.stringify(pos));
                     const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType == STRUCTURE_LINK).min(s => pos.getRangeTo(s));
-                    utils.logMessage("Checking link :" + JSON.stringify(link));
                     let linkPos;
                     let body = roleMiner.getBody(maxSpawnEnergy);
                     if (link) {
-                        utils.logMessage("Checking ids link :" + JSON.stringify(link.id));
-                        utils.logMessage("Checking ids source:" + JSON.stringify(settings.rooms[currentRoom.name].linkSourceId));
-                        utils.logMessage("Checking ids dest:" + JSON.stringify(settings.rooms[currentRoom.name].linkDestinationId));
                         if (settings.rooms[currentRoom.name].linkSourceId == link.id) {
                             linkPos = 'SOURCE';
                             body = roleMiner.getLinkBody(maxSpawnEnergy);
@@ -194,7 +190,12 @@ module.exports.loop = function () {
                 //noinspection JSUnfilteredForInLoop
                 body.push(oldMiner.body[part].type);
             }
-            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition: linkPos, linkId: linkId});
+            currentSpawn.createCreep(body, null, {
+                role: 'miner',
+                source: energySource,
+                linkPosition: linkPos,
+                linkId: linkId
+            });
             oldMiner.memory.replaced = true;
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
         }
