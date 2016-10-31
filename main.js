@@ -154,9 +154,7 @@ module.exports.loop = function () {
                     const pos = unusedSources[0];
                     utils.logMessage("Checking source :" + JSON.stringify(pos));
                     const link = _.min(_.filter(Game.structures, s => s.structureType == STRUCTURE_LINK), s => pos.getRangeTo(s));
-
                     utils.logMessage("Checking link :" + JSON.stringify(link));
-
                     let linkPos;
                     let body = roleMiner.getBody(maxSpawnEnergy);
                     if (link) {
