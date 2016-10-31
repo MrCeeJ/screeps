@@ -8,19 +8,19 @@ const STATE_INITIALISING = function (creep) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
-        const pos = new RoomPosition(creep.memory.source.x, creep.memory.source.y, creep.room.name);
-        const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
-        if (link) {
-            if (settings.rooms[creep.room.name].linkSourceId == link.id) {
-                creep.memory.linkPosition = 'SOURCE';
-            }
-            else if (settings.rooms[creep.room.name].linkDestinationId == link.id) {
-                creep.memory.linkPosition = 'DESTINATION';
-            } else {
-                utils.logCreep(creep, 'ALERT! No unable to find link :' + link, true);
-                creep.say('Need Link!');
-            }
-        }
+        // const pos = new RoomPosition(creep.memory.source.x, creep.memory.source.y, creep.room.name);
+        // const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
+        // if (link) {
+        //     if (settings.rooms[creep.room.name].linkSourceId == link.id) {
+        //         creep.memory.linkPosition = 'SOURCE';
+        //     }
+        //     else if (settings.rooms[creep.room.name].linkDestinationId == link.id) {
+        //         creep.memory.linkPosition = 'DESTINATION';
+        //     } else {
+        //         utils.logCreep(creep, 'ALERT! No unable to find link :' + link, true);
+        //         creep.say('Need Link!');
+        //     }
+        // }
         creep.memory.state = 'MOVING';
         utils.logCreep(creep, 'Moving to location [' + creep.memory.source.x + ',' + creep.memory.source.y + ']', true);
         return states[creep.memory.state](creep);

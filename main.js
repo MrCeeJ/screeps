@@ -113,7 +113,7 @@ module.exports.loop = function () {
         else if (miners.length == settings.maxMiners) {
             let dyingMiners = [];
             if (Game.time % 10 == 0) {
-                    utils.logMessage("Checking for dying miners..");
+                utils.logMessage("Checking for dying miners..");
             }
             _.forEach(miners, m => {
                 if (!m.memory.replaced && m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
@@ -150,21 +150,42 @@ module.exports.loop = function () {
             let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
             if (miners.length < energySources.length) {
                 if (unusedSources.length) {
-                    const body = roleMiner.getBody(maxSpawnEnergy);
-                    currentSpawn.createCreep(body, null, {role: 'miner', source: unusedSources[0]});
-                    utils.logMessage("Spawning miner :" + JSON.stringify(body));
+                    const pos = unusedSources[0].pos;
+                    const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
+                    let linkPos;
+                    let body = roleMiner.getBody(maxSpawnEnergy);
+                    if (link) {
+                        if (settings.rooms[currentRoom.name].linkSourceId == link.id) {
+                            linkPos = 'SOURCE';
+                            body = roleMiner.getLinkBody(maxSpawnEnergy);
+                        }
+                        else if (settings.rooms[currentRoom.name].linkDestinationId == link.id) {
+                            linkPos = 'DESTINATION';
+                        } else {
+                            utils.logMessage("WARNING Links found but misconfigured!");
+                        }
+                    }
+                    currentSpawn.createCreep(body, null, {
+                        role: 'miner',
+                        source: unusedSources[0],
+                        linkPosition: linkPos
+                    });
+                    utils.logMessage("Spawning "+linkPos+" miner :" + JSON.stringify(body));
                 }
+            } else if (unusedSources.length) {
+                utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
             }
         }
 
         function spawnReplacementMiner(oldMiner) {
             const energySource = oldMiner.memory.source;
+            const linkPos = oldMiner.memory.linkPosition;
             const body = [];
             for (let part in oldMiner.body) {
                 //noinspection JSUnfilteredForInLoop
                 body.push(oldMiner.body[part].type);
             }
-            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource});
+            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition : linkPos});
             oldMiner.memory.replaced = true;
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
         }
@@ -188,7 +209,7 @@ module.exports.loop = function () {
     function logGameState() {
         if (Game.time % 10 == 0) {
             utils.logMessage("Time is :" + Game.time);
-            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + ((c.body.length*3)+c.memory.ticksToArrive)+")")));
+            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + ((c.body.length * 3) + c.memory.ticksToArrive) + ")")));
             utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0])));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
             utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
