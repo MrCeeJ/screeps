@@ -181,8 +181,9 @@ module.exports.loop = function () {
                         linkId: link.id
                     });
                     utils.logMessage("Spawning " + linkPos + " miner :" + JSON.stringify(body));
+                } else {
+                    utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
                 }
-                utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
             }
         }
 
