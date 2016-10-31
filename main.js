@@ -188,12 +188,13 @@ module.exports.loop = function () {
         function spawnReplacementMiner(oldMiner) {
             const energySource = oldMiner.memory.source;
             const linkPos = oldMiner.memory.linkPosition;
+            const linkId = oldMiner.memory.linkId;
             const body = [];
             for (let part in oldMiner.body) {
                 //noinspection JSUnfilteredForInLoop
                 body.push(oldMiner.body[part].type);
             }
-            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition: linkPos});
+            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition: linkPos, linkId: linkId});
             oldMiner.memory.replaced = true;
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
         }
