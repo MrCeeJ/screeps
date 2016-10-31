@@ -116,18 +116,13 @@ module.exports.loop = function () {
                     utils.logMessage("Checking for dying miners..");
             }
             _.forEach(miners, m => {
-                if (Game.time % 10 == 0) {
-                    utils.logMessage(m.name + " time left :" + m.ticksToLive);
-                    utils.logMessage("body cost:" + m.body.length * 3);
-                    utils.logMessage("time:" + m.memory.ticksToArrive);
-                }
-                if (m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
+                if (!m.memory.replaced && m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
                     dyingMiners.push(m);
                 }
             });
             if (dyingMiners.length) {
-                //utils.logMessage("Spawning replacement for :" + dyingMiners[0]);
-                //spawnReplacementMiner(dyingMiners[0]);
+                utils.logMessage("Spawning replacement for :" + dyingMiners[0]);
+                spawnReplacementMiner(dyingMiners[0]);
             }
         }
 
@@ -170,6 +165,7 @@ module.exports.loop = function () {
                 body.push(oldMiner.body[part].type);
             }
             currentSpawn.createCreep(body, null, {role: 'miner', source: energySource});
+            oldMiner.memory.replaced = true;
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
         }
 
@@ -192,7 +188,7 @@ module.exports.loop = function () {
     function logGameState() {
         if (Game.time % 10 == 0) {
             utils.logMessage("Time is :" + Game.time);
-            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name)));
+            utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + ((c.body.length*3)+c.memory.ticksToArrive)+")")));
             utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0])));
             utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
             utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));

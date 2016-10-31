@@ -66,7 +66,6 @@ const STATE_DESTINATION_MINING = function (creep) {
     utils.logCreep(creep, "Just destination mining. zzz");
 };
 
-
 const states = {
     'INITIALISING': STATE_INITIALISING,
     'MOVING': STATE_MOVING,
@@ -103,7 +102,7 @@ const drone = {
 
     getLinkBody: function (energy) {
 
-        if (energy >= 550) {
+        if (energy >= 600) {
             return [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE];
         }
         else {
