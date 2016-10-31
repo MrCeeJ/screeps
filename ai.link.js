@@ -11,14 +11,16 @@ const tower = {
         const destinationId = settings.rooms[link.room.name].linkDestinationId;
         if (link.id == destinationId) {
             return true;
-        } else if (link.cooldown == 0 && link.energy > 400) {
-            utils.logMessage('Transferring energy from '+link.pos +" to "+ Game.getObjectById(destinationId).pos);
-            link.transferEnergy(Game.getObjectById(destinationId));
-            return true;
-        }
-        else {
-            utils.logMessage('Insufficient energy for transfer!');
-            return false;
+        } else if (link.cooldown == 0) {
+            if (link.energy > 400) {
+                utils.logMessage('Transferring '+link.energy+' energy from ' + link.pos + " to " + Game.getObjectById(destinationId).pos);
+                link.transferEnergy(Game.getObjectById(destinationId));
+                return true;
+            }
+            else {
+                utils.logMessage('Insufficient energy for transfer! ('+link.energy+')');
+                return false;
+            }
         }
     }
 };
