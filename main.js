@@ -149,11 +149,14 @@ module.exports.loop = function () {
             }
             let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
             if (miners.length < energySources.length) {
+            } else if (unusedSources.length) {
                 if (unusedSources.length) {
 
                     const pos = unusedSources[0];
                     utils.logMessage("Checking source :"+JSON.stringify(pos));
-                    const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
+                    const link = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK)
+                        .min(s => pos.getRangeTo(s))
+                        .value();
                     utils.logMessage("Checking link :"+JSON.stringify(link));
 
                     let linkPos;
@@ -181,7 +184,6 @@ module.exports.loop = function () {
                     });
                     utils.logMessage("Spawning "+linkPos+" miner :" + JSON.stringify(body));
                 }
-            } else if (unusedSources.length) {
                 utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
             }
         }
