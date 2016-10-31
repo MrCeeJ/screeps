@@ -76,12 +76,12 @@ module.exports.loop = function () {
     }
 
     function runTowers() {
-        towers = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+        towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
         _.forEach(towers, t => roleTower.run(t));
     }
 
     function runLinks() {
-        links = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_LINK);
+        links = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK);
         _.forEach(links, l => roleLink.run(l));
     }
 
