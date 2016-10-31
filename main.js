@@ -153,16 +153,17 @@ module.exports.loop = function () {
                 if (unusedSources.length) {
 
                     const pos = unusedSources[0];
-                    utils.logMessage("Checking source :"+JSON.stringify(pos));
-                    const link = _.min(_.filter(Game.structures, s => s.structureType == STRUCTURE_LINK),s => pos.getRangeTo(s) );
-                    utils.logMessage("Checking link :"+JSON.stringify(link));
+                    utils.logMessage("Checking source :" + JSON.stringify(pos));
+                    const link = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK)
+                        .min(s => pos.getRangeTo(s));
+                    utils.logMessage("Checking link :" + JSON.stringify(link));
 
                     let linkPos;
                     let body = roleMiner.getBody(maxSpawnEnergy);
                     if (link) {
-                        utils.logMessage("Checking ids link :"+JSON.stringify(link.id));
-                        utils.logMessage("Checking ids source:"+JSON.stringify(settings.rooms[currentRoom.name].linkSourceId));
-                        utils.logMessage("Checking ids dest:"+JSON.stringify(settings.rooms[currentRoom.name].linkDestinationId));
+                        utils.logMessage("Checking ids link :" + JSON.stringify(link.id));
+                        utils.logMessage("Checking ids source:" + JSON.stringify(settings.rooms[currentRoom.name].linkSourceId));
+                        utils.logMessage("Checking ids dest:" + JSON.stringify(settings.rooms[currentRoom.name].linkDestinationId));
                         if (settings.rooms[currentRoom.name].linkSourceId == link.id) {
                             linkPos = 'SOURCE';
                             body = roleMiner.getLinkBody(maxSpawnEnergy);
@@ -180,7 +181,7 @@ module.exports.loop = function () {
                         linkPosition: linkPos,
                         linkId: link.id
                     });
-                    utils.logMessage("Spawning "+linkPos+" miner :" + JSON.stringify(body));
+                    utils.logMessage("Spawning " + linkPos + " miner :" + JSON.stringify(body));
                 }
                 utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
             }
@@ -194,7 +195,7 @@ module.exports.loop = function () {
                 //noinspection JSUnfilteredForInLoop
                 body.push(oldMiner.body[part].type);
             }
-            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition : linkPos});
+            currentSpawn.createCreep(body, null, {role: 'miner', source: energySource, linkPosition: linkPos});
             oldMiner.memory.replaced = true;
             utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
         }
