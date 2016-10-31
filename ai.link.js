@@ -1,30 +1,24 @@
 const utils = require('utils');
 const settings = require('settings');
-const ai = require('ai.toolkit');
 
 const tower = {
 
     /**
      * A basic Link.
      *
-     * @param {STRUCTURE_LINK} link **/
-
+     * @param link **/
     run: function (link) {
-        if (settings.rooms[link.room].linkDestinationId == link.id){
+        const destinationId = settings.rooms[link.room.name].linkDestinationId;
+        if (link.id == destinationId) {
             return true;
-        } else {
-            if(link.energy > 250) {
-
-            }
+        } else if (link.energy > 100) {
+            utils.logMessage('Transferring energy!');
+            link.transferEnergy(Game.getObjectById(destinationId));
+            return true;
         }
-
-
-
-            var links = link.room.find(FIND_STRUCTURES, s => s.structureType == STRUCTURE_LINK && s.id != link.id);
-
-            var orderedStructures = _.sortByOrder(structures, ['hits']);
-            tower.repair(_.first(orderedStructures));
-            return OK;
+        else {
+            utils.logMessage('Insufficient energy for transfer!');
+            return false;
         }
     }
 };
