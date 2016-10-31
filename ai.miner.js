@@ -51,6 +51,8 @@ const STATE_SOURCE_MINING = function (creep) {
 
 const STATE_DESTINATION_MINING = function (creep) {
     creep.harvest(Game.getObjectById(creep.memory.targetId));
+    creep.withdraw(Game.getObjectById(creep.memory.linkId), RESOURCE_ENERGY);
+    creep.drop(RESOURCE_ENERGY);
     utils.logCreep(creep, "Just destination mining. zzz");
 };
 

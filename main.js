@@ -161,6 +161,7 @@ module.exports.loop = function () {
                         }
                         else if (settings.rooms[currentRoom.name].linkDestinationId == link.id) {
                             linkPos = 'DESTINATION';
+                            body = roleMiner.getLinkBody(maxSpawnEnergy);
                         } else {
                             utils.logMessage("WARNING Links found but misconfigured!");
                         }
