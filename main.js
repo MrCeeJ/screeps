@@ -150,11 +150,18 @@ module.exports.loop = function () {
             let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
             if (miners.length < energySources.length) {
                 if (unusedSources.length) {
+
                     const pos = unusedSources[0];
+                    utils.logMessage("Checking source :"+JSON.stringify(pos));
                     const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
+                    utils.logMessage("Checking link :"+JSON.stringify(link));
+
                     let linkPos;
                     let body = roleMiner.getBody(maxSpawnEnergy);
                     if (link) {
+                        utils.logMessage("Checking ids link :"+JSON.stringify(link.id));
+                        utils.logMessage("Checking ids source:"+JSON.stringify(settings.rooms[currentRoom.name].linkSourceId));
+                        utils.logMessage("Checking ids dest:"+JSON.stringify(settings.rooms[currentRoom.name].linkDestinationId));
                         if (settings.rooms[currentRoom.name].linkSourceId == link.id) {
                             linkPos = 'SOURCE';
                             body = roleMiner.getLinkBody(maxSpawnEnergy);
