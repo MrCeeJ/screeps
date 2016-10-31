@@ -12,7 +12,7 @@ const tower = {
         if (link.id == destinationId) {
             return true;
         } else if (link.energy > 100) {
-            utils.logMessage('Transferring energy from !'+link.pos +" to "+ Game.getObjectById(destinationId).pos);
+            utils.logMessage('Transferring energy from '+link.pos +" to "+ Game.getObjectById(destinationId).pos);
             link.transferEnergy(Game.getObjectById(destinationId));
             return true;
         }

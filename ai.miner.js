@@ -44,12 +44,16 @@ const STATE_MINING = function (creep) {
 };
 
 const STATE_SOURCE_MINING = function (creep) {
+    creep.transfer(Game.getObjectById(creep.memory.linkId), RESOURCE_ENERGY);
     creep.harvest(Game.getObjectById(creep.memory.targetId));
     creep.transfer(Game.getObjectById(creep.memory.linkId), RESOURCE_ENERGY);
+    //creep.withdraw(Game.getObjectById(creep.memory.linkId))
     utils.logCreep(creep, "Just source mining. zzz");
 };
 
 const STATE_DESTINATION_MINING = function (creep) {
+    creep.withdraw(Game.getObjectById(creep.memory.linkId), RESOURCE_ENERGY);
+    creep.drop(RESOURCE_ENERGY);
     creep.harvest(Game.getObjectById(creep.memory.targetId));
     creep.withdraw(Game.getObjectById(creep.memory.linkId), RESOURCE_ENERGY);
     creep.drop(RESOURCE_ENERGY);
