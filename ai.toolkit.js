@@ -129,7 +129,7 @@ var ai = {
             let contents = [];
             for (let item in creep.carry) {
                 //noinspection JSUnfilteredForInLoop
-                if (creep.carry[item] > 0 ) {
+                if (creep.carry[item] > 0) {
                     //noinspection JSUnfilteredForInLoop
                     contents.push(item);
                 }
@@ -161,12 +161,14 @@ var ai = {
             .value();
 
         if (containers.length) {
-            if (creep.transfer(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(containers[0]);
-                utils.logCreep(creep, 'Moving to refill container ' + containers[0].pos);
+            let i = 0;
+            while (creep.transfer(containers[i], RESOURCE_ENERGY) == OK && i < containers.length && creep.carry.energy > 50) {
+                utils.logCreep(creep, 'Refilling container ' + containers[i].pos);
+                i++;
             }
-            else {
-                utils.logCreep(creep, 'Refilling container ' + containers[0].pos);
+            if (i < containers.length && creep.carry.energy > 50) {
+                creep.moveTo(containers[i]);
+                utils.logCreep(creep, 'Moving to refill container ' + containers[0].pos);
             }
             return true;
         }
