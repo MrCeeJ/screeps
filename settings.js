@@ -1,9 +1,9 @@
 var settings = {
-    maxCreeps : 7,
+    maxCreeps : 6,
     maxWorkers : 2,
     maxMiners : 2,
     maxUpgraders : 1,
-    maxTransporters : 2,
+    maxTransporters : 1,
     startingRoom : 'E63S63',
     rangerRoom : 'E62S63',
     startingSpawn : 'Spawn1',
