@@ -150,7 +150,7 @@ module.exports.loop = function () {
             let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
             if (miners.length < energySources.length) {
                 if (unusedSources.length) {
-                    const pos = unusedSources[0].pos;
+                    const pos = unusedSources[0];
                     const link = pos.findClosestByRange(FIND_MY_STRUCTURES, s => s.structureType == STRUCTURE_LINK);
                     let linkPos;
                     let body = roleMiner.getBody(maxSpawnEnergy);
@@ -168,7 +168,8 @@ module.exports.loop = function () {
                     currentSpawn.createCreep(body, null, {
                         role: 'miner',
                         source: unusedSources[0],
-                        linkPosition: linkPos
+                        linkPosition: linkPos,
+                        linkId: link.id
                     });
                     utils.logMessage("Spawning "+linkPos+" miner :" + JSON.stringify(body));
                 }
