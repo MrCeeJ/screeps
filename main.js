@@ -7,17 +7,18 @@ const roleTransporter = require('ai.transporter');
 const roleTower = require('ai.tower');
 const roleLink = require('ai.link');
 const utils = require('utils');
-const maxCreeps = settings.maxCreeps;
 
 module.exports.loop = function () {
 
-    let spawns, currentRoom, currentSpawn;
+    let spawns, currentRoom, roomSettings, currentSpawn;
     for (let i in settings.activeRooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
+        roomSettings = settings.rooms[settings.activeRooms[i]];
         currentRoom = Game.rooms[settings.activeRooms[i]];
-        spawns = settings.rooms[currentRoom.name].spawns;
+        spawns = roomSettings.spawns;
 
         const currentCreeps = _(Game.creeps).size();
+        const maxCreeps = roomSettings.maxCreeps;
         let workers = [];
         let upgraders = [];
         let miners = [];
@@ -105,21 +106,21 @@ module.exports.loop = function () {
                 else if (upgraders.length < 1) {
                     spawnUpgrader(maxSpawnEnergy);
                 }
-                else if (miners.length < settings.maxMiners) {
+                else if (miners.length < roomSettings.maxMiners) {
                     spawnMiner(maxSpawnEnergy);
                 }
-                else if (upgraders.length < settings.maxUpgraders) {
+                else if (upgraders.length < roomSettings.maxUpgraders) {
                     spawnUpgrader(maxSpawnEnergy);
                 }
-                else if (transporters.length < settings.maxTransporters) {
-                    utils.logMessage("Need more transporters :(" + transporters.length + " / " + settings.maxTransporters + ')');
+                else if (transporters.length < roomSettings.maxTransporters) {
+                    utils.logMessage("Need more transporters :(" + transporters.length + " / " + roomSettings.maxTransporters + ')');
                     spawnTransporter(maxSpawnEnergy);
                 }
-                else if (workers.length < settings.maxWorkers) {
+                else if (workers.length < roomSettings.maxWorkers) {
                     spawnWorker(maxSpawnEnergy);
                 }
             }
-            else if (miners.length == settings.maxMiners) {
+            else if (miners.length == roomSettings.maxMiners) {
                 let dyingMiners = [];
                 if (Game.time % 10 == 0) {
                     utils.logMessage("Checking for dying miners..");
@@ -147,7 +148,7 @@ module.exports.loop = function () {
             }
 
             function spawnMiner(maxSpawnEnergy) {
-                let energySources = settings.rooms[currentRoom.name].energySources;
+                let energySources = roomSettings.energySources;
                 let usedSources = [];
                 for (let m in miners) {
                     if (miners[m].memory && miners[m].memory.source) {
@@ -165,11 +166,11 @@ module.exports.loop = function () {
                         let linkPos;
                         let body = roleMiner.getBody(maxSpawnEnergy);
                         if (link) {
-                            if (settings.rooms[currentRoom.name].linkSourceId == link.id) {
+                            if (roomSettings.linkSourceId == link.id) {
                                 linkPos = 'SOURCE';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             }
-                            else if (settings.rooms[currentRoom.name].linkDestinationId == link.id) {
+                            else if (roomSettings.linkDestinationId == link.id) {
                                 linkPos = 'DESTINATION';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             } else {
@@ -212,7 +213,7 @@ module.exports.loop = function () {
                 const body = roleTransporter.getBody(maxSpawnEnergy);
                 currentSpawn.createCreep(body, null, {
                     role: 'transporter',
-                    sourceIds: settings.rooms[currentRoom.name].sourceContainerIds
+                    sourceIds: roomSettings.sourceContainerIds
                 });
                 utils.logMessage("Spawning transporter :" + JSON.stringify(body));
             }
@@ -226,7 +227,7 @@ module.exports.loop = function () {
 
         function logGameState() {
             if (Game.time % 10 == 0) {
-                utils.logMessage("Current room: " + currentRoom.name);
+                utils.logMessage("Current room :" + currentRoom.name);
                 utils.logMessage("Time is :" + Game.time);
                 utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + ((c.body.length * 3) + c.memory.ticksToArrive) + ")")));
                 utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0])));
