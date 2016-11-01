@@ -35,10 +35,17 @@ const drone = {
     /**
      * Generic blank AI file.
      *
-     * @param {Energy} energy **/
+     * @param energy **/
 
     getBody: function (energy) {
-        if (energy >= 800) {
+
+        if (energy >= 1200) {
+            return [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+        }
+        else if (energy >= 1000) {
+            return [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
+        }
+        else if (energy >= 800) {
             return [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
         }
         else if (energy >= 650) {
