@@ -4,11 +4,13 @@ var settings = {
     maxMiners : 2,
     maxUpgraders : 1,
     maxTransporters : 1,
+    activeRooms : ['E63S63'],
     startingRoom : 'E63S63',
     rangerRoom : 'E62S63',
     startingSpawn : 'Spawn1',
     rooms : {
         'E63S63': {
+            spawns : ['Spawn1'],
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
             linkSourceId : '581364ef587daed572db91df',
             linkDestinationId : '58136064cba4c6a855d51b5c',
