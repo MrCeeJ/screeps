@@ -1,14 +1,10 @@
-const utils = require('utils');
 const settings = require('settings');
-const ai = require('ai.toolkit');
 
 const tower = {
-
     /**
      * A basic Tower.
      *
-     * @param {Creep} creep **/
-
+     * @param tower **/
     run: function (tower) {
         let creep = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if (creep) {
@@ -16,33 +12,35 @@ const tower = {
             return OK;
         }
         creep = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
-            filter: function(c) { return c.hits < c.hitsMax;}
+            filter: function (c) {
+                return c.hits < c.hitsMax;
+            }
         });
-        if(creep) {
+        if (creep) {
             tower.heal(creep);
             return OK;
         }
-        if(tower.energy > 500) {
+        if (tower.energy > 500) {
             let structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER];
 
             let structures = tower.room.find(FIND_STRUCTURES, {
-                filter: function(s) {
-                    return s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType);
+                filter: function (s) {
+                    return s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType);
                 }
             });
             if (structures.length) {
                 var orderedStructures = _.sortByOrder(structures, ['hits']);
                 tower.repair(_.first(orderedStructures));
                 return OK;
-            } else if (Game.time % 5 == 0){
+            } else if (Game.time % 5 == 0) {
                 structureTypes = [STRUCTURE_WALL, STRUCTURE_RAMPART];
                 structures = tower.room.find(FIND_STRUCTURES, {
-                    filter: function(s) {
+                    filter: function (s) {
                         return _.includes(structureTypes, s.structureType);
                     }
                 });
                 if (structures.length) {
-                    var orderedStructures = _.sortByOrder(structures, ['hits']);
+                    orderedStructures = _.sortByOrder(structures, ['hits']);
                     tower.repair(_.first(orderedStructures));
                     return OK;
                 }
