@@ -227,12 +227,12 @@ module.exports.loop = function () {
 
         function logGameState() {
             if (Game.time % 10 == 0) {
-                utils.logMessage("Current room :" + currentRoom.name);
+                utils.logMessage("::::  " + currentRoom.name + "  ::::");
                 utils.logMessage("Time is :" + Game.time);
-                utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + ((c.body.length * 3) + c.memory.ticksToArrive) + ")")));
-                utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0])));
-                utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name)));
-                utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name)));
+                utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + c.ticksToLive + "/" + ((c.body.length * 3) + c.memory.ticksToArrive) + ")")));
+                utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0] + " ("+c.ticksToLive+")")));
+                utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name+ " ("+c.ticksToLive+")")));
+                utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name+ " ("+c.ticksToLive+")")));
             }
         }
     }
