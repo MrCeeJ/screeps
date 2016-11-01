@@ -23,16 +23,30 @@ const tower = {
             return OK;
         }
         if(tower.energy > 500) {
-            const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
+            let structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER];
 
-            var structures = tower.room.find(FIND_STRUCTURES, {
+            let structures = tower.room.find(FIND_STRUCTURES, {
                 filter: function(s) {
                     return s.hits < (s.hitsMax*.7) && _.includes(structureTypes, s.structureType);
                 }
             });
-            var orderedStructures = _.sortByOrder(structures, ['hits']);
-            tower.repair(_.first(orderedStructures));
-            return OK;
+            if (structures.length) {
+                var orderedStructures = _.sortByOrder(structures, ['hits']);
+                tower.repair(_.first(orderedStructures));
+                return OK;
+            } else if (Game.time % 5 == 0){
+                structureTypes = [STRUCTURE_WALL, STRUCTURE_RAMPART];
+                structures = tower.room.find(FIND_STRUCTURES, {
+                    filter: function(s) {
+                        return _.includes(structureTypes, s.structureType);
+                    }
+                });
+                if (structures.length) {
+                    var orderedStructures = _.sortByOrder(structures, ['hits']);
+                    tower.repair(_.first(orderedStructures));
+                    return OK;
+                }
+            }
         }
     }
 };
