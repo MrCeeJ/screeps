@@ -98,18 +98,23 @@ module.exports.loop = function () {
             if (!currentSpawn.spawning && currentCreeps < maxCreeps) {
                 const maxSpawnEnergy = currentRoom.energyCapacityAvailable;
                 if (currentCreeps < 2) {
+                    utils.logMessage("Need more drones " + currentCreeps + " /2");
                     spawnDrone();
                 }
                 else if (miners.length < 1) {
+                    utils.logMessage("Need a miner! " + miners.length + " /1");
                     spawnMiner(maxSpawnEnergy);
                 }
                 else if (upgraders.length < 1) {
+                    utils.logMessage("Need an upgrader! " + miners.length + " /1");
                     spawnUpgrader(maxSpawnEnergy);
                 }
                 else if (miners.length < roomSettings.maxMiners) {
+                    utils.logMessage("Need more miners :(" + miners.length + " / " + roomSettings.maxMiners + ')');
                     spawnMiner(maxSpawnEnergy);
                 }
                 else if (upgraders.length < roomSettings.maxUpgraders) {
+                    utils.logMessage("Need more upgraders :(" + upgraders.length + " / " + roomSettings.maxUpgraders + ')');
                     spawnUpgrader(maxSpawnEnergy);
                 }
                 else if (transporters.length < roomSettings.maxTransporters) {
@@ -117,14 +122,12 @@ module.exports.loop = function () {
                     spawnTransporter(maxSpawnEnergy);
                 }
                 else if (workers.length < roomSettings.maxWorkers) {
+                    utils.logMessage("Need more workers :(" + workers.length + " / " + roomSettings.maxWorkers + ')');
                     spawnWorker(maxSpawnEnergy);
                 }
             }
             else if (miners.length == roomSettings.maxMiners) {
                 let dyingMiners = [];
-                if (Game.time % 10 == 0) {
-                    utils.logMessage("Checking for dying miners..");
-                }
                 _.forEach(miners, m => {
                     if (!m.memory.replaced && m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
                         dyingMiners.push(m);
