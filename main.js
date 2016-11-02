@@ -18,6 +18,7 @@ module.exports.loop = function () {
         spawns = roomSettings.spawns;
 
         const currentCreeps = _(Game.creeps).size();
+        let totalLivingCreeps = currentCreeps;
         const maxCreeps = roomSettings.maxCreeps;
         let workers = [];
         let upgraders = [];
@@ -77,6 +78,9 @@ module.exports.loop = function () {
                 else if (creep.memory.role == 'miner') {
                     miners.push(creep);
                     roleMiner.run(creep);
+                    if (creep.memory.replaced) {
+                        totalLivingCreeps --;
+                    }
                 } else if (creep.memory.role == 'transporter') {
                     transporters.push(creep);
                     roleTransporter.run(creep);
@@ -95,7 +99,7 @@ module.exports.loop = function () {
         }
 
         function spawnCreeps() {
-            if (!currentSpawn.spawning && currentCreeps < maxCreeps) {
+            if (!currentSpawn.spawning && totalLivingCreeps < maxCreeps) {
                 const maxSpawnEnergy = currentRoom.energyCapacityAvailable;
                 if (currentCreeps < 2) {
                     utils.logMessage("Need more drones " + currentCreeps + " /2");
