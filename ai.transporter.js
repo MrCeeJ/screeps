@@ -38,8 +38,10 @@ const STATE_TRANSPORTING = function (creep) {
         if (total) {
             ai.dumpMinerals(creep)
         } else if (ai.checkForMinerals(creep, creep.carryCapacity, RESOURCE_OXYGEN)) {
+            utils.logCreep(creep, 'Heading to gather minerals!');
             return transitionToState(creep, 'FETCHING');
         } else {
+            utils.logCreep(creep, 'No minerals, time to get energy!');
             return transitionToState(creep, 'GATHERING');
 
         }
