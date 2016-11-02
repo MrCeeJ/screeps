@@ -206,6 +206,31 @@ var ai = {
         utils.logCreep(creep, 'No stores found.');
         return false;
     },
+    checkForMinerals: function (creep, needed, resource) {
+        let stores = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+            .filter(s => s.store[resource] >= needed)
+            .value();
+        return stores.length;
+    },
+    fetchMinerals: function (creep, needed, resource) {
+        let stores = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType == STRUCTURE_CONTAINER)
+            .filter(s => s.store[resource] >= needed)
+            .sortBy(s => s.pos.getRangeTo(creep.pos))
+            .value();
+        if (stores.length) {
+            if (creep.withdraw(stores[0], resource) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(stores[0]);
+                utils.logCreep(creep, 'Moving to container ' + stores[0].pos + " with " + resource + " :" + stores[0].store[resource]);
+            } else {
+                utils.logCreep(creep, 'Withdrawing ' + resource + ' from container ' + stores[0].pos);
+            }
+            return true;
+        }
+        utils.logCreep(creep, 'No containers with ' + resource + ' found.');
+        return false;
+    },
     refillSpawns: function (creep) {
         let spawns = _(creep.room.find(FIND_MY_SPAWNS))
             .filter(s => s.energy < s.energyCapacity)

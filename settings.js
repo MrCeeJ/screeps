@@ -7,7 +7,7 @@ var settings = {
             linkSourceId : '581364ef587daed572db91df',
             linkDestinationId : '58136064cba4c6a855d51b5c',
             mineralSources : [],
-            sourceContainerIds : ['580f7870ff27e79264b0c4f2'],
+            sourceContainerIds : ['580f7870ff27e79264b0c4f2', 'ceac8f84dfeb65d00c15'],
             maxCreeps : 5,
             maxWorkers : 1,
             maxMiners : 2,

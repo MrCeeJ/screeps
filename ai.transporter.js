@@ -20,11 +20,10 @@ const STATE_INITIALISING = function (creep) {
     }
 };
 
-const STATE_GATHERING = function (creep) {
+const STATE_GATHERING_ENERGY = function (creep) {
     let total = _.sum(creep.carry);
     if (total == creep.carryCapacity) {
-        creep.memory.state = 'TRANSPORTING';
-        return states[creep.memory.state](creep);
+        return transitionToState(creep, 'TRANSPORTING');
     }
     const needed = creep.carryCapacity - total;
     return ai.gatherMostDroppedEnergy(creep, MIN_PICKUP)
@@ -38,24 +37,50 @@ const STATE_TRANSPORTING = function (creep) {
         let total = _.sum(creep.carry);
         if (total) {
             ai.dumpMinerals(creep)
-        }
-        else {
-            creep.memory.state = 'GATHERING';
-            return states[creep.memory.state](creep);
+        } else if (ai.checkForMinerals(creep, creep.carryCapacity, RESOURCE_OXYGEN)) {
+            return transitionToState(creep, 'FETCHING');
+        } else {
+            return transitionToState(creep, 'GATHERING');
+
         }
     } else return ai.refillExtensions(creep)
         || ai.refillSpawns(creep)
         || ai.refillTowers(creep, REFILL_TOWER_CAPACITY)
         || ai.refillContainersExcept(creep, creep.memory.sourceIds, MIN_FULLNESS)
         || ai.refillStorage(creep)
+        || ai.checkForMinerals(creep)
         || ai.goToSpawnOrGather(creep);
+};
+
+const STATE_GATHERING_MINERALS = function (creep) {
+    let total = _.sum(creep.carry);
+    if (total == creep.carryCapacity) {
+        return transitionToState(creep, 'HAULING');
+    }
+    const needed = creep.carryCapacity - total;
+    if (ai.checkForMinerals(creep, RESOURCE_OXYGEN)) {
+        return ai.fetchMinerals(creep, needed, RESOURCE_OXYGEN);
+    } else {
+        return transitionToState(creep, 'GATHERING');
+    }
+};
+
+const STATE_HAULING = function (creep) {
+
 };
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
-    'GATHERING': STATE_GATHERING,
-    'TRANSPORTING': STATE_TRANSPORTING
+    'GATHERING': STATE_GATHERING_ENERGY,
+    'TRANSPORTING': STATE_TRANSPORTING,
+    'FETCHING': STATE_GATHERING_MINERALS,
+    'HAULING': STATE_HAULING
 };
+
+function transitionToState(creep, state) {
+    creep.memory.state = state;
+    return states[creep.memory.state](creep);
+}
 
 const drone = {
 
