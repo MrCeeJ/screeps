@@ -149,7 +149,8 @@ module.exports.loop = function () {
             }
 
             function spawnUpgrader(maxSpawnEnergy) {
-                const body = roleUpgrader.getBody(maxSpawnEnergy);
+                const energy = maxSpawnEnergy > 1000 ? 1000 : maxSpawnEnergy;
+                const body = roleUpgrader.getBody(energy);
                 currentSpawn.createCreep(body, null, {role: 'upgrader'});
                 utils.logMessage("Spawning upgrader :" + JSON.stringify(body));
             }
@@ -226,7 +227,8 @@ module.exports.loop = function () {
             }
 
             function spawnWorker(maxSpawnEnergy) {
-                const body = roleWorker.getBody(maxSpawnEnergy);
+                const energy = maxSpawnEnergy > 1000 ? 1000 : maxSpawnEnergy;
+                const body = roleWorker.getBody(energy);
                 currentSpawn.createCreep(body, null, {role: 'worker'});
                 utils.logMessage("Spawning worker :" + JSON.stringify(body));
             }
