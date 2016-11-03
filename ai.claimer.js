@@ -34,7 +34,7 @@ const drone = {
     /**
      * Generic blank AI file.
      *
-     * @param {Creep} creep **/
+     * @param energy **/
 
     getBody: function (energy) {
 
