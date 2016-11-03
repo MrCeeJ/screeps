@@ -332,6 +332,22 @@ var ai = {
         }
         return true;
     },
+    claimRoom: function (creep) {
+        if(creep.room.controller) {
+            const result = creep.claimController(creep.room.controller);
+            if(result == ERR_NOT_IN_RANGE) {
+                utils.logCreep(creep, 'Controller out of range');
+                creep.moveTo(creep.room.controller);
+                return false
+            } else if (result == OK){
+                utils.logCreep(creep, 'Controller claimed');
+                return true;
+            } else {
+                utils.logCreep(creep, 'Unable to claim controller :'+result);
+                return false;
+            }
+        }
+    }
 };
 
 module.exports = ai;

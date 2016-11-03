@@ -18,6 +18,11 @@ const states = {
 
 };
 
+function transitionToState(creep, state) {
+    creep.memory.state = state;
+    return states[creep.memory.state](creep);
+}
+
 const drone = {
 
     /**

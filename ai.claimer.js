@@ -7,27 +7,40 @@ const STATE_INITIALISING = function (creep) {
     if (!creep.memory.destination) {
         utils.logCreep(creep, "Warning, no destination set!", true);
     } else {
-        creep.memory.state='MOVING';
-        return states[creep.memory.state](creep);
+        transitionToState('MOVING');
     }
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.room.location == creep.memory.destination){
-
+    if (creep.room != creep.memory.destination.room) {
+        creep.moveTo(creep.memory.destination);
+    } else {
+        transitionToState('CLAIMING');
     }
 };
 
 const STATE_CLAIMING = function (creep) {
-
+    if (!creep.memory.claimed) {
+        if (ai.claimRoom(creep)) {
+            creep.memory.claimed = true;
+            utils.logCreep(creep, "Room claimed!");
+        }
+        utils.logCreep(creep, "Room not yet claimed, moving to position");
+    }
+    utils.logCreep(creep, "Room already claimed, nothing to do.");
 };
 
 
 const states = {
     'INITIALISING': STATE_INITIALISING,
     'CLAIMING': STATE_CLAIMING,
-    'MOVING' : STATE_MOVING
+    'MOVING': STATE_MOVING
 };
+
+function transitionToState(creep, state) {
+    creep.memory.state = state;
+    return states[creep.memory.state](creep);
+}
 
 const drone = {
 
@@ -39,21 +52,8 @@ const drone = {
     getBody: function (energy) {
 
         if (energy >= 550) {
-            return [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+            return [CLAIM, MOVE];
         }
-        else if (energy >= 450) {
-            return [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE];
-        }
-        else if (energy >= 350) {
-            return [WORK, WORK, CARRY, CARRY, MOVE];
-        }
-        else if (energy >= 250) {
-            return [WORK, CARRY, CARRY, MOVE];
-        }
-        else {
-            return [WORK, CARRY, MOVE];
-        }
-
     },
 
     run: function (creep) {
