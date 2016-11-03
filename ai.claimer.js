@@ -51,7 +51,7 @@ const drone = {
 
     getBody: function (energy) {
 
-        if (energy >= 550) {
+        if (energy >= 650) {
             return [CLAIM, MOVE];
         }
     },
