@@ -248,7 +248,7 @@ module.exports.loop = function () {
         function logMarket() {
             if (Game.time % 5 == 0) {
                 const orders = _(Game.market.getAllOrders())
-                    .sortBy(o => o.price)
+                    .sortBy(o => -1 * o.price)
                     .value();
 
                 for (let i in orders) {
