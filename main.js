@@ -247,10 +247,15 @@ module.exports.loop = function () {
         }
         function logMarket() {
             if (Game.time % 5 == 0) {
-                const orders = Game.market.getAllOrders();
+                const orders = _(Game.market.getAllOrders())
+                    .sortBy(o => o.price);
+
                 for (let i in orders) {
                     //noinspection JSUnfilteredForInLoop
                     utils.logMessage(i + ":" + JSON.stringify(orders[i]));
+                    if (i > 100){
+                        break;
+                    }
                 }
             }
         }
