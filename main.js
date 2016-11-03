@@ -246,10 +246,12 @@ module.exports.loop = function () {
             }
         }
         function logMarket() {
+            const resources = ['KO', 'ZH', 'GO'];
             if (Game.time % 5 == 0) {
                 const orders = _(Game.market.getAllOrders())
-                    .filter(o => o.type == 'sell')
-                    .sortBy(o => o.price)
+                    .filter(o => o.type == 'buy')
+                    .filter(o => _.some(resources, o => o.resourceType))
+                    .sortBy(o => -1 * o.price)
                     .value();
 
                 for (let i in orders) {
