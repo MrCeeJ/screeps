@@ -38,10 +38,11 @@ module.exports.loop = function () {
             spawnCreeps();
         }
         logGameState();
+        logMarket();
 
         function activateSafeMode() {
             const enemies = currentRoom.find(FIND_HOSTILE_CREEPS);
-            if (enemies.length > 1) {
+            if (enemies.length > 3) {
                 var username = enemies[0].owner.username;
                 Game.notify(`User ${username} spotted in room :` + currentRoom);
                 currentRoom.controller.activateSafeMode()
@@ -242,6 +243,15 @@ module.exports.loop = function () {
                 utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0] + " ("+c.ticksToLive+")")));
                 utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name+ " ("+c.ticksToLive+")")));
                 utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name+ " ("+c.ticksToLive+")")));
+            }
+        }
+        function logMarket() {
+            if (Game.time % 5 == 0) {
+                const orders = Game.market.getAllOrders();
+                for (let i in orders) {
+                    //noinspection JSUnfilteredForInLoop
+                    utils.logMessage(i + ":" + JSON.stringify(orders[i]));
+                }
             }
         }
     }
