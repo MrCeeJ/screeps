@@ -17,7 +17,8 @@ module.exports.loop = function () {
         currentRoom = Game.rooms[settings.activeRooms[i]];
         spawns = roomSettings.spawns;
 
-        let totalLivingCreeps = _(Game.creeps).size();
+        let currentCreeps = _(Game.creeps).size();
+        let totalLivingCreeps  = currentCreeps;
         const maxCreeps = roomSettings.maxCreeps;
         let workers = [];
         let upgraders = [];

@@ -1,13 +1,13 @@
 var settings = {
-    activeRooms : ['E63S63'],
+    activeRooms : ['W29N34'],
     rooms : {
         'W29N34': {
             spawns : ['Spawn1'],
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
-            linkSourceId : '581364ef587daed572db91df',
-            linkDestinationId : '58136064cba4c6a855d51b5c',
+            linkSourceId : '',
+            linkDestinationId : '',
             mineralSources : [],
-            sourceContainerIds : ['580f7870ff27e79264b0c4f2', 'ceac8f84dfeb65d00c15'],
+            sourceContainerIds : ['', ''],
             maxCreeps : 5,
             maxWorkers : 1,
             maxMiners : 2,
