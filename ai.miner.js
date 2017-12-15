@@ -4,7 +4,7 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Miner starting up!', true);
-    if (creep.memory.source == undefined) {
+    if (creep.memory.source === undefined) {
         utils.logCreep(creep, 'ALERT! No location defined', true);
         creep.say('Need Location!');
     } else {
@@ -16,10 +16,10 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_MOVING = function (creep) {
     if (creep.memory.source) {
-        if (creep.pos.x == creep.memory.source.x && creep.pos.y == creep.memory.source.y) {
+        if (creep.pos.x === creep.memory.source.x && creep.pos.y === creep.memory.source.y) {
             let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             const result = creep.harvest(target);
-            if (result != ERR_NOT_IN_RANGE) {
+            if (result !== ERR_NOT_IN_RANGE) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target);
                 if (creep.memory.linkPosition) {
                     creep.memory.state = creep.memory.linkPosition;
