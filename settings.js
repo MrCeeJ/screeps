@@ -1,7 +1,7 @@
 var settings = {
     activeRooms : ['E63S63'],
     rooms : {
-        'E63S63': {
+        'W29N34': {
             spawns : ['Spawn1'],
             energySources : [Game.flags['Flag1'].pos, Game.flags['Flag2'].pos],
             linkSourceId : '581364ef587daed572db91df',
@@ -14,11 +14,11 @@ var settings = {
             maxUpgraders : 1,
             maxTransporters : 1,
         },
-        'E62S63' : {
-            energySources : [Game.flags['Flag3'].pos],
-            mineralSources : [],
-            sourceContainerIds : []
-        }
+        // 'E62S63' : {
+        //     energySources : [Game.flags['Flag3'].pos],
+        //     mineralSources : [],
+        //     sourceContainerIds : []
+        // }
     }
 };
 module.exports = settings;

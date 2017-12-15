@@ -5,7 +5,7 @@ const maxCreeps = settings.maxCreeps;
 module.exports.loop = function () {
     const enemies = Game.rooms['W9S51'].find(FIND_HOSTILE_CREEPS);
     if (enemies.length > 0) {
-        var username = enemies[0].owner.username;
+        let username = enemies[0].owner.username;
         Game.notify(`User ${username} spotted in room W9S51`);
         Game.rooms['W9S51'].controller.activateSafeMode()
     }
@@ -17,7 +17,7 @@ module.exports.loop = function () {
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
         
-        if (creep.memory.role == 'drone') {
+        if (creep.memory.role === 'drone') {
             drones.push(creep);
             roleDrone.run(creep);
         }

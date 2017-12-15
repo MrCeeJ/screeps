@@ -17,8 +17,7 @@ module.exports.loop = function () {
         currentRoom = Game.rooms[settings.activeRooms[i]];
         spawns = roomSettings.spawns;
 
-        const currentCreeps = _(Game.creeps).size();
-        let totalLivingCreeps = currentCreeps;
+        let totalLivingCreeps = _(Game.creeps).size();
         const maxCreeps = roomSettings.maxCreeps;
         let workers = [];
         let upgraders = [];
@@ -43,14 +42,14 @@ module.exports.loop = function () {
         function activateSafeMode() {
             const enemies = currentRoom.find(FIND_HOSTILE_CREEPS);
             if (enemies.length > 3) {
-                var username = enemies[0].owner.username;
+                let username = enemies[0].owner.username;
                 Game.notify(`User ${username} spotted in room :` + currentRoom);
                 currentRoom.controller.activateSafeMode()
             }
         }
 
         function cleanupMemory() {
-            for (var i in Memory.creeps) {
+            for (let i in Memory.creeps) {
                 //noinspection JSUnfilteredForInLoop
                 if (!Game.creeps[i]) {
                     //noinspection JSUnfilteredForInLoop
@@ -64,25 +63,25 @@ module.exports.loop = function () {
                 //noinspection JSUnfilteredForInLoop
                 const creep = Game.creeps[name];
 
-                if (creep.memory.role == 'drone') {
+                if (creep.memory.role === 'drone') {
                     workers.push(creep);
                     roleDrone.run(creep);
                 }
-                else if (creep.memory.role == 'worker') {
+                else if (creep.memory.role === 'worker') {
                     workers.push(creep);
                     roleWorker.run(creep);
                 }
-                else if (creep.memory.role == 'upgrader') {
+                else if (creep.memory.role === 'upgrader') {
                     upgraders.push(creep);
                     roleUpgrader.run(creep);
                 }
-                else if (creep.memory.role == 'miner') {
+                else if (creep.memory.role === 'miner') {
                     miners.push(creep);
                     roleMiner.run(creep);
                     if (creep.memory.replaced) {
-                        totalLivingCreeps --;
+                        totalLivingCreeps--;
                     }
-                } else if (creep.memory.role == 'transporter') {
+                } else if (creep.memory.role === 'transporter') {
                     transporters.push(creep);
                     roleTransporter.run(creep);
                 }
@@ -90,12 +89,12 @@ module.exports.loop = function () {
         }
 
         function runTowers() {
-            towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
+            towers = _.filter(Game.structures, s => s.structureType === STRUCTURE_TOWER);
             _.forEach(towers, t => roleTower.run(t));
         }
 
         function runLinks() {
-            links = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK);
+            links = _.filter(Game.structures, s => s.structureType === STRUCTURE_LINK);
             _.forEach(links, l => roleLink.run(l));
         }
 
@@ -131,7 +130,7 @@ module.exports.loop = function () {
                     spawnWorker(maxSpawnEnergy);
                 }
             }
-            else if (miners.length == roomSettings.maxMiners) {
+            else if (miners.length === roomSettings.maxMiners) {
                 let dyingMiners = [];
                 _.forEach(miners, m => {
                     if (!m.memory.replaced && m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
@@ -171,15 +170,15 @@ module.exports.loop = function () {
                     if (unusedSources.length) {
 
                         const pos = unusedSources[0];
-                        const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType == STRUCTURE_LINK).min(s => pos.getRangeTo(s));
+                        const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType === STRUCTURE_LINK).min(s => pos.getRangeTo(s));
                         let linkPos;
                         let body = roleMiner.getBody(maxSpawnEnergy);
                         if (link) {
-                            if (roomSettings.linkSourceId == link.id) {
+                            if (roomSettings.linkSourceId === link.id) {
                                 linkPos = 'SOURCE';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             }
-                            else if (roomSettings.linkDestinationId == link.id) {
+                            else if (roomSettings.linkDestinationId === link.id) {
                                 linkPos = 'DESTINATION';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             } else {
@@ -236,20 +235,21 @@ module.exports.loop = function () {
         }
 
         function logGameState() {
-            if (Game.time % 10 == 0) {
+            if (Game.time % 10 === 0) {
                 utils.logMessage("::::  " + currentRoom.name + "  ::::");
                 utils.logMessage("Time is :" + Game.time);
                 utils.logMessage("Miners :" + JSON.stringify(_.map(miners, c => c.name + " (" + c.ticksToLive + "/" + ((c.body.length * 3) + c.memory.ticksToArrive) + ")")));
-                utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0] + " ("+c.ticksToLive+")")));
-                utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name+ " ("+c.ticksToLive+")")));
-                utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name+ " ("+c.ticksToLive+")")));
+                utils.logMessage("Workers :" + JSON.stringify(_.map(workers, c => c.name + ":" + c.memory.role[0] + " (" + c.ticksToLive + ")")));
+                utils.logMessage("Upgraders :" + JSON.stringify(_.map(upgraders, c => c.name + " (" + c.ticksToLive + ")")));
+                utils.logMessage("Transporters :" + JSON.stringify(_.map(transporters, c => c.name + " (" + c.ticksToLive + ")")));
             }
         }
+
         function logMarket() {
             const resources = ['KO', 'ZH', 'GO'];
-            if (Game.time % 5 == 0) {
+            if (Game.time % 5 === 0) {
                 const orders = _(Game.market.getAllOrders())
-                    .filter(o => o.type == 'buy')
+                    .filter(o => o.type === 'buy')
                     .filter(o => _.some(resources, o => o.resourceType))
                     .sortBy(o => -1 * o.price)
                     .value();
@@ -257,7 +257,7 @@ module.exports.loop = function () {
                 for (let i in orders) {
                     //noinspection JSUnfilteredForInLoop
                     utils.logMessage(i + ":" + JSON.stringify(orders[i]));
-                    if (i > 100){
+                    if (i > 100) {
                         break;
                     }
                 }
