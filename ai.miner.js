@@ -105,7 +105,7 @@ const drone = {
     },
 
     run: function (creep) {
-        if (creep.memory.state == undefined) {
+        if (creep.memory.state === undefined) {
             creep.memory.state = 'INITIALISING';
         }
         states[creep.memory.state](creep);
