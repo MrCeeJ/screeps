@@ -10,7 +10,7 @@
     "coffeescript": "^2.1.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
-    "grunt-screeps": "^1.3.0",
+    "grunt-screeps": "^1.4.0",
     "require": "^2.4.20"
   }
 }

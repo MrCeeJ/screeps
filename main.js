@@ -10,6 +10,9 @@ const utils = require('utils');
 
 module.exports.loop = function () {
 
+    console.log(settings.activeRooms[0]);
+    console.log(settings.rooms);
+
     let spawns, currentRoom, roomSettings, currentSpawn;
     for (let i in settings.activeRooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
