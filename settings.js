@@ -7,10 +7,10 @@ let settings = {
     rooms: {}
 };
 
-if (settings.rooms.size === 0 || settings.reset) {
+if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.reset) {
 
-    if (settings.rooms.size === 0) {
-        utils.logMessage("No rooms found, updating settings file");
+    if (settings.activeSpawns = [] || settings.activeSpawns.size === 0) {
+        utils.logMessage("No spwans found, updating settings file");
     }
     else if (settings.reset) {
         utils.logMessage("Reset was requested, updating settings file");
@@ -29,11 +29,12 @@ if (settings.rooms.size === 0 || settings.reset) {
     for (const s in settings.activeSpawns) {
         //noinspection JSUnfilteredForInLoop
         let r = settings.activeSpawns[s].room;
-        utils.logMessage("Adding data for spawn : "+settings.activeSpawns[s]);
-        utils.logMessage("Adding data for room : "+r.name);
+        utils.logMessage("Adding data for spawn : " + settings.activeSpawns[s]);
+        utils.logMessage("Adding data for room : " + r);
+        utils.logMessage("Found spawn : " + r.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType === STRUCTURE_SPAWN}));
         settings.rooms[r.name] = {
-            spawns: r.find(STRUCTURE_SPAWN),
-            energySources: r.find(RESOURCE_ENERGY).pos,
+            spawns: r.find(FIND_MY_SPAWNS),
+            energySources: r.find(FIND_SOURCES_ACTIVE),
             linkSourceId: '',
             linkDestinationId: '',
             mineralSources: [],
@@ -44,6 +45,7 @@ if (settings.rooms.size === 0 || settings.reset) {
             maxUpgraders: 1,
             maxTransporters: 1,
         };
+        utils.logSettings(settings.rooms);
         for (let s in settings.energySources) {
             //noinspection JSUnfilteredForInLoop
             r.createFlag(s.pos, settings.flagCount, 'Flag' + settings.flagCount, COLOR_YELLOW, COLOR_GREY);

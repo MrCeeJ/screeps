@@ -9,18 +9,13 @@ const roleLink = require('ai.link');
 const utils = require('utils');
 
 module.exports.loop = function () {
-    console.log("spawns :"+Game.spawns['Spawn1']);
-    console.log("active spawns 0 :"+settings.activeSpawns[0].room.name);
-    console.log("room maxCreeps :"+settings.rooms[settings.activeSpawns[0].room.name].maxCreeps);
 
     let spawns, currentRoom, roomSettings, currentSpawn;
-    for (let i in settings.activeSpawns) {
+    for (const i in settings.rooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
-        roomSettings = settings.rooms[settings.activeSpawns[i].room.name];
-        currentRoom = Game.rooms[settings.activeSpawns[i].room.name];
+        roomSettings = settings.rooms[i];
+        currentRoom = Game.rooms[i];
         spawns = roomSettings.spawns;
-        console.log("current Room :"+currentRoom.name);
-
 
         let currentCreeps = _(Game.creeps).size();
         let totalLivingCreeps  = currentCreeps;
@@ -39,7 +34,7 @@ module.exports.loop = function () {
         runLinks();
         for (let i in spawns) {
             //noinspection JSUnfilteredForInLoop
-            currentSpawn = Game.spawns[spawns[i]];
+            currentSpawn = spawns[i];
             spawnCreeps();
         }
         logGameState();
