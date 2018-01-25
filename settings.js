@@ -3,7 +3,7 @@ const utils = require('utils');
 let settings = {
     reset: false,
     flagCount: 1,
-    activeRooms: Game.spawns,
+    activeSpawns: [],
     rooms: {}
 };
 
@@ -21,25 +21,29 @@ if (settings.rooms.size === 0 || settings.reset) {
     }
     settings.rooms = {};
     settings.flagCount = 1;
-    settings.activeRooms = Game.spawns;
-
-    for (let s in settings.activeRooms) {
+    for (const i in Game.spawns) {
         //noinspection JSUnfilteredForInLoop
-        let r = s.room;
-        settings.rooms.put(r.name, {
-                spawns: r.find(StructureSpawn),
-                energySources: r.find(RESOURCE_ENERGY).pos,
-                linkSourceId: '',
-                linkDestinationId: '',
-                mineralSources: [],
-                sourceContainerIds: ['', ''],
-                maxCreeps: 5,
-                maxWorkers: 1,
-                maxMiners: 2,
-                maxUpgraders: 1,
-                maxTransporters: 1,
-            }
-        );
+        settings.activeSpawns.push(Game.spawns[i]);
+    }
+
+    for (const s in settings.activeSpawns) {
+        //noinspection JSUnfilteredForInLoop
+        let r = settings.activeSpawns[s].room;
+        utils.logMessage("Adding data for spawn : "+settings.activeSpawns[s]);
+        utils.logMessage("Adding data for room : "+r.name);
+        settings.rooms[r.name] = {
+            spawns: r.find(STRUCTURE_SPAWN),
+            energySources: r.find(RESOURCE_ENERGY).pos,
+            linkSourceId: '',
+            linkDestinationId: '',
+            mineralSources: [],
+            sourceContainerIds: ['', ''],
+            maxCreeps: 5,
+            maxWorkers: 1,
+            maxMiners: 2,
+            maxUpgraders: 1,
+            maxTransporters: 1,
+        };
         for (let s in settings.energySources) {
             //noinspection JSUnfilteredForInLoop
             r.createFlag(s.pos, settings.flagCount, 'Flag' + settings.flagCount, COLOR_YELLOW, COLOR_GREY);
