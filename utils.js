@@ -1,6 +1,10 @@
-var utils = {
+const utils = {
     logMessage: function (message) {
         console.log(message);
+    },
+
+    logObject: function(object) {
+        console.log('object', JSON.stringify(object));
     },
 
     logCreep: function (creep, message, override) {

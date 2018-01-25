@@ -7,6 +7,7 @@ const roleTransporter = require('ai.transporter');
 const roleTower = require('ai.tower');
 const roleLink = require('ai.link');
 const utils = require('utils');
+const plans = require('plans');
 
 module.exports.loop = function () {
 
@@ -14,7 +15,7 @@ module.exports.loop = function () {
     for (const i in settings.rooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
         roomSettings = settings.rooms[i];
-        currentRoom = Game.rooms[i];
+        currentRoom = Game.rooms[roomSettings.name];
         spawns = roomSettings.spawns;
 
         let currentCreeps = _(Game.creeps).size();
@@ -29,6 +30,7 @@ module.exports.loop = function () {
 
         activateSafeMode();
         cleanupMemory();
+       // planRoom(currentRoom);
         runCreeps();
         runTowers();
         runLinks();
@@ -57,6 +59,11 @@ module.exports.loop = function () {
                     delete Memory.creeps[i];
                 }
             }
+        }
+
+        function planRoom(room) {
+            utils.logMessage("planning room : " + room.name);
+            plans.planRoom(room)
         }
 
         function runCreeps() {
@@ -162,7 +169,7 @@ module.exports.loop = function () {
                 for (let m in miners) {
                     if (miners[m].memory && miners[m].memory.source) {
                         const obj = miners[m].memory.source;
-                        const pos = new RoomPosition(obj.x, obj.y, obj.roomName);
+                        const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
                         usedSources.push(pos);
                     }
                 }
@@ -183,7 +190,7 @@ module.exports.loop = function () {
                                 linkPos = 'DESTINATION';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             } else {
-                                utils.logMessage("WARNING Links found but misconfigured!");
+                                utils.logMessage("WARNING Links found but misconfigured! :",link);
                             }
                         }
                         currentSpawn.createCreep(body, null, {

@@ -10,14 +10,14 @@ let settings = {
 if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.reset) {
 
     if (settings.activeSpawns = [] || settings.activeSpawns.size === 0) {
-        utils.logMessage("No spwans found, updating settings file");
+        utils.logMessage("No spawns found, updating settings file");
     }
     else if (settings.reset) {
         utils.logMessage("Reset was requested, updating settings file");
         settings.reset = false;
     }
     else {
-        utils.logMessage("Problem encoutered, updating settings file");
+        utils.logMessage("Problem encountered, updating settings file");
     }
     settings.rooms = {};
     settings.flagCount = 1;
@@ -31,8 +31,8 @@ if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.r
         let r = settings.activeSpawns[s].room;
         utils.logMessage("Adding data for spawn : " + settings.activeSpawns[s]);
         utils.logMessage("Adding data for room : " + r);
-        utils.logMessage("Found spawn : " + r.find(FIND_MY_STRUCTURES, {filter: (s) => s.structureType === STRUCTURE_SPAWN}));
         settings.rooms[r.name] = {
+            name: r.name,
             spawns: r.find(FIND_MY_SPAWNS),
             energySources: r.find(FIND_SOURCES_ACTIVE),
             linkSourceId: '',
@@ -48,7 +48,7 @@ if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.r
         utils.logSettings(settings.rooms);
         for (let s in settings.energySources) {
             //noinspection JSUnfilteredForInLoop
-            r.createFlag(s.pos, settings.flagCount, 'Flag' + settings.flagCount, COLOR_YELLOW, COLOR_GREY);
+            r.createFlag(settings.energySources[s].pos, settings.flagCount, 'Flag' + settings.flagCount, COLOR_YELLOW, COLOR_GREY);
             settings.flagCount++;
         }
     }

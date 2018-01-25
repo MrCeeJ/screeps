@@ -9,18 +9,18 @@ const STATE_INITIALISING = function (creep) {
         creep.say('Need Location!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to location [' + creep.memory.source.x + ',' + creep.memory.source.y + ']', true);
+        utils.logCreep(creep, 'Moving to location [' + creep.memory.source.pos.x + ',' + creep.memory.source.pos.y + ']', true);
         return states[creep.memory.state](creep);
     }
 };
 
 const STATE_MOVING = function (creep) {
     if (creep.memory.source) {
-        if (creep.pos.x === creep.memory.source.x && creep.pos.y === creep.memory.source.y) {
+        if (creep.pos.x === creep.memory.source.pos.x && creep.pos.y === creep.memory.source.pos.y) {
             let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             const result = creep.harvest(target);
             if (result !== ERR_NOT_IN_RANGE) {
-                utils.logCreep(creep, 'Arrived, mining from :' + target);
+                utils.logCreep(creep, 'Arrived, mining from :' + target, true);
                 if (creep.memory.linkPosition) {
                     creep.memory.state = creep.memory.linkPosition;
                 } else {
@@ -29,11 +29,11 @@ const STATE_MOVING = function (creep) {
                 creep.memory.targetId = target.id;
                 creep.memory.ticksToArrive = 1500 - creep.ticksToLive;
             } else {
-                utils.logCreep(creep, 'Problem :' + result);
+                utils.logCreep(creep, 'Problem :' + result, true);
             }
         } else {
             utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.source));
-            creep.moveTo(creep.memory.source.x, creep.memory.source.y);
+            utils.logCreep(creep, 'move result :' + creep.moveTo(creep.memory.source.pos.x, creep.memory.source.pos.y));
         }
     }
 };
