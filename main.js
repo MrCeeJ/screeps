@@ -8,6 +8,7 @@ const roleTower = require('ai.tower');
 const roleLink = require('ai.link');
 const utils = require('utils');
 const plans = require('plans');
+const roomToolkit = require('planUtils');
 
 module.exports.loop = function () {
 
@@ -37,7 +38,7 @@ module.exports.loop = function () {
         for (let i in spawns) {
             //noinspection JSUnfilteredForInLoop
             currentSpawn = spawns[i];
-            spawnCreeps();
+            spawnCreeps(currentSpawn);
         }
         logGameState();
         logMarket();
@@ -62,8 +63,10 @@ module.exports.loop = function () {
         }
 
         function planRoom(room,spawns) {
-            utils.logMessage("planning room : " + room.name);
-            plans.planRoom(room,spawns)
+            if (Game.time % 20 === 0) {
+                utils.logMessage("planning room : " + room.name);
+                plans.planRoom(room,spawns)
+            }
         }
 
         function runCreeps() {
@@ -106,7 +109,7 @@ module.exports.loop = function () {
             _.forEach(links, l => roleLink.run(l));
         }
 
-        function spawnCreeps() {
+        function spawnCreeps(currentSpawn) {
             if (!currentSpawn.spawning && totalLivingCreeps < maxCreeps) {
                 const maxSpawnEnergy = currentRoom.energyCapacityAvailable;
                 if (currentCreeps < 2) {
@@ -165,6 +168,7 @@ module.exports.loop = function () {
 
             function spawnMiner(maxSpawnEnergy) {
                 let energySources = roomSettings.energySources;
+                let miningPositions = roomToolkit.getMiningPositions(currentRoom,currentSpawn,energySources);
                 let usedSources = [];
                 for (let m in miners) {
                     if (miners[m].memory && miners[m].memory.source) {

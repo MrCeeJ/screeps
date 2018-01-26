@@ -4,11 +4,12 @@ const utils = require('utils');
 
 const plans = {
     planRoom: function (room, spawns) {
-        if (planUtils.numberOfPlannnedContainers(room) < 2 ) {
+        if (planUtils.numberOfPlannedContainers(room) < 2 ) {
             bootstrapRoom(room, spawns);
         } else if (planUtils.numberOfContainers(room) < 2 ) {
             utils.logMessage("Room still under construction");
         }
+
     },
 };
 
