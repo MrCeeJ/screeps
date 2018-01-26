@@ -51,9 +51,15 @@ const planUtils = {
     },
     getMiningPositions: function (room, currentSpawn, energySources) {
         const positions = [];
+        utils.logObject("room :",room);
+        utils.logObject("currentSpawn :",currentSpawn);
+        utils.logObject("energySources :",energySources);
         for (const source in energySources) {
-            const spaces = planUtils.nonWallPositionsNextToCoordinates(room, energySources[source].x, energySources[source].y);
-            const target = _(spaces).sortBy(s => _(s.findPathTo(currentSpawn.pos)).size()).first();
+            const spaces = planUtils.nonWallPositionsNextToCoordinates(room, energySources[source].pos.x, energySources[source].pos.y);
+            utils.logObject("spaces :",spaces);
+            const target = _(spaces).sortBy(s => _(s.findPathTo(currentSpawn.pos,{ignoreCreeps : true, ignoreRoads : true})).size()).first();
+
+            utils.logObject("target :",target);
             positions.push(target);
         }
         return positions;

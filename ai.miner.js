@@ -4,21 +4,25 @@ const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Miner starting up!', true);
-    if (creep.memory.source === undefined) {
-        utils.logCreep(creep, 'ALERT! No location defined', true);
-        creep.say('Need Location!');
+    if (creep.memory.position === undefined) {
+        utils.logCreep(creep, 'ALERT! No position defined', true);
+        creep.say('Need Position!');
+    } else if (creep.memory.source === undefined) {
+        utils.logCreep(creep, 'ALERT! No source defined', true);
+        creep.say('Need Source!');
     } else {
         creep.memory.state = 'MOVING';
-        utils.logCreep(creep, 'Moving to location [' + creep.memory.source.pos.x + ',' + creep.memory.source.pos.y + ']', true);
+        utils.logCreep(creep, 'Moving to location [' + creep.memory.position.x + ',' + creep.memory.position.y + ']', true);
         return states[creep.memory.state](creep);
     }
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.memory.source) {
-        if (creep.pos.x === creep.memory.source.pos.x && creep.pos.y === creep.memory.source.pos.y) {
-            let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-            const result = creep.harvest(target);
+    if (creep.memory.position) {
+        if (creep.pos.x === creep.memory.position.x && creep.pos.y === creep.memory.position.y) {
+            //let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+            let target = creep.memory.source;
+            const result = creep.harvest(Game.getObjectById(creep.memory.target));
             if (result !== ERR_NOT_IN_RANGE) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target, true);
                 if (creep.memory.linkPosition) {
@@ -32,15 +36,15 @@ const STATE_MOVING = function (creep) {
                 utils.logCreep(creep, 'Problem :' + result, true);
             }
         } else {
-            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.source));
-            utils.logCreep(creep, 'move result :' + creep.moveTo(creep.memory.source.pos.x, creep.memory.source.pos.y));
+            utils.logCreep(creep, 'Moving to :' + JSON.stringify(creep.memory.position));
+            utils.logCreep(creep, 'move result :' + creep.moveTo(creep.memory.position.x, creep.memory.position.y));
         }
     }
 };
 
 const STATE_MINING = function (creep) {
-    creep.harvest(Game.getObjectById(creep.memory.targetId));
-    utils.logCreep(creep, "Just mining. zzz");
+    let result = creep.harvest(Game.getObjectById(creep.memory.targetId));
+    utils.logCreep(creep, "Just mining. zzz" + result === 0 ? "OK" : result);
 };
 
 const STATE_SOURCE_MINING = function (creep) {
