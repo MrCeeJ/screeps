@@ -40,10 +40,10 @@ if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.r
             mineralSources: [],
             sourceContainerIds: ['', ''],
             maxCreeps: 5,
-            maxWorkers: 1,
+            maxWorkers: 2,
             maxMiners: 2,
             maxUpgraders: 1,
-            maxTransporters: 1,
+            maxTransporters: 0,
         };
         //utils.logSettings(settings.rooms);
         for (let s in settings.energySources) {

@@ -40,7 +40,17 @@ const planUtils = {
         }
         return spaces;
     },
-
+    getPos: function (objects) {
+        const positions = [];
+        for (const obj in objects) {
+            if (objects.hasOwnProperty("obj")) {
+                if (objects[obj].hasOwnProperty("pos")) {
+                    positions.push(objects[obj].pos);
+                }
+            }
+        }
+        return positions;
+    },
     getPositions: function (room, locations) {
         const positions = [];
         for (const loc in locations) {

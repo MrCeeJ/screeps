@@ -63,7 +63,7 @@ module.exports.loop = function () {
         }
 
         function planRoom(room,spawns) {
-            if (Game.time % 20 === 0) {
+            if (Game.time % 5 === 0) {
                 utils.logMessage("planning room : " + room.name);
                 plans.planRoom(room,spawns)
             }
@@ -121,7 +121,7 @@ module.exports.loop = function () {
                     spawnMiner(maxSpawnEnergy);
                 }
                 else if (upgraders.length < 1) {
-                    utils.logMessage("Need an upgrader! " + miners.length + " /1");
+                    utils.logMessage("Need an upgrader! " + upgraders.length + " /1");
                     spawnUpgrader(maxSpawnEnergy);
                 }
                 else if (miners.length < roomSettings.maxMiners) {
