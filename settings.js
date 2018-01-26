@@ -45,7 +45,7 @@ if (settings.activeSpawns = [] || settings.activeSpawns.size === 0 || settings.r
             maxUpgraders: 1,
             maxTransporters: 1,
         };
-        utils.logSettings(settings.rooms);
+        //utils.logSettings(settings.rooms);
         for (let s in settings.energySources) {
             //noinspection JSUnfilteredForInLoop
             r.createFlag(settings.energySources[s].pos, settings.flagCount, 'Flag' + settings.flagCount, COLOR_YELLOW, COLOR_GREY);

@@ -3,12 +3,12 @@ const utils = {
         console.log(message);
     },
 
-    logObject: function(object) {
-        console.log('object', JSON.stringify(object));
+    logObject: function (message, object) {
+        console.log(message ? message : 'object', JSON.stringify(object));
     },
 
     logCreep: function (creep, message, override) {
-        if (override || creep.memory.log){
+        if (override || creep.memory.log) {
             console.log(creep.memory.role + ':' + creep.name + ': ' + message);
         }
     },
@@ -17,7 +17,7 @@ const utils = {
         for (const i in rooms) {
             //noinspection JSUnfilteredForInLoop
             console.log(":: Debugging room :" + i);
-            if (rooms[i]!==undefined) {
+            if (rooms[i] !== undefined) {
                 console.log("spawns :" + rooms[i].spawns);
                 console.log("energySources :" + rooms[i].energySources);
                 console.log("mineralSources :" + rooms[i].mineralSources);

@@ -30,7 +30,7 @@ module.exports.loop = function () {
 
         activateSafeMode();
         cleanupMemory();
-       // planRoom(currentRoom);
+        planRoom(currentRoom,spawns);
         runCreeps();
         runTowers();
         runLinks();
@@ -61,9 +61,9 @@ module.exports.loop = function () {
             }
         }
 
-        function planRoom(room) {
+        function planRoom(room,spawns) {
             utils.logMessage("planning room : " + room.name);
-            plans.planRoom(room)
+            plans.planRoom(room,spawns)
         }
 
         function runCreeps() {
