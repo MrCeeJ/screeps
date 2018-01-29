@@ -6,10 +6,11 @@ const plans = {
     planRoom: function (room, spawns) {
         if (planUtils.numberOfPlannedContainers(room) < 2 ) {
             bootstrapRoom(room, spawns);
-        } else if (planUtils.numberOfContainers(room) < 2 ) {
+        } else if (planUtils.numberOfContainers(room) <=2 ) {
             utils.logMessage("Room still under construction");
-            let roads = _(room.find(FIND_CONSTRUCTION_SITES))
-                .filter(s => s.structureType === STRUCTURE_ROAD);
+            let roads = _(room.find(FIND_STRUCTURES))
+                .filter(s => s.structureType !== STRUCTURE_ROAD)
+                .value();
 
             utils.logObject("Roads :",roads);
             let roadPositions = planUtils.getPos(roads);

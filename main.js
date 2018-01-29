@@ -200,13 +200,14 @@ module.exports.loop = function () {
                                 linkPos = 'DESTINATION';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             } else {
-                                utils.logMessage("WARNING Links found but misconfigured! :",link);
+                                utils.logObject("WARNING Links found but misconfigured! :",link);
                             }
                         }
                         currentSpawn.createCreep(body, null, {
                             role: 'miner',
                             source: unusedSources[0],
                             position: pos,
+                            log: false,
                             linkPosition: linkPos,
                             linkId: link.id
                         });
@@ -221,6 +222,7 @@ module.exports.loop = function () {
                 const energySource = oldMiner.memory.source;
                 const linkPos = oldMiner.memory.linkPosition;
                 const linkId = oldMiner.memory.linkId;
+                const pos = oldMiner.memory.position;
                 const body = [];
                 for (let part in oldMiner.body) {
                     //noinspection JSUnfilteredForInLoop
@@ -229,11 +231,12 @@ module.exports.loop = function () {
                 currentSpawn.createCreep(body, null, {
                     role: 'miner',
                     source: energySource,
+                    position: pos,
                     linkPosition: linkPos,
                     linkId: linkId
                 });
                 oldMiner.memory.replaced = true;
-                utils.logMessage("Spawning replacement miner :" + JSON.stringify(body));
+                utils.logObject("Spawning replacement miner for :", pos);
             }
 
             function spawnTransporter(maxSpawnEnergy) {

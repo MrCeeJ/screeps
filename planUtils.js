@@ -40,14 +40,11 @@ const planUtils = {
         }
         return spaces;
     },
-    getPos: function (objects) {
+    getPos: function (items) {
         const positions = [];
-        for (const obj in objects) {
-            if (objects.hasOwnProperty("obj")) {
-                if (objects[obj].hasOwnProperty("pos")) {
-                    positions.push(objects[obj].pos);
-                }
-            }
+        utils.logObject("Pos objects :", items);
+        for (const obj in items) {
+            positions.push(items[obj].pos);
         }
         return positions;
     },
@@ -61,18 +58,24 @@ const planUtils = {
     },
     getMiningPositions: function (room, currentSpawn, energySources) {
         const positions = [];
-        utils.logObject("room :",room);
-        utils.logObject("currentSpawn :",currentSpawn);
-        utils.logObject("energySources :",energySources);
         for (const source in energySources) {
             const spaces = planUtils.nonWallPositionsNextToCoordinates(room, energySources[source].pos.x, energySources[source].pos.y);
             utils.logObject("spaces :",spaces);
             const target = _(spaces).sortBy(s => _(s.findPathTo(currentSpawn.pos,{ignoreCreeps : true, ignoreRoads : true})).size()).first();
-
-            utils.logObject("target :",target);
             positions.push(target);
         }
         return positions;
+    },
+    findEnergySourceIdsInRoom: function(room) {
+        const containers =  _(room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType === STRUCTURE_CONTAINER)
+            .value();
+
+        const ids = [];
+        for (const c in containers) {
+            ids.push (containers[c].id);
+        }
+        return ids;
     }
 
 };

@@ -22,8 +22,8 @@ const STATE_MOVING = function (creep) {
         if (creep.pos.x === creep.memory.position.x && creep.pos.y === creep.memory.position.y) {
             //let target = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             let target = creep.memory.source;
-            const result = creep.harvest(Game.getObjectById(creep.memory.target));
-            if (result !== ERR_NOT_IN_RANGE) {
+            const result = creep.harvest(Game.getObjectById(target.id));
+            if (result === OK) {
                 utils.logCreep(creep, 'Arrived, mining from :' + target, true);
                 if (creep.memory.linkPosition) {
                     creep.memory.state = creep.memory.linkPosition;

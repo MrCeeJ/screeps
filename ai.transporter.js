@@ -1,4 +1,5 @@
 const utils = require('utils');
+const planUtils = require('planUtils');
 const settings = require('settings');
 const ai = require('ai.toolkit');
 
@@ -10,7 +11,8 @@ const MIN_FULLNESS = 0.8;
 
 const STATE_INITIALISING = function (creep) {
     utils.logCreep(creep, 'Transporter starting up!', true);
-    if (creep.memory.sourceIds == undefined) {
+    creep.memory.sourceIds = planUtils.findEnergySourceIdsInRoom(creep.room);
+    if (creep.memory.sourceIds === undefined) {
         utils.logCreep(creep, 'ALERT! No container ids defined', true);
         creep.say('Need ids!');
     } else {
@@ -22,7 +24,7 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_GATHERING_ENERGY = function (creep) {
     let total = _.sum(creep.carry);
-    if (total == creep.carryCapacity) {
+    if (total === creep.carryCapacity) {
         return transitionToState(creep, 'TRANSPORTING');
     }
     const needed = creep.carryCapacity - total;
@@ -33,7 +35,7 @@ const STATE_GATHERING_ENERGY = function (creep) {
 };
 
 const STATE_TRANSPORTING = function (creep) {
-    if (creep.carry.energy == 0) {
+    if (creep.carry.energy === 0) {
         let total = _.sum(creep.carry);
         if (total) {
             ai.dumpMinerals(creep)
@@ -56,7 +58,7 @@ const STATE_TRANSPORTING = function (creep) {
 
 const STATE_GATHERING_MINERALS = function (creep) {
     let total = _.sum(creep.carry);
-    if (total == creep.carryCapacity) {
+    if (total === creep.carryCapacity) {
         return transitionToState(creep, 'HAULING');
     }
     const needed = creep.carryCapacity - total;
@@ -117,7 +119,7 @@ const drone = {
     },
 
     run: function (creep) {
-        if (creep.memory.state == undefined) {
+        if (creep.memory.state === undefined) {
             creep.memory.state = 'INITIALISING';
         }
         states[creep.memory.state](creep);
