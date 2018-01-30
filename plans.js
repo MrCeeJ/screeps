@@ -4,24 +4,26 @@ const utils = require('utils');
 
 const plans = {
     planRoom: function (room, spawns) {
-        if (planUtils.numberOfPlannedContainers(room) < 2 ) {
+        if (planUtils.numberOfPlannedAndRealContainers(room) < 2 ) {
             bootstrapRoom(room, spawns);
-        } else if (planUtils.numberOfContainers(room) <=2 ) {
+        } else if (planUtils.numberOfContainers(room) < 0 ) {
             utils.logMessage("Room still under construction");
             let roads = _(room.find(FIND_STRUCTURES))
-                .filter(s => s.structureType !== STRUCTURE_ROAD)
+                .filter(s => s.structureType === STRUCTURE_ROAD)
                 .value();
 
-            utils.logObject("Roads :",roads);
+          //  utils.logObject("Roads :",roads);
             let roadPositions = planUtils.getPos(roads);
-            utils.logObject("Road Pos :",roadPositions);
-            const closest = spawns[0].pos.findClosestByRange(roadPositions);
-            utils.logObject("Closest road to spawn ::",closest);
-            // const spawnPath = room.findPath(closest.pos, spawns[0].pos, {ignoreCreeps : true, ignoreRoads : true});
-            // for (const p in spawnPath) {
-            //     utils.logMessage("Placing road site at ["+path[p].x+","+path[p].y+"]");
-            //     //room.createConstructionSite(spawnPath[p].x, spawnPath[p].y,STRUCTURE_ROAD);
-            // }
+           // utils.logObject("Road Pos :",roadPositions);
+            const closest = room.controller.pos.findClosestByRange(roadPositions);
+         //   utils.logObject("Closest road to controller :",closest);
+         //   utils.logObject("Controller ::",room.controller.pos);
+            const path = room.findPath(closest, room.controller.pos, {ignoreCreeps : true, ignoreRoads : true});
+         //   utils.logObject("Path to controller :",path);
+            for (const p in path) {
+              //   utils.logMessage("Placing road site at ["+path[p].x+","+path[p].y+"]");
+                 room.createConstructionSite(path[p].x, path[p].y,STRUCTURE_ROAD);
+             }
         }
 
     },
@@ -71,7 +73,7 @@ function buildContainersAndSpawnPaths(room, spawns, endLocation) {
         room.createConstructionSite(path[p].x, path[p].y,STRUCTURE_ROAD);
     }
     let roads = _(room.find(FIND_STRUCTURES))
-        .filter(s => s.structureType === STRUCTURE_ROAD);
+        .filter(s => s.structureType === STRUCTURE_ROAD).value();
     const closest = spawns[0].pos.findClosestByRange(roads);
     const spawnPath = room.findPath(closest.pos, spawns[0].pos, {ignoreCreeps : true, ignoreRoads : true});
     for (const p in spawnPath) {

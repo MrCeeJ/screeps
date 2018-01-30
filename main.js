@@ -31,7 +31,6 @@ module.exports.loop = function () {
 
         activateSafeMode();
         cleanupMemory();
-        planRoom(currentRoom,spawns);
         runCreeps();
         runTowers();
         runLinks();
@@ -40,6 +39,7 @@ module.exports.loop = function () {
             currentSpawn = spawns[i];
             spawnCreeps(currentSpawn);
         }
+        planRoom(currentRoom,spawns);
         logGameState();
         logMarket();
 
@@ -63,7 +63,7 @@ module.exports.loop = function () {
         }
 
         function planRoom(room,spawns) {
-            if (Game.time % 5 === 0) {
+            if (Game.time % 25 === 0) {
                 utils.logMessage("planning room : " + room.name);
                 plans.planRoom(room,spawns)
             }
@@ -175,7 +175,7 @@ module.exports.loop = function () {
                     if (miners[m].memory && miners[m].memory.source) {
                         const obj = miners[m].memory.source;
                         const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
-                        usedSources.push(pos);
+                        usedSources.push(obj);
                         if (miners[m].memory.position) {
                             usedPositions.push(miners[m].memory.position);
                         }

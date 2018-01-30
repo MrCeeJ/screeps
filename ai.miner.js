@@ -44,7 +44,7 @@ const STATE_MOVING = function (creep) {
 
 const STATE_MINING = function (creep) {
     let result = creep.harvest(Game.getObjectById(creep.memory.targetId));
-    utils.logCreep(creep, "Just mining. zzz :" + result === 0 ? "OK" : result);
+    utils.logCreep(creep, "Just mining. :" + result, result !== 0);
 };
 
 const STATE_SOURCE_MINING = function (creep) {

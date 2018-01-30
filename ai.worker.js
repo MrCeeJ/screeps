@@ -10,7 +10,7 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_GATHERING = function (creep) {
     const MIN_ENERGY = creep.carryCapacity;
-    if (creep.carry.energy == creep.carryCapacity) {
+    if (creep.carry.energy === creep.carryCapacity) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
@@ -18,7 +18,7 @@ const STATE_GATHERING = function (creep) {
 };
 
 const STATE_WORKING = function (creep) {
-    if (creep.carry.energy == 0) {
+    if (creep.carry.energy === 0) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }

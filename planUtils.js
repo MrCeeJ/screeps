@@ -6,7 +6,7 @@ const planUtils = {
             .filter(s => s.structureType === STRUCTURE_CONTAINER)
             .size();
     },
-    numberOfPlannedContainers: function (room) {
+    numberOfPlannedAndRealContainers: function (room) {
         let containers = _(room.find(FIND_STRUCTURES))
             .filter(s => s.structureType === STRUCTURE_CONTAINER)
             .size();
