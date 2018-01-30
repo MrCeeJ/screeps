@@ -1,5 +1,4 @@
 const utils = require('utils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
@@ -12,7 +11,7 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_MOVING = function (creep) {
-    if (creep.room != creep.memory.destination.room) {
+    if (creep.room !== creep.memory.destination.room) {
         creep.moveTo(creep.memory.destination);
     } else {
         transitionToState('CLAIMING');
@@ -57,7 +56,7 @@ const drone = {
     },
 
     run: function (creep) {
-        if (creep.memory.state == undefined) {
+        if (creep.memory.state === undefined) {
             creep.memory.state = 'INITIALISING';
         }
         states[creep.memory.state](creep);

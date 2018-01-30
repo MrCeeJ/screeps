@@ -1,4 +1,4 @@
-const settings = require('settings');
+const data = require('data');
 const roleDrone = require('ai.drone');
 const roleWorker = require('ai.worker');
 const roleUpgrader = require('ai.upgrader');
@@ -12,16 +12,21 @@ const roomToolkit = require('planUtils');
 
 module.exports.loop = function () {
 
-    let spawns, currentRoom, roomSettings, currentSpawn;
-    for (const i in settings.rooms) {
+    let spawns, currentRoom, roomData, currentSpawn;
+
+    if(Memory.rooms === undefined || Memory.rooms === []) {
+        data.reset();
+    }
+
+    for (const i in Memory.rooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
-        roomSettings = settings.rooms[i];
-        currentRoom = Game.rooms[roomSettings.name];
-        spawns = roomSettings.spawns;
+        roomData = Memory.rooms[i];
+        currentRoom = Game.rooms[roomData.name];
+        spawns = roomData.spawns;
 
         let currentCreeps = _(Game.creeps).size();
         let totalLivingCreeps  = currentCreeps;
-        const maxCreeps = roomSettings.maxCreeps;
+        const maxCreeps = roomData.maxCreeps;
         let workers = [];
         let upgraders = [];
         let miners = [];
@@ -30,7 +35,7 @@ module.exports.loop = function () {
         let links;
 
         activateSafeMode();
-        cleanupMemory();
+        removeDeadScreepsFromMemory();
         runCreeps();
         runTowers();
         runLinks();
@@ -52,7 +57,7 @@ module.exports.loop = function () {
             }
         }
 
-        function cleanupMemory() {
+        function removeDeadScreepsFromMemory() {
             for (let i in Memory.creeps) {
                 //noinspection JSUnfilteredForInLoop
                 if (!Game.creeps[i]) {
@@ -124,24 +129,24 @@ module.exports.loop = function () {
                     utils.logMessage("Need an upgrader! " + upgraders.length + " /1");
                     spawnUpgrader(maxSpawnEnergy);
                 }
-                else if (miners.length < roomSettings.maxMiners) {
-                    utils.logMessage("Need more miners :(" + miners.length + " / " + roomSettings.maxMiners + ')');
+                else if (miners.length < roomData.maxMiners) {
+                    utils.logMessage("Need more miners :(" + miners.length + " / " + roomData.maxMiners + ')');
                     spawnMiner(maxSpawnEnergy);
                 }
-                else if (upgraders.length < roomSettings.maxUpgraders) {
-                    utils.logMessage("Need more upgraders :(" + upgraders.length + " / " + roomSettings.maxUpgraders + ')');
+                else if (upgraders.length < roomData.maxUpgraders) {
+                    utils.logMessage("Need more upgraders :(" + upgraders.length + " / " + roomData.maxUpgraders + ')');
                     spawnUpgrader(maxSpawnEnergy);
                 }
-                else if (transporters.length < roomSettings.maxTransporters) {
-                    utils.logMessage("Need more transporters :(" + transporters.length + " / " + roomSettings.maxTransporters + ')');
-                    spawnTransporter(maxSpawnEnergy);
+                else if (transporters.length < roomData.maxTransporters) {
+                    utils.logMessage("Need more transporters :(" + transporters.length + " / " + roomData.maxTransporters + ')');
+                    spawnTransporter(maxSpawnEnergy,roomData);
                 }
-                else if (workers.length < roomSettings.maxWorkers) {
-                    utils.logMessage("Need more workers :(" + workers.length + " / " + roomSettings.maxWorkers + ')');
+                else if (workers.length < roomData.maxWorkers) {
+                    utils.logMessage("Need more workers :(" + workers.length + " / " + roomData.maxWorkers + ')');
                     spawnWorker(maxSpawnEnergy);
                 }
             }
-            else if (miners.length === roomSettings.maxMiners) {
+            else if (miners.length === roomData.maxMiners) {
                 let dyingMiners = [];
                 _.forEach(miners, m => {
                     if (!m.memory.replaced && m.ticksToLive < (m.memory.ticksToArrive + (m.body.length * 3))) {
@@ -167,7 +172,7 @@ module.exports.loop = function () {
             }
 
             function spawnMiner(maxSpawnEnergy) {
-                let energySources = roomSettings.energySources;
+                let energySources = roomData.energySources;
                 let miningPositions = roomToolkit.getMiningPositions(currentRoom,currentSpawn,energySources);
                 let usedSources = [];
                 let usedPositions = [];
@@ -192,11 +197,11 @@ module.exports.loop = function () {
                         let linkPos;
                         let body = roleMiner.getBody(maxSpawnEnergy);
                         if (link) {
-                            if (roomSettings.linkSourceId === link.id) {
+                            if (roomData.linkSourceId === link.id) {
                                 linkPos = 'SOURCE';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             }
-                            else if (roomSettings.linkDestinationId === link.id) {
+                            else if (roomData.linkDestinationId === link.id) {
                                 linkPos = 'DESTINATION';
                                 body = roleMiner.getLinkBody(maxSpawnEnergy);
                             } else {
@@ -239,11 +244,11 @@ module.exports.loop = function () {
                 utils.logObject("Spawning replacement miner for :", pos);
             }
 
-            function spawnTransporter(maxSpawnEnergy) {
+            function spawnTransporter(maxSpawnEnergy,roomData) {
                 const body = roleTransporter.getBody(maxSpawnEnergy);
                 currentSpawn.createCreep(body, null, {
                     role: 'transporter',
-                    sourceIds: roomSettings.sourceContainerIds
+                    sourceIds: roomData.sourceContainerIds
                 });
                 utils.logMessage("Spawning transporter :" + JSON.stringify(body));
             }

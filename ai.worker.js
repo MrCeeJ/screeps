@@ -1,5 +1,4 @@
 const utils = require('utils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
@@ -14,7 +13,7 @@ const STATE_GATHERING = function (creep) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
-    return  ai.gatherContainerEnergy(creep) || ai.gatherNearestDroppedEnergy(creep, MIN_ENERGY);
+    return ai.gatherContainerEnergy(creep) || ai.gatherNearestDroppedEnergy(creep, MIN_ENERGY);
 };
 
 const STATE_WORKING = function (creep) {
@@ -22,7 +21,7 @@ const STATE_WORKING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
-    return ai.buildBuildings(creep) || ai.repairBuildings(creep) || ai.upgradeRoom(creep);
+    return ai.buildBuildings(creep) || ai.repairBuildings(creep) || ai.repairWalls(creep) || ai.upgradeRoom(creep);
 };
 
 const states = {

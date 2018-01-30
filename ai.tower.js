@@ -1,5 +1,3 @@
-const settings = require('settings');
-
 const tower = {
     /**
      * A basic Tower.

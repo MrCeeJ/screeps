@@ -1,5 +1,4 @@
 const utils = require('utils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.75;
@@ -12,7 +11,7 @@ const STATE_INITIALISING = function (creep) {
 
 const STATE_GATHERING = function (creep) {
     const MIN_ENERGY = creep.carryCapacity;
-    if (creep.carry.energy == creep.carryCapacity) {
+    if (creep.carry.energy === creep.carryCapacity) {
         creep.memory.state = 'WORKING';
         return states[creep.memory.state](creep);
     }
@@ -20,7 +19,7 @@ const STATE_GATHERING = function (creep) {
 };
 
 const STATE_WORKING = function (creep) {
-    if (creep.carry.energy == 0) {
+    if (creep.carry.energy === 0) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
@@ -70,7 +69,7 @@ const drone = {
     },
 
     run: function (creep) {
-        if (creep.memory.state == undefined) {
+        if (creep.memory.state === undefined) {
             creep.memory.state = 'INITIALISING';
         }
         states[creep.memory.state](creep);

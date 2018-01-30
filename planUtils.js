@@ -76,6 +76,11 @@ const planUtils = {
             ids.push (containers[c].id);
         }
         return ids;
+    },
+    buildRoadAlongPath(room, path) {
+        for (const p in path) {
+            room.createConstructionSite(path[p].x, path[p].y,STRUCTURE_ROAD);
+        }
     }
 
 };

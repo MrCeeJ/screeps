@@ -307,7 +307,7 @@ const ai = {
             return false;
         },
         repairBuildings: function (creep) {
-            const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER, STRUCTURE_WALL, STRUCTURE_RAMPART];
+            const structureTypes = [STRUCTURE_CONTAINER, STRUCTURE_ROAD, STRUCTURE_TOWER];
 
             let structures = _(creep.room.find(FIND_STRUCTURES))
                 .filter(s => s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType))
@@ -328,6 +328,28 @@ const ai = {
             utils.logCreep(creep, 'No buildings to repair.');
             return false;
         },
+    repairWalls: function (creep) {
+        const structureTypes = [STRUCTURE_WALL, STRUCTURE_RAMPART];
+
+        let structures = _(creep.room.find(FIND_STRUCTURES))
+            .filter(s => s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType))
+            .sortBy(s => s.hits)
+            .value();
+        //utils.logCreep(creep,"Things to repair :"+JSON.stringify(structures),true);
+
+        if (structures.length) {
+            if (creep.repair(structures[0]) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(structures[0]);
+                utils.logCreep(creep, 'Moving to repair ' + structures[0].structureType + ' at ' + structures[0].pos);
+            }
+            else {
+                utils.logCreep(creep, 'Repairing ' + structures[0].structureType + ' at ' + structures[0].pos);
+            }
+            return true;
+        }
+        utils.logCreep(creep, 'No buildings to repair.');
+        return false;
+    },
         upgradeRoom: function (creep) {
             if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller);

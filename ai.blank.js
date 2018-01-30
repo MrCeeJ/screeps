@@ -1,5 +1,4 @@
 const utils = require('utils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {

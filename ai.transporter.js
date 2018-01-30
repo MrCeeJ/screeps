@@ -1,6 +1,5 @@
 const utils = require('utils');
 const planUtils = require('planUtils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const REFILL_TOWER_CAPACITY = 0.9;

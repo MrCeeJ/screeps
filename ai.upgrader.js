@@ -1,5 +1,4 @@
 const utils = require('utils');
-const settings = require('settings');
 const ai = require('ai.toolkit');
 
 const STATE_INITIALISING = function (creep) {
@@ -9,7 +8,7 @@ const STATE_INITIALISING = function (creep) {
 };
 
 const STATE_GATHERING = function (creep) {
-    if (creep.carry.energy == creep.carryCapacity) {
+    if (creep.carry.energy === creep.carryCapacity) {
         creep.memory.state = 'UPGRADING';
         return states[creep.memory.state](creep);
     }
@@ -17,7 +16,7 @@ const STATE_GATHERING = function (creep) {
 };
 
 const STATE_UPGRADING = function (creep) {
-    if (creep.carry.energy == 0) {
+    if (creep.carry.energy === 0) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
@@ -69,7 +68,7 @@ const drone = {
     },
 
     run: function (creep) {
-        if (creep.memory.state == undefined) {
+        if (creep.memory.state === undefined) {
             creep.memory.state = 'INITIALISING';
         }
         states[creep.memory.state](creep);
