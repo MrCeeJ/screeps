@@ -6,11 +6,11 @@ const planUtils = {
     calculateTechLevel(room) {
         if (planUtils.numberOfContainers(room) < 2) {
             if (planUtils.numberOfPlannedAndRealContainers(room) < 2) {
-                return tech.NONE;
+                return 'NONE';
             }
-            else return tech.BOOTSTRAP;
+            else return 'BOOTSTRAP';
         }
-        else return tech.CONNECTED;
+        else return 'CONNECTED';
     },
     numberOfContainers: function (room) {
         return _(room.find(FIND_STRUCTURES))
@@ -116,6 +116,21 @@ const planUtils = {
         for (const p in path) {
             room.createConstructionSite(path[p].x, path[p].y, STRUCTURE_ROAD);
         }
+    },
+
+    buildContainersAndSpawnPaths(room, spawns, containerLocation) {
+    room.createConstructionSite(containerLocation.x, containerLocation.y, STRUCTURE_CONTAINER);
+    const start = spawns[0].pos;
+    utils.logMessage("Pathing to  [" + containerLocation.x + "," + containerLocation.y + "," + room.name + "]");
+    const end = new RoomPosition(containerLocation.x, containerLocation.y, room.name);
+    const path = room.findPath(start, end, {ignoreCreeps: true, ignoreRoads: true});
+    planUtils.buildRoadAlongPath(room, path);
+
+    let roads = _(room.find(FIND_STRUCTURES))
+        .filter(s => s.structureType === STRUCTURE_ROAD).value();
+    const closest = spawns[0].pos.findClosestByRange(roads);
+    const spawnPath = room.findPath(closest.pos, spawns[0].pos, {ignoreCreeps: true, ignoreRoads: true});
+    planUtils.buildRoadAlongPath(room, spawnPath);
     }
 };
 
