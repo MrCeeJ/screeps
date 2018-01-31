@@ -1,14 +1,19 @@
+const utils = require('utils');
+const planUtils = require('planUtils');
+
 let data = {
     reset: function () {
+        utils.logMessage("Resetting memory data");
         Memory.rooms = {};
+        Memory.resetData = false;
         const defaults = {
             name: "",
-            spawns: [],
-            energySources: [],
+            techLevel : "",
+            spawnIds: [],
+            energySourceIds: [],
             linkSourceId: '',
             linkDestinationId: '',
-            mineralSources: [],
-            sourceContainerIds: ['', ''],
+            sourceContainerIds: [],
             maxCreeps: 6,
             maxWorkers: 2,
             maxMiners: 2,
@@ -17,10 +22,12 @@ let data = {
         };
         for (const i in Game.spawns) {
             const r = Game.spawns[i].room;
-            Memory.rooms[r.name] = defaults;
-            Memory.rooms[r.name].name = r.name;
-            Memory.rooms[r.name].spawns = r.find(FIND_MY_SPAWNS);
-            Memory.rooms[r.name].energySources = r.find(FIND_SOURCES_ACTIVE);
+            let location = Memory.rooms[r.name];
+            location = defaults;
+            location.name = r.name;
+            location.spawnIds = utils.getIds(r.find(FIND_MY_SPAWNS));
+            location.energySourceIds = utils.getIds(r.find(FIND_SOURCES_ACTIVE));
+            location.techLevel = planUtils.calculateTechLevel(r);
         }
     }
 };

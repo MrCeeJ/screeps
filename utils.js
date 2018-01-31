@@ -1,4 +1,12 @@
 const utils = {
+
+    getIds: function(array) {
+        const ids = [];
+        for (const a in array) {
+            ids.push(array[a].id);
+        }
+        return ids;
+    },
     logMessage: function (message) {
         console.log(message);
     },

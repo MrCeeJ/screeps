@@ -14,15 +14,14 @@ module.exports.loop = function () {
 
     let spawns, currentRoom, roomData, currentSpawn;
 
-    if(Memory.rooms === undefined || Memory.rooms === []) {
+    if(Memory.rooms === undefined || Memory.rooms === [] || Memory.resetData === undefined || Memory.resetData === true) {
         data.reset();
     }
-
     for (const i in Memory.rooms) {
         //noinspection ES6ModulesDependencies,JSUnresolvedVariable
         roomData = Memory.rooms[i];
         currentRoom = Game.rooms[roomData.name];
-        spawns = roomData.spawns;
+        spawnIds = roomData.spawns;
 
         let currentCreeps = _(Game.creeps).size();
         let totalLivingCreeps  = currentCreeps;
@@ -39,12 +38,12 @@ module.exports.loop = function () {
         runCreeps();
         runTowers();
         runLinks();
-        for (let i in spawns) {
-            //noinspection JSUnfilteredForInLoop
-            currentSpawn = spawns[i];
+        for (const i in spawnIds) {
+             //noinspection JSUnfilteredForInLoop
+            currentSpawn = Game.getObjectById([Memory.rooms["W74S82"].spawnIds[i]]);
             spawnCreeps(currentSpawn);
         }
-        planRoom(currentRoom,spawns);
+        planRoom(currentRoom,spawnIds);
         logGameState();
         logMarket();
 
@@ -67,10 +66,10 @@ module.exports.loop = function () {
             }
         }
 
-        function planRoom(room,spawns) {
+        function planRoom(room,spawnIds) {
             if (Game.time % 25 === 0) {
                 utils.logMessage("planning room : " + room.name);
-                plans.planRoom(room,spawns)
+                plans.planRoom(room,spawnIds)
             }
         }
 
@@ -172,21 +171,21 @@ module.exports.loop = function () {
             }
 
             function spawnMiner(maxSpawnEnergy) {
-                let energySources = roomData.energySources;
+                let energySources = roomData.energySourceIds;
                 let miningPositions = roomToolkit.getMiningPositions(currentRoom,currentSpawn,energySources);
                 let usedSources = [];
                 let usedPositions = [];
                 for (let m in miners) {
-                    if (miners[m].memory && miners[m].memory.source) {
-                        const obj = miners[m].memory.source;
-                        const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
+                    if (miners[m].memory && miners[m].memory.sourceId) {
+                        const obj = Game.getObjectById(miners[m].memory.sourceId);
+                        //const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
                         usedSources.push(obj);
                         if (miners[m].memory.position) {
                             usedPositions.push(miners[m].memory.position);
                         }
                     }
                 }
-                let unusedSources = _.reject(energySources, s => _.some(usedSources, s));
+                let unusedSources = _.reject(energySources, s => _.some(usedSources.id, s));
                 const unusedPositions= _.reject(miningPositions, s => _.some(usedPositions, s));
 
                 if (miners.length < energySources.length) {
@@ -194,6 +193,7 @@ module.exports.loop = function () {
 
                         const pos = unusedPositions[0];
                         const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType === STRUCTURE_LINK).min(s => pos.getRangeTo(s));
+                        utils.logObject("Links :",link);
                         let linkPos;
                         let body = roleMiner.getBody(maxSpawnEnergy);
                         if (link) {
@@ -210,7 +210,7 @@ module.exports.loop = function () {
                         }
                         currentSpawn.createCreep(body, null, {
                             role: 'miner',
-                            source: unusedSources[0],
+                            sourceId: unusedSources[0],
                             position: pos,
                             log: false,
                             linkPosition: linkPos,
@@ -224,7 +224,7 @@ module.exports.loop = function () {
             }
 
             function spawnReplacementMiner(oldMiner) {
-                const energySource = oldMiner.memory.source;
+                const energySource = oldMiner.memory.sourceId;
                 const linkPos = oldMiner.memory.linkPosition;
                 const linkId = oldMiner.memory.linkId;
                 const pos = oldMiner.memory.position;
@@ -235,7 +235,7 @@ module.exports.loop = function () {
                 }
                 currentSpawn.createCreep(body, null, {
                     role: 'miner',
-                    source: energySource,
+                    sourceId: energySource,
                     position: pos,
                     linkPosition: linkPos,
                     linkId: linkId

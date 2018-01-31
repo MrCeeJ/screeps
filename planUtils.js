@@ -1,6 +1,17 @@
 const utils = require('utils');
+const tech = require('tech');
 
 const planUtils = {
+
+    calculateTechLevel(room) {
+        if (planUtils.numberOfContainers(room) < 2) {
+            if (planUtils.numberOfPlannedAndRealContainers(room) < 2) {
+                return tech.NONE;
+            }
+            else return tech.BOOTSTRAP;
+        }
+        else return tech.CONNECTED;
+    },
     numberOfContainers: function (room) {
         return _(room.find(FIND_STRUCTURES))
             .filter(s => s.structureType === STRUCTURE_CONTAINER)
@@ -40,6 +51,27 @@ const planUtils = {
         }
         return spaces;
     },
+    containsNoConstructionSites: function (room) {
+        let sites = _(room.find(FIND_CONSTRUCTION_SITES))
+            .filter(s => s.structureType === STRUCTURE_CONTAINER)
+            .size();
+        return sites === 0;
+    },
+
+    findSpacesWithoutBuildingsOrSites: function (room, locations) {
+        const spaces = [];
+        for (const l in locations) {
+            const structures = room.lookForAt(LOOK_STRUCTURES, locations[l].x, locations[l].y);
+            const sites = room.lookForAt(LOOK_CONSTRUCTION_SITES, locations[l].x, locations[l].y);
+
+            if (_(structures).size() === 0 && _(sites).size() === 0) {
+                utils.logObject("Empty space found at [" + locations[l].x + "," + locations[l].y + "]: for ", Game.getObjectById(energyLocationIds[e]).pos);
+                spaces.push(locations[l]);
+            }
+        }
+        return spaces;
+    },
+
     getPos: function (items) {
         const positions = [];
         utils.logObject("Pos objects :", items);
@@ -59,30 +91,32 @@ const planUtils = {
     getMiningPositions: function (room, currentSpawn, energySources) {
         const positions = [];
         for (const source in energySources) {
-            const spaces = planUtils.nonWallPositionsNextToCoordinates(room, energySources[source].pos.x, energySources[source].pos.y);
-            utils.logObject("spaces :",spaces);
-            const target = _(spaces).sortBy(s => _(s.findPathTo(currentSpawn.pos,{ignoreCreeps : true, ignoreRoads : true})).size()).first();
+            const spaces = planUtils.nonWallPositionsNextToCoordinates(room, Game.getObjectById(energySources[source]).pos.x, Game.getObjectById(energySources[source]).pos.y);
+            utils.logObject("spaces :", spaces);
+            const target = _(spaces).sortBy(s => _(s.findPathTo(currentSpawn.pos, {
+                ignoreCreeps: true,
+                ignoreRoads: true
+            })).size()).first();
             positions.push(target);
         }
         return positions;
     },
-    findEnergySourceIdsInRoom: function(room) {
-        const containers =  _(room.find(FIND_STRUCTURES))
+    findEnergySourceIdsInRoom: function (room) {
+        const containers = _(room.find(FIND_STRUCTURES))
             .filter(s => s.structureType === STRUCTURE_CONTAINER)
             .value();
 
         const ids = [];
         for (const c in containers) {
-            ids.push (containers[c].id);
+            ids.push(containers[c].id);
         }
         return ids;
     },
     buildRoadAlongPath(room, path) {
         for (const p in path) {
-            room.createConstructionSite(path[p].x, path[p].y,STRUCTURE_ROAD);
+            room.createConstructionSite(path[p].x, path[p].y, STRUCTURE_ROAD);
         }
     }
-
 };
 
 module.exports = planUtils;

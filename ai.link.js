@@ -1,4 +1,4 @@
-const tower = {
+const link = {
 
     /**
      * A basic Link.
@@ -21,4 +21,4 @@ const tower = {
         }
     }
 };
-module.exports = tower;
+module.exports = link;
