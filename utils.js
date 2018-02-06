@@ -1,4 +1,5 @@
-let lastLogTime = Game.time;
+let lastLogTime;
+const delay = 5;
 
 const utils = {
 
@@ -29,13 +30,10 @@ const utils = {
 
     logHeartbeat : function () {
       const currentTime = Game.time;
-      const delay = 5;
       if (currentTime - lastLogTime > delay) {
-          console.log("Nothing much happening, another "+ delay +" ticks go by.")
+          console.log("Nothing much happening, another "+ delay +" ticks go by.");
           lastLogTime = Game.time;
       }
-
-
     },
     logSettings: function (rooms) {
         for (const i in rooms) {

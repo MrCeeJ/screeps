@@ -6,6 +6,7 @@ let data = {
         utils.logMessage("Resetting memory data");
         Memory.rooms = {};
         Memory.resetData = false;
+        Memory.resetConstructionSites = false;
         const defaults = {
             name: "",
             techLevel : "",

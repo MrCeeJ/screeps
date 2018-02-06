@@ -1,73 +1,82 @@
 const planUtils = require('planUtils');
 const utils = require('utils');
-const tech = require('tech');
 
 const plans = {
-    planRoom: function (room, spawnIds) {
+    planRoom: function (room) {
         if (planUtils.containsNoConstructionSites(room)) {
-            Memory.rooms[room.name].techLevel = planUtils.calculateTechLevel(room);
-            techPlans[Memory.rooms[room.name].techLevel](room, spawnIds);
+            techPlans[Memory.rooms[room.name].techLevel](room);
         } else {
             utils.logMessage("Room: " + room.name + " still under construction.");
         }
-    },
+    }
 };
 
-const BOOTSTRAP = function (room, spawnIds) {
-    if (Memory[room.name].techLevel === 'NONE') {
-        utils.logMessage("Bootstrapping Room: " + JSON.stringify(room));
-        const energyLocationIds = Memory.rooms[room.name].energySourceIds;
-        for (const e in energyLocationIds) {
-            let locations = planUtils.nonWallsNextToLocation(room, Game.getObjectById(energyLocationIds[e]).pos);
-            let goodLocations = planUtils.findSpacesWithoutBuildingsOrSites(room, locations);
-
-            if (_(goodLocations).size() === 0) {
-                utils.logMessage("Warning, unable to find good site for container");
-            }
-            else {
-                let positions = planUtils.getPositions(room, goodLocations);
-                const containerLocation = _(positions).sortBy(s => _(s.findPathTo(Game.getObjectById(spawnIds[0]).pos)).size()).first();
-                planUtils.buildContainersAndSpawnPaths(room, spawnIds, containerLocation);
-            }
-        }
+const BUILD_CONTAINERS = function (room) {
+    if (Memory.rooms[room.name].techLevel === 'NONE') {
+        utils.logMessage("Constructing containers for room: " + JSON.stringify(room));
+        planUtils.buildInitialContainers(room);
+        Memory.rooms[room.name].techLevel = 'CONTAINERS';
     } else
-        utils.logMessage("Warning, attempted to bootstrap room in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to construct containers room in incorrect state :", Memory[room.name].techLevel);
 };
 
-CONNECT = function (room) {
-    if (Memory[room.name].techLevel === 'BOOTSTRAP') {
-        let roads = _(room.find(FIND_STRUCTURES))
-            .filter(s => s.structureType === STRUCTURE_ROAD)
-            .value();
-
-        let roadPositions = planUtils.getPos(roads);
-        const closest = room.controller.pos.findClosestByRange(roadPositions);
-        const path = room.findPath(closest, room.controller.pos, {ignoreCreeps: true, ignoreRoads: true});
-        planUtils.buildRoadAlongPath(room, path);
+const CONNECT_CONTAINERS = function (room) {
+    if (Memory[room.name].techLevel === 'CONTAINERS') {
+        planUtils.connectContainersAndSpawns(room);
+        Memory.rooms[room.name].techLevel = 'CONNECTED_CONTAINERS';
     } else
-        utils.logMessage("Warning, attempted to connect room in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to connect containers in incorrect state :", Memory[room.name].techLevel);
 };
 
-STORE = function (room) {
+const CONNECT_CONTROLLER = function(room) {
+    if (Memory[room.name].techLevel === 'CONNECTED_CONTAINERS') {
+        planUtils.connectController(room);
+        Memory.rooms[room.name].techLevel = 'CONNECT';
+    } else
+        utils.logMessage("Warning, attempted to connect controller in incorrect state :", Memory[room.name].techLevel);
+};
+
+const BUILD_L1_STORES = function (room) {
     if (Memory[room.name].techLevel === 'CONNECT') {
         utils.logMessage("Attempted to build storage in room:", room.name);
+        // TODO: Write function
+        //Memory.rooms[room.name].techLevel = 'L1_STORES';
     }
     else
-        utils.logMessage("Warning, attempted to connect room in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to build storage in incorrect state :", Memory[room.name].techLevel);
 };
 
-LINK = function (room) {
-
+const BUILD_LINK = function (room) {
+    if (Memory[room.name].techLevel === 'L1_STORES') {
+        utils.logMessage("Attempted to build link in room:", room.name);
+        // TODO: Write function
+        //Memory.rooms[room.name].techLevel = 'LINKS';
+    }
+    else
+        utils.logMessage("Warning, attempted to build links in incorrect state :", Memory[room.name].techLevel);
 };
 
+const BUILD_TOWERS = function (room) {
+    if (Memory[room.name].techLevel === 'LINKS') {
+        utils.logMessage("Attempted to build towers in room:", room.name);
+        // TODO: Write function
+        //Memory.rooms[room.name].techLevel = 'TOWERS';
+    }
+    else
+        utils.logMessage("Warning, attempted to build towers in incorrect state :", Memory[room.name].techLevel);
+};
 
 /**
  A map from current room tech level to actions to move to the next one.
  */
 const techPlans = {
-    'NONE': BOOTSTRAP,
-    'BOOTSTRAP': CONNECT,
-    'CONNECTED': STORE,
-    'BASIC_STORAGE': LINK
+    'NONE': BUILD_CONTAINERS,
+    'CONTAINERS': CONNECT_CONTAINERS,
+    'CONNECTED_CONTAINERS': CONNECT_CONTROLLER,
+    'CONNECTED_CONTROLLERS': BUILD_L1_STORES,
+    'L1_STORES' : BUILD_LINK,
+    'LINKS' : BUILD_TOWERS,
+    'TOWERS' : undefined
 };
+
 module.exports = plans;

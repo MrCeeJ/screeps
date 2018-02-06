@@ -7,6 +7,7 @@ const roleTransporter = require('ai.transporter');
 const roleTower = require('ai.tower');
 const roleLink = require('ai.link');
 const utils = require('utils');
+const planUtils = require('planUtils');
 const plans = require('plans');
 const roomToolkit = require('planUtils');
 
@@ -15,14 +16,15 @@ module.exports.loop = function () {
     utils.logHeartbeat();
 
     let spawnIds, currentRoom, roomData, currentSpawn;
-    if(Memory.rooms === undefined || Memory.rooms === [] || Memory.resetData === undefined || Memory.resetData === true) {
+    if (Memory.resetData === undefined || Memory.resetData === true || Memory.resetData === 'true' || Memory.rooms === undefined || Memory.rooms === []) {
         data.reset();
-    } else {
+    }
+    else {
         for (const i in Memory.rooms) {
             //noinspection ES6ModulesDependencies,JSUnresolvedVariable
             roomData = Memory.rooms[i];
             currentRoom = Game.rooms[roomData.name];
-            spawnIds = roomData.spawns;
+            spawnIds = roomData.spawnIds;
 
             let currentCreeps = _(Game.creeps).size();
             let totalLivingCreeps = currentCreeps;
@@ -34,6 +36,9 @@ module.exports.loop = function () {
             let towers;
             let links;
 
+            if (Memory.resetConstructionSites === true || Memory.resetConstructionSites === 'true') {
+                planUtils.resetConstructionSites(currentRoom);
+            }
             activateSafeMode();
             removeDeadScreepsFromMemory();
             runCreeps();
@@ -41,7 +46,7 @@ module.exports.loop = function () {
             runLinks();
             for (const i in spawnIds) {
                 //noinspection JSUnfilteredForInLoop
-                currentSpawn = Game.getObjectById([Memory.rooms["W74S82"].spawnIds[i]]);
+                currentSpawn = Game.getObjectById(spawnIds[i]);
                 spawnCreeps(currentSpawn);
             }
             planRoom(currentRoom, spawnIds);
@@ -68,7 +73,7 @@ module.exports.loop = function () {
             }
 
             function planRoom(room, spawnIds) {
-                if (Game.time % 25 === 0) {
+                if (Game.time % 10 === 0) {
                     utils.logMessage("planning room : " + room.name);
                     plans.planRoom(room, spawnIds)
                 }
@@ -172,32 +177,31 @@ module.exports.loop = function () {
                 }
 
                 function spawnMiner(maxSpawnEnergy) {
-                    let energySources = roomData.energySourceIds;
-                    let miningPositions = roomToolkit.getMiningPositions(currentRoom, currentSpawn, energySources);
-                    let usedSources = [];
+                    let energySourceIds = roomData.energySourceIds;
+                    let miningPositions = roomToolkit.getMiningPositions(currentRoom, currentSpawn, energySourceIds);
+                    let usedSourceIds = [];
                     let usedPositions = [];
                     for (let m in miners) {
                         if (miners[m].memory && miners[m].memory.sourceId) {
                             const obj = Game.getObjectById(miners[m].memory.sourceId);
                             //const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
-                            usedSources.push(obj);
+                            usedSourceIds.push(obj);
                             if (miners[m].memory.position) {
                                 usedPositions.push(miners[m].memory.position);
                             }
                         }
                     }
-                    let unusedSources = _.reject(energySources, s => _.some(usedSources.id, s));
+                    const unusedSources = _.reject(energySourceIds, s => _.some(usedSourceIds, s));
                     const unusedPositions = _.reject(miningPositions, s => _.some(usedPositions, s));
 
-                    if (miners.length < energySources.length) {
+                    if (miners.length < energySourceIds.length) {
                         if (unusedPositions.length) {
-
                             const pos = unusedPositions[0];
                             const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType === STRUCTURE_LINK).min(s => pos.getRangeTo(s));
-                            utils.logObject("Links :", link);
+                            utils.logObject("Links :", JSON.stringify(link));
                             let linkPos;
                             let body = roleMiner.getBody(maxSpawnEnergy);
-                            if (link) {
+                            if (link !== 'null') {
                                 if (roomData.linkSourceId === link.id) {
                                     linkPos = 'SOURCE';
                                     body = roleMiner.getLinkBody(maxSpawnEnergy);

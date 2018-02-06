@@ -1,22 +1,16 @@
 const utils = require('utils');
-const tech = require('tech');
 
 const planUtils = {
-
     calculateTechLevel(room) {
-        if (planUtils.numberOfContainers(room) < 2) {
-            if (planUtils.numberOfPlannedAndRealContainers(room) < 2) {
-                return 'NONE';
+        if (Memory.rooms[room.name]) {
+            const energySites = Memory.rooms[room.name].energySourceIds.length;
+            if (planUtils.numberOfPlannedAndRealContainers(room) === energySites) {
+                return 'CONTAINERS';
             }
-            else return 'BOOTSTRAP';
         }
-        else return 'CONNECTED';
+        else return 'NONE';
     },
-    numberOfContainers: function (room) {
-        return _(room.find(FIND_STRUCTURES))
-            .filter(s => s.structureType === STRUCTURE_CONTAINER)
-            .size();
-    },
+
     numberOfPlannedAndRealContainers: function (room) {
         let containers = _(room.find(FIND_STRUCTURES))
             .filter(s => s.structureType === STRUCTURE_CONTAINER)
@@ -26,16 +20,28 @@ const planUtils = {
             .size();
         return containers + sites;
     },
-
+    hasBuildingOrSite: function (locations, structure) {
+        for (const loc in locations) {
+            let contents = locations[loc].look();
+            let structures = contents['structure'];
+            for (const s in structures) {
+                if (structures[s].structureType === structure)
+                    return true;
+            }
+            let sites = contents['constructionSite'];
+            for (const s in sites) {
+                if (sites[s].structureType === structure)
+                    return true;
+            }
+        }
+        return false;
+    },
     nonWallsNextToLocation: function (room, pos) {
         const area = room.lookAtArea((pos.y) - 1, (pos.x) - 1, (pos.y) + 1, (pos.x) + 1, true);
         let spaces = [];
-        // utils.logObject("Checking room:", room);
-        // utils.logObject("Checking position:", pos);
-        // utils.logObject("Area examined :", area);
         for (const a in area) {
             if (area[a].type === "terrain" && area[a].terrain !== 'wall' && (pos.x !== area[a].x || pos.y !== area[a].y)) {
-                spaces.push(area[a]);
+                spaces.push(new RoomPosition(area[a].x, area[a].y, room.name));
             }
         }
         return spaces;
@@ -53,33 +59,24 @@ const planUtils = {
     },
     containsNoConstructionSites: function (room) {
         let sites = _(room.find(FIND_CONSTRUCTION_SITES))
-            .filter(s => s.structureType === STRUCTURE_CONTAINER)
             .size();
         return sites === 0;
     },
 
-    findSpacesWithoutBuildingsOrSites: function (room, locations) {
+    findSpacesWithoutBuildingsOrSites: function (room, locations, energySource) {
         const spaces = [];
         for (const l in locations) {
             const structures = room.lookForAt(LOOK_STRUCTURES, locations[l].x, locations[l].y);
             const sites = room.lookForAt(LOOK_CONSTRUCTION_SITES, locations[l].x, locations[l].y);
 
             if (_(structures).size() === 0 && _(sites).size() === 0) {
-                utils.logObject("Empty space found at [" + locations[l].x + "," + locations[l].y + "]: for ", Game.getObjectById(energyLocationIds[e]).pos);
+                utils.logObject("Empty space found at [" + locations[l].x + "," + locations[l].y + "]: for ", Game.getObjectById(energySource).pos);
                 spaces.push(locations[l]);
             }
         }
         return spaces;
     },
 
-    getPos: function (items) {
-        const positions = [];
-        utils.logObject("Pos objects :", items);
-        for (const obj in items) {
-            positions.push(items[obj].pos);
-        }
-        return positions;
-    },
     getPositions: function (room, locations) {
         const positions = [];
         for (const loc in locations) {
@@ -112,25 +109,73 @@ const planUtils = {
         }
         return ids;
     },
+    findConstructionSiteIds: function (room, structureType) {
+        return _(room.find(FIND_CONSTRUCTION_SITES))
+            .filter(s => s.structureType === structureType)
+            .forEach(s => s.id)
+            .value();
+    },
     buildRoadAlongPath(room, path) {
         for (const p in path) {
             room.createConstructionSite(path[p].x, path[p].y, STRUCTURE_ROAD);
         }
     },
+    buildInitialContainers(room) {
+        const energyLocationIds = Memory.rooms[room.name].energySourceIds;
+        const spawnIds = Memory.rooms[room.name].spawnIds;
+        for (const e in energyLocationIds) {
+            let locations = planUtils.nonWallsNextToLocation(room, Game.getObjectById(energyLocationIds[e]).pos);
+            if (planUtils.hasBuildingOrSite(locations, STRUCTURE_CONTAINER)) {
+                break;
+            }
+            let goodLocations = planUtils.findSpacesWithoutBuildingsOrSites(room, locations, energyLocationIds[e]);
 
-    buildContainersAndSpawnPaths(room, spawns, containerLocation) {
-    room.createConstructionSite(containerLocation.x, containerLocation.y, STRUCTURE_CONTAINER);
-    const start = spawns[0].pos;
-    utils.logMessage("Pathing to  [" + containerLocation.x + "," + containerLocation.y + "," + room.name + "]");
-    const end = new RoomPosition(containerLocation.x, containerLocation.y, room.name);
-    const path = room.findPath(start, end, {ignoreCreeps: true, ignoreRoads: true});
-    planUtils.buildRoadAlongPath(room, path);
+            if (_(goodLocations).size() === 0) {
+                utils.logMessage("Warning, unable to find good site for container");
+            }
+            else {
+                let positions = planUtils.getPositions(room, goodLocations);
+                const containerLocation = _(positions).sortBy(s => _(s.findPathTo(Game.getObjectById(spawnIds[0]).pos)).size()).first();
+                room.createConstructionSite(containerLocation.x, containerLocation.y, STRUCTURE_CONTAINER);
+            }
+        }
+        Memory.rooms[room.name].sourceContainerIds = planUtils.findConstructionSiteIds(room, STRUCTURE_CONTAINER);
 
-    let roads = _(room.find(FIND_STRUCTURES))
-        .filter(s => s.structureType === STRUCTURE_ROAD).value();
-    const closest = spawns[0].pos.findClosestByRange(roads);
-    const spawnPath = room.findPath(closest.pos, spawns[0].pos, {ignoreCreeps: true, ignoreRoads: true});
-    planUtils.buildRoadAlongPath(room, spawnPath);
+    },
+    connectContainersAndSpawns(room) {
+        const spawnIds = Memory.rooms[room.name].spawnIds;
+        const containerIds = Memory.rooms[room.name].sourceContainerIds;
+
+        for (const s in spawnIds) {
+            const spawn = Game.getObjectById(spawnIds[s]);
+            const start = spawn.pos;
+            for (let c in containerIds) {
+                const container = Game.getObjectById(containerIds[c]);
+                const end = container.pos;
+                utils.logMessage("Pathing from " + JSON.stringify(start) + " to " + JSON.stringify(end) + ".");
+                const path = room.findPath(start, end, {ignoreCreeps: true, ignoreRoads: true});
+                planUtils.buildRoadAlongPath(room, path);
+            }
+        }
+    },
+    connectController: function (room) {
+        let roadPositions = _(room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType === STRUCTURE_ROAD)
+            .forEach(s => s.pos)
+            .value();
+
+        const closest = room.controller.pos.findClosestByRange(roadPositions);
+        const path = room.findPath(closest, room.controller.pos, {ignoreCreeps: true, ignoreRoads: true});
+        planUtils.buildRoadAlongPath(room, path);
+    },
+    resetConstructionSites(room) {
+        utils.logMessage("Clearing construction sites.");
+        Memory.resetConstructionSites = false;
+        let sites = _(room.find(FIND_CONSTRUCTION_SITES))
+            .value();
+        for (const site in sites) {
+            sites[site].remove();
+        }
     }
 };
 
