@@ -1,3 +1,5 @@
+let lastLogTime = Game.time;
+
 const utils = {
 
     getIds: function(array) {
@@ -9,18 +11,32 @@ const utils = {
     },
     logMessage: function (message) {
         console.log(message);
+        lastLogTime = Game.time;
     },
 
     logObject: function (message, object) {
         console.log(message ? message : 'object', JSON.stringify(object));
+        lastLogTime = Game.time;
+
     },
 
     logCreep: function (creep, message, override) {
         if (override || creep.memory.log) {
             console.log(creep.memory.role + ':' + creep.name + ': ' + message);
+            lastLogTime = Game.time;
         }
     },
 
+    logHeartbeat : function () {
+      const currentTime = Game.time;
+      const delay = 5;
+      if (currentTime - lastLogTime > delay) {
+          console.log("Nothing much happening, another "+ delay +" ticks go by.")
+          lastLogTime = Game.time;
+      }
+
+
+    },
     logSettings: function (rooms) {
         for (const i in rooms) {
             //noinspection JSUnfilteredForInLoop
