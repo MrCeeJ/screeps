@@ -21,7 +21,7 @@ const BUILD_CONTAINERS = function (room) {
 };
 
 const CONNECT_CONTAINERS = function (room) {
-    if (Memory[room.name].techLevel === 'CONTAINERS') {
+    if (Memory.rooms[room.name].techLevel === 'CONTAINERS') {
         planUtils.connectContainersAndSpawns(room);
         Memory.rooms[room.name].techLevel = 'CONNECTED_CONTAINERS';
     } else
@@ -29,7 +29,7 @@ const CONNECT_CONTAINERS = function (room) {
 };
 
 const CONNECT_CONTROLLER = function(room) {
-    if (Memory[room.name].techLevel === 'CONNECTED_CONTAINERS') {
+    if (Memory.rooms[room.name].techLevel === 'CONNECTED_CONTAINERS') {
         planUtils.connectController(room);
         Memory.rooms[room.name].techLevel = 'CONNECT';
     } else
@@ -37,7 +37,7 @@ const CONNECT_CONTROLLER = function(room) {
 };
 
 const BUILD_L1_STORES = function (room) {
-    if (Memory[room.name].techLevel === 'CONNECT') {
+    if (Memory.rooms[room.name].techLevel === 'CONNECT') {
         utils.logMessage("Attempted to build storage in room:", room.name);
         // TODO: Write function
         //Memory.rooms[room.name].techLevel = 'L1_STORES';
@@ -47,7 +47,7 @@ const BUILD_L1_STORES = function (room) {
 };
 
 const BUILD_LINK = function (room) {
-    if (Memory[room.name].techLevel === 'L1_STORES') {
+    if (Memory.rooms[room.name].techLevel === 'L1_STORES') {
         utils.logMessage("Attempted to build link in room:", room.name);
         // TODO: Write function
         //Memory.rooms[room.name].techLevel = 'LINKS';
@@ -57,7 +57,7 @@ const BUILD_LINK = function (room) {
 };
 
 const BUILD_TOWERS = function (room) {
-    if (Memory[room.name].techLevel === 'LINKS') {
+    if (Memory.rooms[room.name].techLevel === 'LINKS') {
         utils.logMessage("Attempted to build towers in room:", room.name);
         // TODO: Write function
         //Memory.rooms[room.name].techLevel = 'TOWERS';
