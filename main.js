@@ -218,8 +218,8 @@ module.exports.loop = function () {
                                 sourceId: unusedSources[0],
                                 position: pos,
                                 log: false,
-                                linkPosition: linkPos,
-                                linkId: link.id
+                      //          linkPosition: linkPos,
+                      //          linkId: link.id
                             });
                             utils.logMessage("Spawning " + pos + " miner :" + JSON.stringify(body));
                         } else {
