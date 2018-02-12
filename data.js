@@ -10,6 +10,7 @@ let data = {
         const defaults = {
             name: "",
             techLevel : "",
+            latticePosition : 0,
             spawnIds: [],
             energySourceIds: [],
             linkSourceId: '',

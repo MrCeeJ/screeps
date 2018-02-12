@@ -1,5 +1,8 @@
 const utils = require('utils');
 
+const lattice = [{x:1,y:1},{x:-1,y:1},{x:-1,y:-1},{x:1,y:-1},{x:2,y:0},{x:2,y:2},{x:0,y:2},{x:-2,y:2},{x:-2,y:0},{x:-2,y:-2},{x:0,y:-2},{x:2,y:-2},{x:3,y:-1},
+    {x:3,y:1},{x:3,y:3},{x:1,y:3},{x:-1,y:3},{x:-3,y:3},{x:-3,y:1},{x:-3,y:-1},{x:-3,y:-3},{x:-1,y:-3},{x:1,y:-3},{x:3,y:-3}];
+
 const planUtils = {
     calculateTechLevel(room) {
         if (Memory.rooms[room.name]) {
@@ -144,7 +147,12 @@ const planUtils = {
     },
     connectContainersAndSpawns(room) {
         const spawnIds = Memory.rooms[room.name].spawnIds;
-        const containerIds = Memory.rooms[room.name].sourceContainerIds;
+        const containerIds = _(room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType === STRUCTURE_CONTAINER)
+            .forEach(s => s.id)
+            .value();
+
+        Memory.rooms[room.name].sourceContainerIds = containerIds;
 
         for (const s in spawnIds) {
             const spawn = Game.getObjectById(spawnIds[s]);
@@ -164,7 +172,12 @@ const planUtils = {
             .forEach(s => s.pos)
             .value();
 
-        const closest = room.controller.pos.findClosestByRange(roadPositions);
+        let closest;
+        if (roadPositions.length !== 0) {
+            closest = room.controller.pos.findClosestByRange(roadPositions);
+        } else {
+            closest = planUtils.getSpawns(room)[0].pos;
+        }
         const path = room.findPath(closest, room.controller.pos, {ignoreCreeps: true, ignoreRoads: true});
         planUtils.buildRoadAlongPath(room, path);
     },
@@ -176,6 +189,35 @@ const planUtils = {
         for (const site in sites) {
             sites[site].remove();
         }
+    },
+    buildExtensions(room, number) {
+        let latticePosition = Memory.rooms[room.name].latticePosition;
+        const spawnPos = planUtils.getSpawns(room)[0].pos;
+        for (let i = 0; i< number; i++) {
+            let found = false;
+            let position;
+            while (!found) {
+                position = planUtils.getNextLatticePosition(spawnPos,latticePosition);
+                latticePosition++;
+                const result = position.createConstructionSite(STRUCTURE_EXTENSION);
+                if (result === 0) {
+                    found = true;
+                } else {
+                    utils.logMessage("Error :"+ result +" - Unable to build at ", position);
+                }
+            }
+        }
+        Memory.rooms[room.name].latticePosition = latticePosition;
+    },
+    getSpawns(room) {
+        let spawns = _(room.find(FIND_STRUCTURES))
+            .filter(s => s.structureType === STRUCTURE_SPAWN)
+            .value();
+        return spawns;
+    },
+    getNextLatticePosition(pos, index) {
+      const offset = lattice[index];
+      return new RoomPosition(pos.x + offset.x, pos.y+offset.y, pos.roomName);
     }
 };
 

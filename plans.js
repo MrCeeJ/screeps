@@ -17,7 +17,7 @@ const BUILD_CONTAINERS = function (room) {
         planUtils.buildInitialContainers(room);
         Memory.rooms[room.name].techLevel = 'CONTAINERS';
     } else
-        utils.logMessage("Warning, attempted to construct containers room in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to construct containers room in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
 const CONNECT_CONTAINERS = function (room) {
@@ -25,25 +25,25 @@ const CONNECT_CONTAINERS = function (room) {
         planUtils.connectContainersAndSpawns(room);
         Memory.rooms[room.name].techLevel = 'CONNECTED_CONTAINERS';
     } else
-        utils.logMessage("Warning, attempted to connect containers in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to connect containers in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
 const CONNECT_CONTROLLER = function(room) {
     if (Memory.rooms[room.name].techLevel === 'CONNECTED_CONTAINERS') {
         planUtils.connectController(room);
-        Memory.rooms[room.name].techLevel = 'CONNECT';
+        Memory.rooms[room.name].techLevel = 'CONNECTED_CONTROLLERS';
     } else
-        utils.logMessage("Warning, attempted to connect controller in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to connect controller in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
-const BUILD_L1_STORES = function (room) {
-    if (Memory.rooms[room.name].techLevel === 'CONNECT') {
-        utils.logMessage("Attempted to build storage in room:", room.name);
-        // TODO: Write function
-        //Memory.rooms[room.name].techLevel = 'L1_STORES';
+const BUILD_L1_EXTENSIONS = function (room) {
+    if (Memory.rooms[room.name].techLevel === 'CONNECTED_CONTROLLERS') {
+        utils.logMessage("Attempted to build extensions in room:", room.name);
+        planUtils.buildExtensions(room, 10);
+        Memory.rooms[room.name].techLevel = 'L1_STORES';
     }
     else
-        utils.logMessage("Warning, attempted to build storage in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to build extensions in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
 const BUILD_LINK = function (room) {
@@ -53,7 +53,7 @@ const BUILD_LINK = function (room) {
         //Memory.rooms[room.name].techLevel = 'LINKS';
     }
     else
-        utils.logMessage("Warning, attempted to build links in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to build links in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
 const BUILD_TOWERS = function (room) {
@@ -63,7 +63,7 @@ const BUILD_TOWERS = function (room) {
         //Memory.rooms[room.name].techLevel = 'TOWERS';
     }
     else
-        utils.logMessage("Warning, attempted to build towers in incorrect state :", Memory[room.name].techLevel);
+        utils.logMessage("Warning, attempted to build towers in incorrect state :", Memory.rooms[room.name].techLevel);
 };
 
 /**
@@ -73,7 +73,7 @@ const techPlans = {
     'NONE': BUILD_CONTAINERS,
     'CONTAINERS': CONNECT_CONTAINERS,
     'CONNECTED_CONTAINERS': CONNECT_CONTROLLER,
-    'CONNECTED_CONTROLLERS': BUILD_L1_STORES,
+    'CONNECTED_CONTROLLERS': BUILD_L1_EXTENSIONS,
     'L1_STORES' : BUILD_LINK,
     'LINKS' : BUILD_TOWERS,
     'TOWERS' : undefined

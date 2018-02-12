@@ -49,7 +49,7 @@ module.exports.loop = function () {
                 currentSpawn = Game.getObjectById(spawnIds[i]);
                 spawnCreeps(currentSpawn);
             }
-            planRoom(currentRoom, spawnIds);
+            planRoom(currentRoom);
             logGameState();
             logMarket();
 
@@ -72,10 +72,10 @@ module.exports.loop = function () {
                 }
             }
 
-            function planRoom(room, spawnIds) {
+            function planRoom(room) {
                 if (Game.time % 10 === 0) {
                     utils.logMessage("planning room : " + room.name);
-                    plans.planRoom(room, spawnIds)
+                    plans.planRoom(room)
                 }
             }
 
@@ -193,26 +193,29 @@ module.exports.loop = function () {
                     }
                     const unusedSources = _.reject(energySourceIds, s => _.some(usedSourceIds, s));
                     const unusedPositions = _.reject(miningPositions, s => _.some(usedPositions, s));
+                    utils.logMessage("Unused sources :",unusedSources);
+                    utils.logMessage("Unused positions :",unusedPositions);
 
                     if (miners.length < energySourceIds.length) {
                         if (unusedPositions.length) {
-                            const pos = unusedPositions[0];
-                            const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType === STRUCTURE_LINK).min(s => pos.getRangeTo(s));
-                            utils.logObject("Links :", JSON.stringify(link));
-                            let linkPos;
                             let body = roleMiner.getBody(maxSpawnEnergy);
-                            if (link !== 'null') {
-                                if (roomData.linkSourceId === link.id) {
-                                    linkPos = 'SOURCE';
-                                    body = roleMiner.getLinkBody(maxSpawnEnergy);
-                                }
-                                else if (roomData.linkDestinationId === link.id) {
-                                    linkPos = 'DESTINATION';
-                                    body = roleMiner.getLinkBody(maxSpawnEnergy);
-                                } else {
-                                    utils.logObject("WARNING Links found but misconfigured! :", link);
-                                }
-                            }
+
+                            const pos = unusedPositions[0];
+                            // const link = _(currentRoom.find(FIND_MY_STRUCTURES)).filter(s => s.structureType === STRUCTURE_LINK).min(s => pos.getRangeTo(s));
+                            // utils.logObject("Links :", JSON.stringify(link));
+                            // let linkPos;
+                            // if (link !== null) {
+                            //     if (roomData.linkSourceId === link.id) {
+                            //         linkPos = 'SOURCE';
+                            //         body = roleMiner.getLinkBody(maxSpawnEnergy);
+                            //     }
+                            //     else if (roomData.linkDestinationId === link.id) {
+                            //         linkPos = 'DESTINATION';
+                            //         body = roleMiner.getLinkBody(maxSpawnEnergy);
+                            //     } else {
+                            //         utils.logObject("WARNING Links found but misconfigured! :", link);
+                            //     }
+                            // }
                             currentSpawn.createCreep(body, null, {
                                 role: 'miner',
                                 sourceId: unusedSources[0],
@@ -221,7 +224,7 @@ module.exports.loop = function () {
                       //          linkPosition: linkPos,
                       //          linkId: link.id
                             });
-                            utils.logMessage("Spawning " + pos + " miner :" + JSON.stringify(body));
+                            utils.logMessage("Spawning miner :" + JSON.stringify(pos) +" - "+ JSON.stringify(body));
                         } else {
                             utils.logMessage("WARNING Too many miners, but unused energy sources found!!");
                         }
