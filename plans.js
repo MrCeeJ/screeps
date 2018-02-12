@@ -48,7 +48,7 @@ const BUILD_L1_EXTENSIONS = function (room) {
 
 const BUILD_LINK = function (room) {
     if (Memory.rooms[room.name].techLevel === 'L1_STORES') {
-        utils.logMessage("Attempted to build link in room:", room.name);
+        utils.logMessage("Attempted to build link in room :" + room.name);
         // TODO: Write function
         //Memory.rooms[room.name].techLevel = 'LINKS';
     }
