@@ -21,6 +21,7 @@ const STATE_WORKING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
+    creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
     return ai.buildBuildings(creep) || ai.repairBuildings(creep) || ai.repairWalls(creep) || ai.upgradeRoom(creep);
 };
 

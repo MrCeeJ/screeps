@@ -20,6 +20,7 @@ const STATE_UPGRADING = function (creep) {
         creep.memory.state = 'GATHERING';
         return states[creep.memory.state](creep);
     }
+    creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
     return ai.upgradeRoom(creep);
 };
 
