@@ -183,9 +183,9 @@ module.exports.loop = function () {
                     let usedPositions = [];
                     for (let m in miners) {
                         if (miners[m].memory && miners[m].memory.sourceId) {
-                            const obj = Game.getObjectById(miners[m].memory.sourceId);
+                            //const obj = Game.getObjectById(miners[m].memory.sourceId);
                             //const pos = new RoomPosition(obj.pos.x, obj.pos.y, obj.room.name);
-                            usedSourceIds.push(obj);
+                            usedSourceIds.push(miners[m].memory.sourceId);
                             if (miners[m].memory.position) {
                                 usedPositions.push(miners[m].memory.position);
                             }

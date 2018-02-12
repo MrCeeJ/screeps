@@ -6,6 +6,12 @@ const lattice = [{x:1,y:1},{x:-1,y:1},{x:-1,y:-1},{x:1,y:-1},{x:2,y:0},{x:2,y:2}
 const planUtils = {
     calculateTechLevel(room) {
         if (Memory.rooms[room.name]) {
+            if (room.controller.level === 1) {
+                return 'NONE';
+            } else if (room.energyCapacityAvailable < 550) {
+                return 'L0_ENERGY'
+            }
+
             const energySites = Memory.rooms[room.name].energySourceIds.length;
             if (planUtils.numberOfPlannedAndRealContainers(room) === energySites) {
                 return 'CONTAINERS';
@@ -142,8 +148,6 @@ const planUtils = {
                 room.createConstructionSite(containerLocation.x, containerLocation.y, STRUCTURE_CONTAINER);
             }
         }
-        Memory.rooms[room.name].sourceContainerIds = planUtils.findConstructionSiteIds(room, STRUCTURE_CONTAINER);
-
     },
     connectContainersAndSpawns(room) {
         const spawnIds = Memory.rooms[room.name].spawnIds;

@@ -328,28 +328,28 @@ const ai = {
             utils.logCreep(creep, 'No buildings to repair.');
             return false;
         },
-    repairWalls: function (creep) {
-        const structureTypes = [STRUCTURE_WALL, STRUCTURE_RAMPART];
+        repairWalls: function (creep) {
+            const structureTypes = [STRUCTURE_WALL, STRUCTURE_RAMPART];
 
-        let structures = _(creep.room.find(FIND_STRUCTURES))
-            .filter(s => s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType))
-            .sortBy(s => s.hits)
-            .value();
-        //utils.logCreep(creep,"Things to repair :"+JSON.stringify(structures),true);
+            let structures = _(creep.room.find(FIND_STRUCTURES))
+                .filter(s => s.hits < (s.hitsMax * .7) && _.includes(structureTypes, s.structureType))
+                .sortBy(s => s.hits)
+                .value();
+            //utils.logCreep(creep,"Things to repair :"+JSON.stringify(structures),true);
 
-        if (structures.length) {
-            if (creep.repair(structures[0]) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(structures[0]);
-                utils.logCreep(creep, 'Moving to repair ' + structures[0].structureType + ' at ' + structures[0].pos);
+            if (structures.length) {
+                if (creep.repair(structures[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(structures[0]);
+                    utils.logCreep(creep, 'Moving to repair ' + structures[0].structureType + ' at ' + structures[0].pos);
+                }
+                else {
+                    utils.logCreep(creep, 'Repairing ' + structures[0].structureType + ' at ' + structures[0].pos);
+                }
+                return true;
             }
-            else {
-                utils.logCreep(creep, 'Repairing ' + structures[0].structureType + ' at ' + structures[0].pos);
-            }
-            return true;
-        }
-        utils.logCreep(creep, 'No buildings to repair.');
-        return false;
-    },
+            utils.logCreep(creep, 'No buildings to repair.');
+            return false;
+        },
         upgradeRoom: function (creep) {
             if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller);
@@ -359,8 +359,7 @@ const ai = {
                 utils.logCreep(creep, 'Upgrading room');
             }
             return true;
-        }
-        ,
+        },
         claimRoom: function (creep) {
             if (creep.room.controller) {
                 const result = creep.claimController(creep.room.controller);
@@ -375,6 +374,17 @@ const ai = {
                     utils.logCreep(creep, 'Unable to claim controller :' + result);
                     return false;
                 }
+            }
+        },
+        revertToDrone: function (creep) {
+            let minerCount = 0;
+            for (const name in Game.creeps) {
+                if (Game.creeps[name].role === 'miner') {
+                    minerCount++;
+                }
+            }
+            if (minerCount < 2){
+                creep.memory.role = 'drone';
             }
         }
     }
